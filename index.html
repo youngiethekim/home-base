@@ -453,20 +453,20 @@
 
   /* ---- system node board (rooms hold interactive nodes) ---- */
   .board{position:relative;width:100%;height:100%}
-  .gnode{position:absolute;z-index:2;transform:translate(-50%,-50%);width:78px;text-align:center;cursor:pointer;transition:transform .15s var(--ease)}
-  .gnode:hover{transform:translate(-50%,-50%) translateY(-3px) scale(1.06);z-index:3}
-  .nring{width:66px;height:66px;border-radius:50%;margin:0 auto;border:3px solid rgba(255,255,255,.85);
-    background:conic-gradient(var(--nc) calc(var(--h)*1%), rgba(0,0,0,.12) 0);
-    display:grid;place-items:center;box-shadow:0 5px 14px rgba(40,25,10,.32);transition:--h .9s linear}
-  .nico{position:relative;top:-54px;font-size:31px;line-height:1;text-shadow:0 1px 2px rgba(255,255,255,.6)}
-  .nlvl{position:relative;top:-47px;font-size:10px;font-weight:700;color:#5b4636}
-  .nlabel{position:relative;top:-42px;font-size:12px;font-weight:700;background:#fff;border-radius:8px;padding:1.5px 7px;display:inline-block;white-space:nowrap;box-shadow:0 1px 3px rgba(40,25,10,.2)}
-  @media(max-width:640px){ /* must come after the base .gnode/.nring rules above (same specificity) so it actually wins */
-    .gnode{width:60px}
-    .nring{width:50px;height:50px}
-    .nico{font-size:23px;top:-41px}
-    .nlvl{top:-35px}
-    .nlabel{font-size:9px;top:-31px;padding:1px 4px}
+  .gnode{position:absolute;z-index:2;transform:translate(-50%,-50%);width:92px;text-align:center;cursor:pointer;transition:transform .15s var(--ease)}
+  .gnode:hover{transform:translate(-50%,-50%) translateY(-3px) scale(1.07);z-index:3}
+  .nring{width:80px;height:80px;border-radius:50%;margin:0 auto;border:4px solid #fff;
+    background:conic-gradient(var(--nc) calc(var(--h)*1%), rgba(0,0,0,.14) 0);
+    display:grid;place-items:center;box-shadow:0 0 0 3px var(--nc),0 6px 16px rgba(40,25,10,.38);transition:--h .9s linear}
+  .nico{position:relative;top:-61px;font-size:37px;line-height:1;text-shadow:0 1px 3px rgba(255,255,255,.75)}
+  .nlvl{position:relative;top:-52px;font-size:11px;font-weight:800;color:#5b4636}
+  .nlabel{position:relative;top:-46px;font-size:13px;font-weight:800;background:#fff;border-radius:9px;padding:2px 9px;display:inline-block;white-space:nowrap;box-shadow:0 2px 5px rgba(40,25,10,.28)}
+  @media(max-width:640px){ /* must come after the base .gnode/.nring rules above (same specificity) so it actually wins — smaller here so the ring doesn't overlap on the narrow board */
+    .gnode{width:48px}
+    .nring{width:40px;height:40px;border-width:2.5px;box-shadow:0 0 0 2px var(--nc),0 3px 9px rgba(40,25,10,.32)}
+    .nico{font-size:18px;top:-33px}
+    .nlvl{top:-28px;font-size:8px}
+    .nlabel{font-size:8px;top:-25px;padding:1px 4px}
   }
   .n-due .nring{animation:duePulse 1.4s ease-in-out infinite}
   .n-overdue .nring{box-shadow:0 0 0 4px rgba(214,69,53,.35),0 4px 12px rgba(40,25,10,.3)}
@@ -948,15 +948,12 @@ const GAME = { nodes:{}, units:{}, pets:{}, jobs:{}, alerts:[], coins:STATE.coin
 
 function initGame(){
   GAME.nodes = {};
-  // one node per domain that maps to a room; roomPos in % of the board box
-  const ROOM = { // hand-placed positions over the board (x%,y%) — spread in a 4/4/3 grid so
-    // none of the 11 room labels collide at desktop or 390px mobile widths (see task-10 report)
-    kids:{x:14,y:20}, health:{x:38,y:18}, cleaning:{x:62,y:20}, electronics:{x:87,y:18},
-    safety:{x:13,y:50}, pets:{x:38,y:50}, maintenance:{x:62,y:50}, finances:{x:87,y:50},
-    // row 3 kept left-of-center (x<=44) so it clears the streak-badge glass panel
-    // anchored bottom-right of the board (.ov.br) at every width — see task-10 report
-    kitchen:{x:10,y:80}, yard:{x:27,y:83}, auto:{x:44,y:78},
-  };
+  // department nodes arranged in a ring around the house centre. RX/RY are % of the
+  // board's width/height; RX<RY so the ellipse reads as a circle on the wide board.
+  const N=STATE.domains.length, CX=50, CY=47, RX=31, RY=40;
+  const ROOM={};
+  STATE.domains.forEach((d,i)=>{ const a=(-90 + i*360/N)*Math.PI/180;
+    ROOM[d.id]={ x:+(CX+RX*Math.cos(a)).toFixed(1), y:+(CY+RY*Math.sin(a)).toFixed(1) }; });
   STATE.domains.forEach(d=>{
     const h = typeof domainHealth==='function' ? domainHealth(d.id) : 80;
     GAME.nodes[d.id] = { id:d.id, domainId:d.id, name:d.name, icon:d.icon,
