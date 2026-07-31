@@ -320,6 +320,9 @@
   @media(max-width:860px){.gwrap{grid-template-columns:1fr}}
   .deptinfo.flash{animation:panelFlash .32s var(--ease)}
   @keyframes panelFlash{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .middle{animation:midIn .3s var(--ease)}
+  @keyframes midIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.middle{animation:none}}
   .sidebar{display:flex;flex-direction:column;gap:12px;min-width:0}
   .sidebar>.glass{width:100%}
   .sidebar .questpanel{width:100%;max-width:none}
@@ -1389,23 +1392,18 @@ function renderRoom(d){ const c=HEX[d.id]||'#c9754d';
 function render(){
   const app=document.getElementById('app');
   const v=STATE.view;
-  app.innerHTML = v==='overworld'? renderOverworld()
-    : v==='domain'   ? renderDomain()
-    : v==='checklist'? renderChecklist()
-    : v==='schedule' ? renderSchedule()
-    : v==='calendar' ? renderCalendar()
-    : v==='departments'? renderDepartments()
-    : v==='campaign' ? renderCampaign()
-    : v==='vault'    ? renderVault()
-    : v==='receipts' ? renderReceipts()
-    : v==='pets'     ? renderPetsIndex()
-    : v==='family'   ? renderFamily()
-    : v==='approvals'? renderApprovals()
-    : renderOverworld();
-  if(v==='domain'){ renderConsole(); document.body.style.paddingBottom=''; }
-  else if(v==='overworld'){ document.getElementById('console').innerHTML=''; document.body.style.paddingBottom='var(--tray-h)'; }
-  else { document.getElementById('console').innerHTML=''; document.body.style.paddingBottom='0'; }
-  if(v==='overworld') STATE.booted=true;   // boot animation runs once
+  const con=document.getElementById('console');
+  // domain drill-in keeps its own full screen (Command-Control console); everything else uses the persistent shell
+  if(v==='domain'){ app.innerHTML=renderDomain(); renderConsole(); document.body.style.paddingBottom=''; typeof attachDrag==='function'&&attachDrag(); return; }
+  // persistent header + swappable middle + persistent bottom bar; only the middle animates in on a view change
+  app.innerHTML = `<div class="gv${STATE.booted?'':' boot'}">
+      <div id="toasts"></div>
+      ${shellHeader()}
+      <div id="middle" class="middle">${viewMiddle(v)}</div>
+    </div>${renderTray()}`;
+  if(con) con.innerHTML='';
+  document.body.style.paddingBottom='var(--tray-h)';
+  STATE.booted=true;   // boot animation runs once
   typeof attachDrag==='function' && attachDrag();
 }
 
@@ -1650,21 +1648,10 @@ function sparkle(el){ if(!el) return; const r=el.getBoundingClientRect(), cx=r.l
     setTimeout(()=>s.remove(),650);
   }
 }
-function renderOverworld(){
-  const hh=liveHomeHealth(), mood=liveMood(hh), L=houseLevel();
-  const q=todaysQuests();
-  const questRows=q.length?q.map(t=>{ const d=domainById(t.domainId);
-    return `<div class="quest" onclick="completeTask('${t.id}')" title="Mark done"><div class="qc">✓</div>
-      <div class="qt">${esc(t.title)}<small>${d.icon} ${esc(d.name.split(/[ &]/)[0])}</small></div>
-      <div class="qx">+${t.xp} XP</div></div>`; }).join('')
-    : `<div style="color:#bfa886;font-size:12px;padding:4px 0">All clear — no quests due. 🎉</div>`;
-  if(!STATE.selDept || !domainById(STATE.selDept))
-    STATE.selDept=[...STATE.domains].sort((a,b)=>domainHealth(a.id)-domainHealth(b.id))[0].id;
-  const sel=STATE.selDept;
-  return `<div class="gv${STATE.booted?'':' boot'}">
-    <div id="toasts"></div>
-    <div class="housebg"></div>
-    <div class="topbar2">
+// persistent top header (brand + live HUD chips + nav) — shown on every top-level view
+function shellHeader(){
+  const hh=liveHomeHealth(), mood=liveMood(hh);
+  return `<div class="topbar2">
       <div class="topbar-main">
         <div class="brand2">🏡 Home Base <span>· ${esc(STATE.household.name)}</span></div>
         <div class="sp"></div>
@@ -1677,8 +1664,21 @@ function renderOverworld(){
         <div class="cur">💎 <span id="hud-gems-n">${GAME.gems}</span></div>
         <div class="cur" onclick="toggleParentMode()" title="Toggle parent mode" style="cursor:pointer">${isParent()?'👪 Parent':'🔓 Play'}</div>
       </div>
-      <div class="topbar-nav">${gameNav('overworld')}</div>
-    </div>
+      <div class="topbar-nav">${gameNav(STATE.view)}</div>
+    </div>`;
+}
+// the map view's middle content (board + contextual right panel). housebg lives here so it only shows on the map.
+function mapMiddle(){
+  const q=todaysQuests();
+  const questRows=q.length?q.map(t=>{ const d=domainById(t.domainId);
+    return `<div class="quest" onclick="completeTask('${t.id}')" title="Mark done"><div class="qc">✓</div>
+      <div class="qt">${esc(t.title)}<small>${d.icon} ${esc(d.name.split(/[ &]/)[0])}</small></div>
+      <div class="qx">+${t.xp} XP</div></div>`; }).join('')
+    : `<div style="color:#bfa886;font-size:12px;padding:4px 0">All clear — no quests due. 🎉</div>`;
+  if(!STATE.selDept || !domainById(STATE.selDept))
+    STATE.selDept=[...STATE.domains].sort((a,b)=>domainHealth(a.id)-domainHealth(b.id))[0].id;
+  const sel=STATE.selDept;
+  return `<div class="housebg"></div>
     <div class="gwrap">
       <div class="scene">
         <div class="board" id="board">${renderUnits()}${renderPets()}${renderBoard()}</div>
@@ -1689,10 +1689,23 @@ function renderOverworld(){
         <div class="glass questpanel"><h5>TODAY'S QUESTS</h5>${questRows}
           <div class="viewall" onclick="openView('checklist')">View all (${STATE.tasks.filter(t=>t.status!=='done').length}) ›</div></div>
       </div>
-    </div>
-    ${renderTray()}
-  </div>`;
+    </div>`;
 }
+// the middle content for a given top-level view (map or an index screen)
+function viewMiddle(v){
+  return v==='checklist'? renderChecklist()
+    : v==='schedule' ? renderSchedule()
+    : v==='calendar' ? renderCalendar()
+    : v==='departments'? renderDepartments()
+    : v==='campaign' ? renderCampaign()
+    : v==='vault'    ? renderVault()
+    : v==='receipts' ? renderReceipts()
+    : v==='pets'     ? renderPetsIndex()
+    : v==='family'   ? renderFamily()
+    : v==='approvals'? renderApprovals()
+    : mapMiddle();
+}
+function renderOverworld(){ return mapMiddle(); } // legacy alias
 
 /* ---- bottom unit tray (thumb-friendly drag source) ---- */
 function renderTrayItem(m){
