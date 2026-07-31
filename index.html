@@ -316,12 +316,10 @@
   .pop{display:inline-block;animation:numPop .28s ease}
   :root{--tray-h:110px}
   @media(max-width:640px){:root{--tray-h:88px}}
-  .gwrap{display:grid;grid-template-columns:92px 1fr minmax(280px,320px);gap:14px;align-items:start;margin-bottom:4px}
-  .crewcol{flex-direction:column;overflow:visible;padding:0;gap:8px}
-  .crewcol .ccard{width:100%;padding:7px 4px}
-  .crewcol .ccard .cn{font-size:11px;margin-top:2px}
-  .crewcol .ccard.bot .botface,.crewcol .botface img{height:40px}
-  @media(max-width:860px){.gwrap{grid-template-columns:1fr}.crewcol{flex-direction:row;overflow-x:auto}.crewcol .ccard{width:auto}}
+  .gwrap{display:grid;grid-template-columns:1fr minmax(300px,360px);gap:16px;align-items:start;margin-bottom:4px}
+  @media(max-width:860px){.gwrap{grid-template-columns:1fr}}
+  .deptinfo.flash{animation:panelFlash .32s var(--ease)}
+  @keyframes panelFlash{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:none}}
   .sidebar{display:flex;flex-direction:column;gap:12px;min-width:0}
   .sidebar>.glass{width:100%}
   .sidebar .questpanel{width:100%;max-width:none}
@@ -527,9 +525,17 @@
   .trayitem:not(.busy) .trayring{background:none}
   .trayring .pfp{width:44px!important;height:44px!important;border:2px solid #2b2017}
   .trayname{font-size:10.5px;font-weight:700;color:#f6e8cf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62px}
+  .tchore{width:100%;display:flex;flex-direction:column;align-items:center;gap:1px}
+  .tcbar{width:54px;height:5px;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
+  .tcbar i{display:block;height:100%;background:linear-gradient(90deg,#ffd76b,#f4a24a);border-radius:4px;transition:width .4s var(--ease)}
+  .tctxt{font-size:8.5px;font-weight:800;color:#f0dcae;white-space:nowrap}
+  .traygap{flex:none;width:1px;align-self:stretch;margin:8px 3px;background:rgba(255,255,255,.2)}
+  .trayitem.petitem{cursor:pointer}
+  .trayring.pet{background:none}
+  .trayring.pet .pfp{border-color:#caa877;background:#fff}
   @media(max-width:640px){
     .trayitem{width:56px} .trayring{width:46px;height:46px} .trayring .pfp{width:40px!important;height:40px!important}
-    .trayname{font-size:9.5px;max-width:54px}
+    .trayname{font-size:9.5px;max-width:54px} .tcbar{width:46px}
   }
 
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -584,10 +590,10 @@ const STATE = {
       tip:'Keep firmware & software up to date, back up devices monthly, and put expensive electronics on surge protectors to protect the warranty.'},
   ],
   members:[
-    {id:'m1',name:'Young', avatar:'🧑🏻', xp:320, streak:6, badges:['Warranty Wizard','Zero Overdue'], av:{skin:'#eab98e',hair:'#3a2a1e',style:'short',shirt:'#c9754d'}},
-    {id:'m2',name:'Ivy',   avatar:'👩🏻', xp:410, streak:9, badges:['Filter Master','Green Thumb'], av:{skin:'#f0cba6',hair:'#4a2f1e',style:'bun',shirt:'#5ea4c4'}},
-    {id:'m3',name:'Wonjoo',  avatar:'🧒🏻', xp:150, streak:3, badges:['Spotless'], av:{skin:'#e7b48a',hair:'#2a1c12',style:'buzz',shirt:'#6faa52'}},
-    {id:'m4',name:'Mira',  avatar:'👧🏻', xp:90,  streak:1, badges:[], av:{skin:'#f2d0b0',hair:'#3a2418',style:'pony',shirt:'#d1789e'}},
+    {id:'m1',name:'Young', avatar:'🧑🏻', xp:320, streak:6, dgoal:4, ddone:3, badges:['Warranty Wizard','Zero Overdue'], av:{skin:'#eab98e',hair:'#3a2a1e',style:'short',shirt:'#c9754d'}},
+    {id:'m2',name:'Ivy',   avatar:'👩🏻', xp:410, streak:9, dgoal:5, ddone:5, dbonus:true, badges:['Filter Master','Green Thumb'], av:{skin:'#f0cba6',hair:'#4a2f1e',style:'bun',shirt:'#5ea4c4'}},
+    {id:'m3',name:'Wonjoo',  avatar:'🧒🏻', xp:150, streak:3, dgoal:4, ddone:2, badges:['Spotless'], av:{skin:'#e7b48a',hair:'#2a1c12',style:'buzz',shirt:'#6faa52'}},
+    {id:'m4',name:'Mira',  avatar:'👧🏻', xp:90,  streak:1, dgoal:3, ddone:1, badges:[], av:{skin:'#f2d0b0',hair:'#3a2418',style:'pony',shirt:'#d1789e'}},
   ],
   assets:[
     {id:'a1',domainId:'maintenance',name:'Furnace + AC (HVAC)',brand:'Carrier',model:'Infinity 24ANB6',
@@ -867,8 +873,18 @@ function goalProgress(g){ const v=(METRICS[g.metric]||(()=>0))(g); const pct=Mat
   return {value:v, target:g.target, pct, met:v>=g.target}; }
 function creditDone(memberId){ // shared counter bump for every credited completion (chore approval or immediate credit)
   STATE.done=(STATE.done||0)+1;
-  if(memberId){ STATE._memberDone=STATE._memberDone||{}; STATE._memberDone[memberId]=(STATE._memberDone[memberId]||0)+1; }
+  if(memberId){ STATE._memberDone=STATE._memberDone||{}; STATE._memberDone[memberId]=(STATE._memberDone[memberId]||0)+1; creditDaily(memberId); }
 }
+// per-member DAILY chore progress (shown on the bottom bar). Persists on the member; resets on a real new day.
+function memberDaily(m){ const k=dayKey();
+  if(!m.dkey) m.dkey=k; else if(m.dkey!==k){ m.dkey=k; m.ddone=0; m.dbonus=false; }
+  const goal=m.dgoal||3, done=m.ddone||0;
+  return {done, goal, pct:Math.min(100,Math.round(done/goal*100)), complete:done>=goal}; }
+function creditDaily(memberId){ const m=memberById(memberId); if(!m) return; memberDaily(m);
+  m.ddone=(m.ddone||0)+1;
+  if(m.ddone>=(m.dgoal||3) && !m.dbonus){ m.dbonus=true; GAME.coins+=150; STATE.points=(STATE.points||0)+5;
+    pushToast(`🎁 ${m.name} hit their daily goal! +150 🪙`,'good'); }
+  markDirty(); }
 function checkGoals(){
   STATE.goals.forEach(g=>{ const pk=periodKey(g);
     if(g.awardedKey===pk) return;               // already paid this period
@@ -1603,9 +1619,15 @@ function renderBoard(){
       ${n.state==='overdue'?'<div class="npin">!</div>':''}
     </div>`).join('');
 }
-function selectNode(id){ STATE.selNode=id; STATE.panel='node'; refreshPanel(); }
+function selectNode(id){ STATE.selNode=id; STATE.selDept=id; STATE.panel='node'; refreshPanel(); }
 function refreshPanel(){ const el=document.getElementById('deptinfo'); if(!el) return;
-  el.innerHTML = STATE.panel==='node' ? renderNodePanel(STATE.selNode) : deptInfoHTML(STATE.selDept); }
+  el.innerHTML = sidePanelHTML(STATE.selNode||STATE.selDept);
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
+// combined right-panel: the clicked department's info + its node level & upgrade control
+function sidePanelHTML(id){ const n=GAME.nodes[id]; if(!n) return deptInfoHTML(id); const cost=upgradeCost(n);
+  return deptInfoHTML(id)
+    + `<div class="dirow" style="margin-top:12px"><span>Node level</span><b>Lv.${n.level}</b></div>`
+    + `<button class="btn up" style="width:100%;margin-top:6px" ${GAME.coins<cost?'disabled':''} onclick="upgradeNode('${id}')">⬆ Upgrade — ${cost} 🪙</button>`; }
 function upgradeCost(n){ return Math.round(TUNE.upgradeCostBase*Math.pow(TUNE.upgradeCostMul,n.level-1)); }
 function renderNodePanel(id){ const n=GAME.nodes[id]; const cost=upgradeCost(n);
   const regBtn = id==='pets' ? `<button class="btn" onclick="openView('pets')">Open pet care ›</button>`
@@ -1639,9 +1661,6 @@ function renderOverworld(){
   if(!STATE.selDept || !domainById(STATE.selDept))
     STATE.selDept=[...STATE.domains].sort((a,b)=>domainHealth(a.id)-domainHealth(b.id))[0].id;
   const sel=STATE.selDept;
-  const crew=STATE.members.map(m=>`<div class="ccard" onclick="openView('family')">${memberAv(m,40)}
-      <div class="cn">${esc(m.name)}</div></div>`).join('')+
-    `<div class="ccard bot" onclick="openReport()"><div class="botface"><img src="${agentImg('homebase')}" alt="Home Base bot" onerror="this.parentNode.textContent='🤖'"></div><div class="cn">Home Base</div></div>`;
   return `<div class="gv${STATE.booted?'':' boot'}">
     <div id="toasts"></div>
     <div class="housebg"></div>
@@ -1661,13 +1680,12 @@ function renderOverworld(){
       <div class="topbar-nav">${gameNav('overworld')}</div>
     </div>
     <div class="gwrap">
-      <div class="crew crewcol">${crew}</div>
       <div class="scene">
         <div class="board" id="board">${renderUnits()}${renderPets()}${renderBoard()}</div>
         <div class="ov br"><div class="glass streakbadge"><span class="n">🔥 ${STATE.streak}</span><span>day<br>streak</span></div></div>
       </div>
       <div class="sidebar">
-        <div class="glass deptinfo" id="deptinfo">${deptInfoHTML(sel)}</div>
+        <div class="glass deptinfo" id="deptinfo">${sidePanelHTML(sel)}</div>
         <div class="glass questpanel"><h5>TODAY'S QUESTS</h5>${questRows}
           <div class="viewall" onclick="openView('checklist')">View all (${STATE.tasks.filter(t=>t.status!=='done').length}) ›</div></div>
       </div>
@@ -1681,12 +1699,21 @@ function renderTrayItem(m){
   const u=GAME.units[m.id], busy=u&&u.status!=='idle';
   const j=u&&u.busyJob&&GAME.jobs[u.busyJob];
   const p=j?Math.min(100,Math.round(j.elapsed/j.dur*100)):0;
+  const d=memberDaily(m);
   return `<div class="trayitem${busy?' busy':''}" data-grab="${m.id}" id="tray-${m.id}">
     <div class="trayring" style="--p:${p}">${memberAv(m,44)}</div>
     <div class="trayname">${esc(m.name)}</div>
+    <div class="tchore" title="Daily chores: ${d.done}/${d.goal}">
+      <div class="tcbar"><i style="width:${d.pct}%"></i></div>
+      <span class="tctxt">${d.done}/${d.goal}${d.complete?' 🎁':''}</span></div>
   </div>`;
 }
-function renderTray(){ return `<div class="tray" id="tray">${STATE.members.map(renderTrayItem).join('')}</div>`; }
+function renderPetTrayItem(p){
+  return `<div class="trayitem petitem" onclick="openPet('${p.id}')" title="${esc(p.name)}">
+    <div class="trayring pet"><img class="pfp" src="${petImg(p.id)}" alt="${esc(p.name)}" onerror="this.parentNode.textContent='🐾'"></div>
+    <div class="trayname">${esc(p.name)}</div></div>`;
+}
+function renderTray(){ return `<div class="tray" id="tray">${STATE.members.map(renderTrayItem).join('')}<div class="traygap"></div>${STATE.pets.map(renderPetTrayItem).join('')}</div>`; }
 function updateTray(){
   Object.values(GAME.units).forEach(u=>{
     const el=document.getElementById('tray-'+u.id); if(!el) return;
