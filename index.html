@@ -492,8 +492,8 @@
   .board.picking .gnode:not(.gtarget){opacity:.32;filter:grayscale(.5)}
   .board.picking .gnode.gtarget{transform:translate(-50%,-50%) scale(1.14)}
   .board.picking .gnode.gtarget .nring{box-shadow:0 0 0 5px rgba(143,211,154,.55),0 4px 12px rgba(40,25,10,.25)}
-  .ghost{position:fixed;z-index:200;left:0;top:0;width:44px;transform:translate(-50%,-60%);pointer-events:none;opacity:.88}
-  .ghost img{width:100%;display:block;filter:drop-shadow(0 10px 10px rgba(0,0,0,.35))}
+  .dragghost{position:fixed;z-index:200;left:0;top:0;width:44px;transform:translate(-50%,-60%);pointer-events:none;opacity:.88}
+  .dragghost img{width:100%;display:block;filter:drop-shadow(0 10px 10px rgba(0,0,0,.35))}
   /* ---- selected-department info window (right) ---- */
   .ov.tr{display:flex;flex-direction:column;gap:12px;width:262px;max-width:56vw}
   .deptinfo{padding:12px 14px}
@@ -540,6 +540,67 @@
     .trayitem{width:56px} .trayring{width:46px;height:46px} .trayring .pfp{width:40px!important;height:40px!important}
     .trayname{font-size:9.5px;max-width:54px} .tcbar{width:46px}
   }
+
+  /* ---- Stars, bounties, bank & prizes ---- */
+  .whobar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 14px;margin-bottom:14px}
+  .whobar select{font:inherit;font-weight:700;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+  .wchip{display:inline-flex;align-items:center;gap:6px;background:var(--bg2);border-radius:999px;
+    padding:6px 12px;font-weight:700;font-size:13px;white-space:nowrap}
+  .wchip b{font-variant-numeric:tabular-nums}
+  .rtabs{display:flex;gap:8px;margin:0 0 14px;flex-wrap:wrap}
+  .rtab{padding:9px 16px;border-radius:12px;background:var(--bg2);font-weight:700;font-size:13.5px;color:var(--muted);
+    box-shadow:0 3px 0 #dccdb2;transition:transform .08s var(--ease)}
+  .rtab:active{transform:translateY(2px);box-shadow:0 1px 0 #dccdb2}
+  .rtab.on{background:var(--accent);color:#fff;box-shadow:0 3px 0 var(--accent2)}
+  .rtab .badge{position:static;display:inline-grid;place-items:center;margin-left:6px;transform:none}
+  .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+  .bcard{padding:14px 16px;display:flex;flex-direction:column;gap:10px;border-left:5px solid var(--amber)}
+  .bcard.mine{border-left-color:var(--green)}
+  .bcard.needsme{border-left-color:var(--accent)}
+  .bhead{display:flex;align-items:flex-start;gap:10px}
+  .btitle{font-weight:700;font-size:15px;line-height:1.3}
+  .bdesc{font-size:13px;color:var(--muted);line-height:1.45}
+  .bpay{flex:none;text-align:right;line-height:1.25}
+  .stars{font-weight:800;color:var(--accent2);font-variant-numeric:tabular-nums}
+  .steps{display:flex;gap:4px;align-items:center;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .step{flex:1;text-align:center;padding:4px 2px;border-radius:8px;background:var(--bg2);font-weight:700}
+  .step.on{background:#dcecd8;color:var(--green)}
+  .step.cur{background:none;border:1px dashed var(--amber);color:var(--amber);padding:3px 1px}
+  .bact{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .bwho{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted)}
+  .bwho .pfp{vertical-align:middle}
+  .prizegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:14px}
+  .pzcard{padding:16px 14px;text-align:center;display:flex;flex-direction:column;gap:7px;align-items:center}
+  .pzcard.short{opacity:.62}
+  .pzem{font-size:40px;line-height:1}
+  .pzn{font-weight:700;font-size:14px;line-height:1.3}
+  .pzc{font-weight:800;color:var(--accent2);font-size:15px}
+  .packgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(186px,1fr));gap:16px}
+  .pack{padding:20px 16px 16px;text-align:center;position:relative}
+  .pack.best{border:2px solid var(--accent)}
+  .pack .tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;
+    font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  .pack .pk{font-size:26px}
+  .pack .ps{font-size:22px;font-weight:800;color:var(--accent2);margin:4px 0 2px}
+  .pack .pp{color:var(--muted);font-size:13px;margin-bottom:10px}
+  .walletgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+  .wcard{padding:16px}
+  .wlab{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+  .wnum{font-size:28px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+  .lrow{display:flex;gap:10px;align-items:center;padding:9px 13px;border-bottom:1px dashed var(--line);font-size:13px}
+  .lrow:last-child{border-bottom:none}
+  .lrow .lamt{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .lrow .lup{color:var(--green)}.lrow .ldn{color:var(--red)}
+  .rform{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:13px}
+  .rform input,.rform select{font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+  .rform input[name=title],.rform input[name=pname]{flex:1;min-width:190px}
+  .rform .num{width:96px}
+  .rform label{font-size:12px;color:var(--muted);font-weight:700}
+  @media(max-width:640px){.rform>*{flex:1 1 100%}}
+  .note{font-size:12px;color:var(--muted);line-height:1.5}
+  .whobar .grow,.bhead .grow,.rform .grow,.lrow .grow{flex:1;min-width:0}
+  .bal{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:1px dashed var(--line)}
+  .bal:last-child{border-bottom:none}
 
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -593,10 +654,10 @@ const STATE = {
       tip:'Keep firmware & software up to date, back up devices monthly, and put expensive electronics on surge protectors to protect the warranty.'},
   ],
   members:[
-    {id:'m1',name:'Young', avatar:'🧑🏻', xp:320, streak:6, dgoal:4, ddone:3, badges:['Warranty Wizard','Zero Overdue'], av:{skin:'#eab98e',hair:'#3a2a1e',style:'short',shirt:'#c9754d'}},
-    {id:'m2',name:'Ivy',   avatar:'👩🏻', xp:410, streak:9, dgoal:5, ddone:5, dbonus:true, badges:['Filter Master','Green Thumb'], av:{skin:'#f0cba6',hair:'#4a2f1e',style:'bun',shirt:'#5ea4c4'}},
-    {id:'m3',name:'Wonjoo',  avatar:'🧒🏻', xp:150, streak:3, dgoal:4, ddone:2, badges:['Spotless'], av:{skin:'#e7b48a',hair:'#2a1c12',style:'buzz',shirt:'#6faa52'}},
-    {id:'m4',name:'Mira',  avatar:'👧🏻', xp:90,  streak:1, dgoal:3, ddone:1, badges:[], av:{skin:'#f2d0b0',hair:'#3a2418',style:'pony',shirt:'#d1789e'}},
+    {id:'m1',name:'Young', avatar:'🧑🏻', xp:320, streak:6, dgoal:4, ddone:3, stars:18, bank:0,   badges:['Warranty Wizard','Zero Overdue'], av:{skin:'#eab98e',hair:'#3a2a1e',style:'short',shirt:'#c9754d'}},
+    {id:'m2',name:'Ivy',   avatar:'👩🏻', xp:410, streak:9, dgoal:5, ddone:5, stars:12, bank:0,   dbonus:true, badges:['Filter Master','Green Thumb'], av:{skin:'#f0cba6',hair:'#4a2f1e',style:'bun',shirt:'#5ea4c4'}},
+    {id:'m3',name:'Wonjoo',  avatar:'🧒🏻', xp:150, streak:3, dgoal:4, ddone:2, stars:64, bank:120, badges:['Spotless'], av:{skin:'#e7b48a',hair:'#2a1c12',style:'buzz',shirt:'#6faa52'}},
+    {id:'m4',name:'Mira',  avatar:'👧🏻', xp:90,  streak:1, dgoal:3, ddone:1, stars:30, bank:45,  badges:[], av:{skin:'#f2d0b0',hair:'#3a2418',style:'pony',shirt:'#d1789e'}},
   ],
   assets:[
     {id:'a1',domainId:'maintenance',name:'Furnace + AC (HVAC)',brand:'Carrier',model:'Infinity 24ANB6',
@@ -852,6 +913,56 @@ const STATE = {
    {id:'g2',scope:'family',title:'Complete 40 tasks this month',metric:'tasksDoneMonth',target:40,period:'month',bonus:{coins:600,points:50}},
    {id:'g3',scope:'member',memberId:'m3',title:'Wonjoo: 5 chores this week',metric:'memberDoneWeek',target:5,period:'month',bonus:{coins:120,points:8}},
   ],
+  // ---- star economy: parents buy stars from the store, post them as bounties, kids bank or spend them ----
+  rewards:{ treasury:305, escrow:140, redeemed:116, bankRate:2, lastInterest:null,
+    purchases:[
+      {id:'sp1',date:'2026-07-21',pack:'Starter Pack',stars:100,price:4.99,by:'m2'},
+      {id:'sp2',date:'2026-07-02',pack:'Big Month',stars:750,price:24.99,by:'m1'},
+    ]},
+  bounties:[
+    {id:'b1',title:'Fold and put away the laundry',domainId:'cleaning',
+      detail:'Two baskets in the hallway — fold, sort by person, put it all away.',
+      stars:25,coins:20,xp:15,dueDate:'2026-08-02',createdBy:'m2',verifierId:null,
+      status:'open',volunteerId:null,claimedAt:null,submittedAt:null,signedBy:null,signedAt:null,paidAt:null,note:''},
+    {id:'b2',title:'Wash the CR-V (inside and out)',domainId:'auto',
+      detail:'Vacuum the seats and mats, wipe the dash, then wash and dry the outside.',
+      stars:40,coins:35,xp:25,dueDate:'2026-08-03',createdBy:'m1',verifierId:'m1',
+      status:'open',volunteerId:null,claimedAt:null,submittedAt:null,signedBy:null,signedAt:null,paidAt:null,note:''},
+    {id:'b3',title:'Water every plant in the house',domainId:'yard',
+      detail:'Front room, kitchen sill and both bedrooms. Check the soil first — soggy pots get skipped.',
+      stars:10,coins:8,xp:10,dueDate:'2026-08-01',createdBy:'m2',verifierId:null,
+      status:'open',volunteerId:null,claimedAt:null,submittedAt:null,signedBy:null,signedAt:null,paidAt:null,note:''},
+    {id:'b4',title:'Walk Mochi after dinner',domainId:'pets',
+      detail:'Twenty minutes around the block, and refill the water bowl when you get back.',
+      stars:15,coins:12,xp:12,dueDate:'2026-07-31',createdBy:'m1',verifierId:'m4',
+      status:'claimed',volunteerId:'m3',claimedAt:'2026-07-30',submittedAt:null,signedBy:null,signedAt:null,paidAt:null,note:''},
+    {id:'b5',title:'Tidy the playroom shelves',domainId:'cleaning',
+      detail:'Books upright, bins labelled, nothing left on the floor.',
+      stars:20,coins:16,xp:12,dueDate:'2026-07-30',createdBy:'m2',verifierId:'m3',
+      status:'submitted',volunteerId:'m4',claimedAt:'2026-07-29',submittedAt:'2026-07-30',signedBy:null,signedAt:null,paidAt:null,note:''},
+    {id:'b6',title:'Sweep the garage',domainId:'maintenance',
+      detail:'Move the bikes out, sweep front to back, put everything back where it was.',
+      stars:30,coins:24,xp:18,dueDate:'2026-07-29',createdBy:'m1',verifierId:'m4',
+      status:'signed',volunteerId:'m3',claimedAt:'2026-07-28',submittedAt:'2026-07-29',signedBy:'m4',signedAt:'2026-07-29',paidAt:null,note:''},
+  ],
+  prizes:[
+    {id:'pz1',name:'Movie night — you pick',emoji:'🎬',stars:40,stock:4},
+    {id:'pz2',name:'Ice cream trip',emoji:'🍦',stars:25,stock:6},
+    {id:'pz3',name:'Extra hour of screen time',emoji:'🎮',stars:30,stock:8},
+    {id:'pz4',name:'Skip-a-chore pass',emoji:'🎫',stars:60,stock:3},
+    {id:'pz5',name:'$10 gift card',emoji:'💳',stars:100,stock:2},
+    {id:'pz6',name:'Pick the dinner menu',emoji:'🍕',stars:50,stock:4},
+    {id:'pz7',name:'Sleepover with a friend',emoji:'🏕️',stars:150,stock:1},
+    {id:'pz8',name:'LEGO set of your choice',emoji:'🧱',stars:400,stock:1},
+  ],
+  redemptions:[
+    {id:'rd1',prizeId:'pz2',memberId:'m4',stars:25,at:'2026-07-29',status:'requested'},
+  ],
+  starLedger:[
+    {id:'sl1',at:'2026-07-28',memberId:'m3',type:'award',stars:20,note:'Rake the front leaves'},
+    {id:'sl2',at:'2026-07-27',memberId:'m4',type:'deposit',stars:15,note:'Moved to the bank'},
+    {id:'sl3',at:'2026-07-26',memberId:'m3',type:'interest',stars:2,note:'Weekly interest'},
+  ],
   points:0,
 };
 
@@ -903,7 +1014,8 @@ function resetGoal(id){ if(!isParent()) return; const g=STATE.goals.find(x=>x.id
 /* ===== Persistence ===== */
 const PKEY='homebase.v1';
 const PERSIST_SLICE=['tasks','assets','receipts','members','pets','goals','approvals',
-  'points','coins','gems','streak','done','roleMode','parents','content','pin'];
+  'points','coins','gems','streak','done','roleMode','parents','content','pin',
+  'rewards','bounties','prizes','redemptions','starLedger','activeMemberId'];
 function saveState(){
   if(typeof GAME==='object'){ STATE.coins = Math.round(GAME.coins); STATE.gems = GAME.gems; }
   try{ const slice={}; PERSIST_SLICE.forEach(k=>{ if(k in STATE) slice[k]=STATE[k]; });
@@ -942,6 +1054,214 @@ function approve(id){ const a=STATE.approvals.find(x=>x.id===id); if(!a||a.statu
 }
 function sendBack(id, note){ const a=STATE.approvals.find(x=>x.id===id); if(!a||a.status!=='pending') return;
   a.status='sent_back'; a.note=note||''; pushToast('Sent back','info'); markDirty(); render(); }
+
+/* ============================================================================
+   STARS — the family reward economy
+   Parents buy stars from the store, post them as bounties on the board, and kids
+   volunteer. A second family member signs off that the work was really done, then
+   the stars move into the kid's wallet — to spend on prizes or bank at interest.
+   Every star in circulation was purchased: nothing is minted out of thin air.
+   ========================================================================== */
+const STAR_PACKS=[
+  {id:'pk_s',name:'Starter Pack', emoji:'✨', stars:100,  price:4.99},
+  {id:'pk_m',name:'Family Pack',  emoji:'🌟', stars:300,  price:12.99, tag:'Most popular'},
+  {id:'pk_l',name:'Big Month',    emoji:'💫', stars:750,  price:24.99, tag:'Best value', best:true},
+  {id:'pk_x',name:'Season Pass',  emoji:'🌠', stars:2000, price:59.99},
+];
+const WEEK_MS=7*86400000, MAX_CATCHUP_WEEKS=8;
+let _bSeq=1, _rdSeq=1, _slSeq=1, _pzSeq=1;
+
+function rw(){ return STATE.rewards; }
+function isParentMember(id){ return (STATE.parents||[]).includes(id); }
+function activeMember(){ return memberById(STATE.activeMemberId) || STATE.members[0]; }
+function setActiveMember(id){ STATE.activeMemberId=id; markDirty(); render(); }
+function kidMembers(){ return STATE.members.filter(m=>!isParentMember(m.id)); }
+function needParent(){ if(isParent()) return true;
+  pushToast('Parent mode only — tap 🔓 Play in the header to switch','warn'); return false; }
+function starLog(memberId,type,stars,note){
+  STATE.starLedger.unshift({id:'sl'+(_slSeq++),at:today(),memberId,type,stars,note:note||''});
+  if(STATE.starLedger.length>200) STATE.starLedger.length=200;
+}
+function bountyById(id){ return STATE.bounties.find(b=>b.id===id); }
+function liveBounties(){ return STATE.bounties.filter(b=>b.status!=='paid'); }
+function openBounties(){ return STATE.bounties.filter(b=>b.status==='open'); }
+function myBounties(mid){ return STATE.bounties.filter(b=>b.volunteerId===mid && ['claimed','submitted','signed'].includes(b.status)); }
+// a chore is signable by anyone who didn't do it — or only by the named partner, when one was named
+function canSignOff(b,mid){ return b.status==='submitted' && mid && mid!==b.volunteerId && (!b.verifierId || b.verifierId===mid); }
+function signoffQueue(mid){ return STATE.bounties.filter(b=>canSignOff(b,mid)); }
+function awaitingRelease(){ return STATE.bounties.filter(b=>b.status==='signed'); }
+function pendingRedemptions(){ return STATE.redemptions.filter(r=>r.status==='requested'); }
+// everything on the board that wants the current player's attention
+function starTodo(){ const me=activeMember(); if(!me) return 0;
+  return signoffQueue(me.id).length + openBounties().length +
+    (isParent()? awaitingRelease().length + pendingRedemptions().length : 0); }
+
+/* ---- posting & claiming ---- */
+function postBounty(ev){ ev.preventDefault(); if(!needParent()) return;
+  const f=ev.target, title=f.title.value.trim(), stars=Math.max(0,parseInt(f.stars.value,10)||0);
+  if(!title) return;
+  if(stars>rw().treasury){ pushToast(`Only ${rw().treasury} ⭐ left in the treasury — top up in the Store`,'warn'); return; }
+  rw().treasury-=stars; rw().escrow+=stars;                    // reserved the moment it's posted, so a bounty is always funded
+  const assignee=f.assignee.value||null;
+  STATE.bounties.unshift({id:'b'+Date.now().toString(36)+(_bSeq++), title,
+    domainId:f.domain.value, detail:f.detail.value.trim(),
+    stars, coins:Math.max(0,parseInt(f.coins.value,10)||0), xp:Math.max(5,Math.round(stars*0.6)),
+    dueDate:f.due.value||addDays(today(),3), createdBy:activeMember().id, verifierId:f.verifier.value||null,
+    status:assignee?'claimed':'open', volunteerId:assignee, claimedAt:assignee?today():null,
+    submittedAt:null,signedBy:null,signedAt:null,paidAt:null,note:''});
+  f.reset(); pushToast(`Posted — ${stars} ⭐ reserved`,'good'); markDirty(); render();
+}
+function volunteerFor(id){ const b=bountyById(id), me=activeMember(); if(!b||b.status!=='open'||!me) return;
+  b.volunteerId=me.id; b.claimedAt=today(); b.status='claimed'; b.note='';
+  pushToast(`${me.name} took it on — ${b.stars} ⭐ on the line`,'good'); markDirty(); render();
+}
+function dropBounty(id){ const b=bountyById(id); if(!b||b.status!=='claimed') return;
+  b.volunteerId=null; b.claimedAt=null; b.status='open';
+  pushToast('Back on the board','info'); markDirty(); render();
+}
+function submitBounty(id){ const b=bountyById(id); if(!b||b.status!=='claimed') return;
+  const sel=document.getElementById('vsel-'+id);
+  if(sel && sel.value) b.verifierId=sel.value;
+  if(!b.verifierId){ pushToast('Pick who signs off first','warn'); return; }
+  if(b.verifierId===b.volunteerId){ pushToast("You can't sign off your own chore",'warn'); return; }
+  b.status='submitted'; b.submittedAt=today();
+  const v=memberById(b.verifierId);
+  pushToast(`Sent to ${v?v.name:'your partner'} to sign off`,'info'); markDirty(); render();
+}
+function signOffBounty(id){ const b=bountyById(id), me=activeMember();
+  if(!b||!me||!canSignOff(b,me.id)){ pushToast("That one isn't yours to sign off",'warn'); return; }
+  b.signedBy=me.id; b.signedAt=today();
+  if(isParentMember(me.id)){ payBounty(b, `${me.name} signed off`); return; }   // a parent's word closes it out
+  b.status='signed';                                                            // a sibling's word still needs a parent
+  pushToast(`Signed off — a parent will release the ${b.stars} ⭐`,'good'); markDirty(); render();
+}
+function rejectBounty(id){ const b=bountyById(id), me=activeMember();
+  if(!b||!me||!canSignOff(b,me.id)) return;
+  const note=prompt('What still needs doing?')||'';
+  b.status='claimed'; b.submittedAt=null; b.note=note;
+  pushToast('Sent back for another pass','warn'); markDirty(); render();
+}
+function releaseBounty(id){ if(!needParent()) return;
+  const b=bountyById(id); if(!b||b.status!=='signed') return;
+  payBounty(b, 'released by a parent');
+}
+function payBounty(b, why){
+  const m=memberById(b.volunteerId); if(!m) return;
+  rw().escrow=Math.max(0,rw().escrow-b.stars);
+  m.stars=(m.stars||0)+b.stars;
+  if(b.coins) GAME.coins+=b.coins;
+  if(b.xp){ m.xp+=b.xp; m.streak=(m.streak||0)+1; }
+  creditDone(m.id);
+  b.status='paid'; b.paidAt=today();
+  starLog(m.id,'award',b.stars,b.title);
+  celebrate(); pushToast(`⭐ ${b.stars} to ${m.name} — ${why}`,'good');
+  markDirty(); checkGoals(); render();
+}
+function cancelBounty(id){ if(!needParent()) return;
+  const b=bountyById(id); if(!b||b.status==='paid') return;
+  if(!confirm(`Cancel "${b.title}" and return ${b.stars} ⭐ to the treasury?`)) return;
+  rw().escrow=Math.max(0,rw().escrow-b.stars); rw().treasury+=b.stars;
+  STATE.bounties=STATE.bounties.filter(x=>x.id!==id);
+  pushToast('Cancelled — stars returned','info'); markDirty(); render();
+}
+
+/* ---- the bank: stars left in the bank earn interest every week ---- */
+function weeklyInterest(m){ return Math.floor((m.bank||0)*(rw().bankRate||0)/100); }
+function depositStars(mid){ const m=memberById(mid), el=document.getElementById('bankamt');
+  const n=Math.min(m.stars||0, Math.max(0,parseInt(el&&el.value,10)||0));
+  if(!n){ pushToast('Enter how many stars to bank','warn'); return; }
+  m.stars-=n; m.bank=(m.bank||0)+n; starLog(mid,'deposit',n,'Moved to the bank');
+  pushToast(`Banked ${n} ⭐ — earning ${rw().bankRate}% a week`,'good'); markDirty(); render();
+}
+function withdrawStars(mid){ const m=memberById(mid), el=document.getElementById('bankamt');
+  const n=Math.min(m.bank||0, Math.max(0,parseInt(el&&el.value,10)||0));
+  if(!n){ pushToast('Enter how many stars to take out','warn'); return; }
+  m.bank-=n; m.stars=(m.stars||0)+n; starLog(mid,'withdraw',n,'Taken out of the bank');
+  pushToast(`${n} ⭐ back in your wallet`,'info'); markDirty(); render();
+}
+function bankAll(mid){ const m=memberById(mid); const el=document.getElementById('bankamt'); if(el) el.value=m.stars||0; }
+function payInterest(weeks){
+  let paid=0, short=false;
+  for(let w=0;w<weeks;w++) STATE.members.forEach(m=>{
+    const gain=weeklyInterest(m); if(!gain) return;
+    if(rw().treasury<gain){ short=true; return; }                 // interest is funded from purchased stars too
+    rw().treasury-=gain; m.bank+=gain; paid+=gain; starLog(m.id,'interest',gain,'Weekly interest');
+  });
+  if(paid) pushToast(`🏦 ${paid} ⭐ of interest paid`,'good');
+  if(short) pushToast('Treasury too low to pay all interest — top up in the Store','warn');
+  markDirty(); return paid;
+}
+function runInterest(){                                            // catch-up on load, capped so a long absence can't explode
+  const now=Date.now();
+  if(!rw().lastInterest){ rw().lastInterest=now; return; }
+  const weeks=Math.min(MAX_CATCHUP_WEEKS, Math.floor((now-rw().lastInterest)/WEEK_MS));
+  if(weeks<1) return;
+  payInterest(weeks); rw().lastInterest+=weeks*WEEK_MS;
+}
+function advanceWeek(){ if(!needParent()) return;
+  payInterest(1); rw().lastInterest=Date.now(); render();
+}
+function setBankRate(v){ if(!needParent()) return;
+  rw().bankRate=Math.max(0,Math.min(20,parseFloat(v)||0)); markDirty(); render();
+}
+function nextInterestIn(){ const ms=(rw().lastInterest||Date.now())+WEEK_MS-Date.now();
+  const d=Math.ceil(ms/86400000); return d<=0?'any moment':`in ${d} day${d===1?'':'s'}`; }
+
+/* ---- prize catalogue ---- */
+function prizeById(id){ return STATE.prizes.find(p=>p.id===id); }
+function redeemPrize(id){ const p=prizeById(id), me=activeMember(); if(!p||!me) return;
+  if(p.stock<=0){ pushToast('All gone for now','warn'); return; }
+  if((me.stars||0)<p.stars){ pushToast(`${p.stars-(me.stars||0)} ⭐ short — keep earning!`,'warn'); return; }
+  me.stars-=p.stars; rw().redeemed=(rw().redeemed||0)+p.stars;
+  STATE.redemptions.unshift({id:'rd'+Date.now().toString(36)+(_rdSeq++),prizeId:id,memberId:me.id,stars:p.stars,at:today(),status:'requested'});
+  starLog(me.id,'redeem',p.stars,p.name);
+  celebrate(); pushToast(`${p.emoji} Requested — a parent will hand it over`,'good'); markDirty(); render();
+}
+function fulfillRedemption(id){ if(!needParent()) return;
+  const r=STATE.redemptions.find(x=>x.id===id); if(!r||r.status!=='requested') return;
+  const p=prizeById(r.prizeId); if(p&&p.stock>0) p.stock--;
+  r.status='fulfilled'; r.closedAt=today();
+  pushToast('Handed over 🎁','good'); markDirty(); render();
+}
+function declineRedemption(id){ if(!needParent()) return;
+  const r=STATE.redemptions.find(x=>x.id===id); if(!r||r.status!=='requested') return;
+  const m=memberById(r.memberId); if(m) m.stars=(m.stars||0)+r.stars;            // stars go straight back
+  rw().redeemed=Math.max(0,(rw().redeemed||0)-r.stars);
+  r.status='declined'; r.closedAt=today();
+  starLog(r.memberId,'refund',r.stars,'Redemption declined');
+  pushToast('Declined — stars refunded','info'); markDirty(); render();
+}
+function addPrize(ev){ ev.preventDefault(); if(!needParent()) return;
+  const f=ev.target, name=f.pname.value.trim(); if(!name) return;
+  STATE.prizes.push({id:'pz'+Date.now().toString(36)+(_pzSeq++), name,
+    emoji:(f.emoji.value.trim()||'🎁').slice(0,4),
+    stars:Math.max(1,parseInt(f.stars.value,10)||10), stock:Math.max(1,parseInt(f.stock.value,10)||1)});
+  f.reset(); pushToast('Added to the catalogue','good'); markDirty(); render();
+}
+function removePrize(id){ if(!needParent()) return;
+  const p=prizeById(id); if(!p||!confirm(`Remove "${p.name}" from the catalogue?`)) return;
+  STATE.prizes=STATE.prizes.filter(x=>x.id!==id); markDirty(); render();
+}
+
+/* ---- the store: where stars come from ---- */
+function starsPurchased(){ return (rw().purchases||[]).reduce((s,p)=>s+p.stars,0); }
+function starsHeld(){ return STATE.members.reduce((s,m)=>s+(m.stars||0),0); }
+function starsBanked(){ return STATE.members.reduce((s,m)=>s+(m.bank||0),0); }
+function buyStars(packId){ if(!needParent()) return;
+  const p=STAR_PACKS.find(x=>x.id===packId); if(!p) return;
+  if(!confirm(`Buy ${p.stars} ⭐ for $${p.price.toFixed(2)}?\n\nDemo checkout — no card is charged.`)) return;
+  rw().treasury+=p.stars;
+  rw().purchases.unshift({id:'sp'+Date.now().toString(36),date:today(),pack:p.name,stars:p.stars,price:p.price,by:activeMember().id});
+  celebrate(); pushToast(`+${p.stars} ⭐ in the treasury`,'good'); markDirty(); render();
+}
+function giftStars(ev){ ev.preventDefault(); if(!needParent()) return;
+  const f=ev.target, n=Math.max(0,parseInt(f.stars.value,10)||0), mid=f.member.value;
+  const m=memberById(mid); if(!m||!n) return;
+  if(n>rw().treasury){ pushToast(`Only ${rw().treasury} ⭐ in the treasury`,'warn'); return; }
+  rw().treasury-=n; m.stars=(m.stars||0)+n;
+  starLog(mid,'gift',n,f.note.value.trim()||'A gift from a parent');
+  f.reset(); celebrate(); pushToast(`🎁 ${n} ⭐ to ${m.name}`,'good'); markDirty(); render();
+}
 
 let RECEIPT_SEQ=100;
 let TASK_SEQ = 100;
@@ -1093,7 +1413,7 @@ let DRAG=null;
 function canAssign(uId,nId){ const u=GAME.units[uId], n=GAME.nodes[nId];
   return u&&n&&u.status==='idle'&&(n.state==='due'||n.state==='overdue')&&!n.job&&GAME.energy>=TUNE.jobEnergyCost; }
 function makeGhost(uId,e){ const src=unitEl(uId), img=src&&src.querySelector('.uimg');
-  const g=document.createElement('div'); g.className='ghost';
+  const g=document.createElement('div'); g.className='dragghost';
   g.innerHTML = img ? `<img src="${img.src}" draggable="false">` : '🧑';
   document.body.appendChild(g); moveGhost(e); return g; }
 function moveGhost(e){ if(!DRAG||!DRAG.ghost) return;
@@ -1543,11 +1863,12 @@ function renderDepartments(){
 function gameNav(active){
   const items=[['overworld','🗺️','Map',"openView('overworld')"],['campaign','🎯','Journey',"openView('campaign')"],['departments','🏠','Depts',"openView('departments')"],['calendar','🗓️','Calendar',"openView('calendar')"],
     ['vault','🗄️','Assets',"openView('vault')"],['receipts','🧾','Receipts',"openView('receipts')"],
-    ['pets','🐾','Pets',"openView('pets')"],['approvals','📋','Approve',"openView('approvals')"],
+    ['pets','🐾','Pets',"openView('pets')"],['rewards','⭐','Stars',"openView('rewards')"],['approvals','📋','Approve',"openView('approvals')"],
     ['findpro','🔧','Find Pro',"openFindPro('handyman')"],['family','🏆','Family',"openView('family')"]];
-  const pend=pendingApprovals().length;
-  return `<div class="gamenav">`+items.map(([id,ic,lb,act])=>
-    `<button class="gnav${id===active?' on':''}" onclick="${act}" style="position:relative">${id==='approvals'&&pend?`<span class="badge">${pend}</span>`:''}<span class="gi">${ic}</span>${lb}</button>`).join('')+`</div>`;
+  const pend=pendingApprovals().length, stars=starTodo();
+  const badgeFor=id=> id==='approvals'?pend : id==='rewards'?stars : 0;
+  return `<div class="gamenav">`+items.map(([id,ic,lb,act])=>{ const n=badgeFor(id);
+    return `<button class="gnav${id===active?' on':''}" onclick="${act}" style="position:relative">${n?`<span class="badge">${n}</span>`:''}<span class="gi">${ic}</span>${lb}</button>`;}).join('')+`</div>`;
 }
 /* ---- Home Mastery campaign (guided playbook, mirrors Command Control) ---- */
 const CAMPAIGN=[
@@ -1662,6 +1983,8 @@ function shellHeader(){
           <span class="entxt"><span id="hud-energy-n">${Math.round(GAME.energy)}</span>/${TUNE.energyMax}</span></div>
         <div class="cur">🪙 <span id="hud-coins-n">${Math.round(GAME.coins).toLocaleString()}</span></div>
         <div class="cur">💎 <span id="hud-gems-n">${GAME.gems}</span></div>
+        <div class="cur" onclick="openView('rewards')" style="cursor:pointer"
+          title="${esc(activeMember().name)}'s stars — tap for the bounty board">⭐ ${activeMember().stars||0}</div>
         <div class="cur" onclick="toggleParentMode()" title="Toggle parent mode" style="cursor:pointer">${isParent()?'👪 Parent':'🔓 Play'}</div>
       </div>
       <div class="topbar-nav">${gameNav(STATE.view)}</div>
@@ -1702,6 +2025,7 @@ function viewMiddle(v){
     : v==='receipts' ? renderReceipts()
     : v==='pets'     ? renderPetsIndex()
     : v==='family'   ? renderFamily()
+    : v==='rewards'  ? renderRewards()
     : v==='approvals'? renderApprovals()
     : mapMiddle();
 }
@@ -2248,7 +2572,12 @@ function approvalRow(a){
 function renderApprovals(){
   const pend=pendingApprovals();
   const rows=pend.length?pend.map(approvalRow).join(''):`<div class="empty card">Nothing waiting on approval. 🎉</div>`;
-  return backbar('📋 Approvals')+
+  const me=activeMember(), sign=signoffQueue(me.id).length, rel=isParent()?awaitingRelease().length:0;
+  const star=(sign+rel)?`<div class="card" style="padding:12px 15px;margin-bottom:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:22px">⭐</span>
+      <span class="grow">${sign?`<b>${sign}</b> star ${sign===1?'chore is':'chores are'} waiting on ${esc(me.name)} to sign off. `:''}${rel?`<b>${rel}</b> signed off and ready for a parent to release.`:''}</span>
+      <button class="btn" onclick="openView('rewards')">Go to the bounty board</button></div>`:'';
+  return backbar('📋 Approvals')+star+
     `<div class="muted" style="margin:0 4px 12px">${pend.length} pending${isParent()?'':' · waiting for a parent to review'}</div>`+
     `<div class="tasklist">${rows}</div>`;
 }
@@ -2265,7 +2594,8 @@ function renderFamily(){
     return `<div class="mcard card">
       <div class="top">${memberAv(m,52)}
         <div class="grow"><b style="font-size:17px">${esc(m.name)}</b>
-          <div class="muted" style="font-size:13px">${m.xp} XP · 🔥 ${m.streak}-day streak</div></div></div>
+          <div class="muted" style="font-size:13px">${m.xp} XP · 🔥 ${m.streak}-day streak</div>
+          <div style="font-size:13px;margin-top:2px">⭐ <b>${m.stars||0}</b> to spend · 🏦 <b>${m.bank||0}</b> banked</div></div></div>
       <div class="badges">${badges}</div>
       <div class="sec-title" style="margin:14px 4px 6px">Assigned chores</div>${list}
     </div>`;
@@ -2289,6 +2619,233 @@ function renderFamily(){
       <button class="btn ghost" style="font-size:12px;padding:6px 10px" onclick="if(confirm('Reset all Home Base data to the demo?')) resetDemo()">↺ Reset demo</button>
     </div>`+reward+shelf+
     `<div class="sec-title">Leaderboard</div><div class="card lead">${lead}</div><div class="mcards">${cards}</div>`;
+}
+
+/* ============================ STARS & REWARDS UI ============================ */
+function starTab(t){ STATE.rtab=t; render(); }
+function memberOpts(sel,skip,blank){
+  return (blank?`<option value="">${blank}</option>`:'')+
+    STATE.members.filter(m=>m.id!==skip)
+      .map(m=>`<option value="${m.id}"${m.id===sel?' selected':''}>${m.avatar} ${esc(m.name)}${isParentMember(m.id)?' (parent)':''}</option>`).join('');
+}
+function whoBar(){
+  const me=activeMember(), tot=(me.stars||0)+(me.bank||0);
+  return `<div class="card whobar">
+    <span class="wlab">Playing as</span>
+    ${memberAv(me,34)}
+    <select onchange="setActiveMember(this.value)" title="Switch family member">${memberOpts(me.id,null,null)}</select>
+    <span class="wchip">⭐ <b>${me.stars||0}</b> to spend</span>
+    <span class="wchip">🏦 <b>${me.bank||0}</b> banked</span>
+    <span class="wchip">Σ <b>${tot}</b> total</span>
+    <div class="grow"></div>
+    ${isParent()
+      ? `<span class="wchip" title="Stars bought and not yet promised">🏛️ Treasury <b>${rw().treasury}</b></span>
+         <span class="wchip" title="Stars reserved on posted bounties">🔒 Reserved <b>${rw().escrow}</b></span>`
+      : `<span class="note">Ask a parent to switch on 👪 parent mode to post chores or buy stars.</span>`}
+  </div>`;
+}
+function starSteps(b){
+  const idx = b.status==='open'?0 : b.status==='claimed'?1 : b.status==='submitted'?2 : b.status==='signed'?3 : 4;
+  return `<div class="steps">`+['Claimed','Done','Signed','Paid'].map((s,i)=>
+    `<div class="step${idx>i?' on':idx===i?' cur':''}">${s}</div>`).join('')+`</div>`;
+}
+function bountyCard(b){
+  const me=activeMember(), d=domainById(b.domainId), vol=memberById(b.volunteerId), ver=memberById(b.verifierId);
+  const mine=b.volunteerId===me.id, signable=canSignOff(b,me.id);
+  const due=b.status==='paid'?'':`<span class="chip">${dueStatus({status:b.status,dueDate:b.dueDate})==='overdue'?'⛔ ':'📅 '}due ${relDay(b.dueDate)}</span>`;
+  let acts='';
+  if(b.status==='open'){
+    acts=`<button class="btn" onclick="volunteerFor('${b.id}')">🙋 I'll do it</button>
+      ${isParent()?`<button class="btn ghost" onclick="cancelBounty('${b.id}')">✕ Cancel</button>`:''}`;
+  } else if(b.status==='claimed'){
+    acts = mine
+      ? `${b.verifierId?'':`<select id="vsel-${b.id}" style="font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)">${memberOpts(null,b.volunteerId,'Who signs off?')}</select>`}
+         <button class="btn" onclick="submitBounty('${b.id}')">✓ Mark it done</button>
+         <button class="btn ghost" onclick="dropBounty('${b.id}')">↩ Give it back</button>`
+      : `<span class="note">${esc(vol?vol.name:'Someone')} is on it.</span>
+         ${isParent()?`<button class="btn ghost" onclick="cancelBounty('${b.id}')">✕ Cancel</button>`:''}`;
+  } else if(b.status==='submitted'){
+    acts = signable
+      ? `<button class="btn" onclick="signOffBounty('${b.id}')">✍️ Sign off</button>
+         <button class="btn ghost" onclick="rejectBounty('${b.id}')">↩ Not yet</button>`
+      : `<span class="note">Waiting on ${esc(ver?ver.name:'a family member')} to sign off.</span>`;
+  } else if(b.status==='signed'){
+    const sb=memberById(b.signedBy);
+    acts = isParent()
+      ? `<button class="btn" onclick="releaseBounty('${b.id}')">💸 Release ${b.stars} ⭐</button>
+         <span class="note">${esc(sb?sb.name:'A sibling')} signed off on ${esc(vol?vol.name:'')}'s work.</span>`
+      : `<span class="note">✍️ ${esc(sb?sb.name:'Signed')} signed off — a parent releases the stars.</span>`;
+  } else {
+    acts=`<span class="note">🎉 Paid out ${b.stars} ⭐ to ${esc(vol?vol.name:'')} on ${fmtDate(b.paidAt||today())}.</span>`;
+  }
+  return `<div class="card bcard${signable?' needsme':mine?' mine':''}">
+    <div class="bhead">
+      <div class="grow"><div class="btitle">${esc(b.title)}</div>
+        ${b.detail?`<div class="bdesc" style="margin-top:4px">${esc(b.detail)}</div>`:''}</div>
+      <div class="bpay"><div class="stars" style="font-size:19px">${b.stars} ⭐</div>
+        ${b.coins?`<div class="muted" style="font-size:12px">+ ${b.coins} 🪙</div>`:''}</div>
+    </div>
+    <div class="bwho">${d?`<span class="chip">${d.icon} ${esc(d.name.split(/[ &]/)[0])}</span>`:''}${due}
+      ${vol?`<span>${memberAv(vol,22)} ${esc(vol.name)}</span>`:'<span>🙋 open to anyone</span>'}
+      <span>✍️ ${ver?`${memberAv(ver,22)} ${esc(ver.name)} signs off`:'anyone but the doer signs off'}</span></div>
+    ${b.note?`<div class="note" style="color:var(--red)">↩ Sent back: ${esc(b.note)}</div>`:''}
+    ${starSteps(b)}
+    <div class="bact">${acts}</div>
+  </div>`;
+}
+function bountySection(title,list,empty){
+  return `<div class="sec-title">${title}${list.length?` · ${list.length}`:''}</div>`+
+    (list.length?`<div class="bgrid">${list.map(bountyCard).join('')}</div>`
+                :`<div class="empty card">${empty}</div>`);
+}
+function renderBountyBoard(){
+  const me=activeMember();
+  const mine=myBounties(me.id), sign=signoffQueue(me.id), open=openBounties();
+  const rel=awaitingRelease(), others=STATE.bounties.filter(b=>
+    ['claimed','submitted'].includes(b.status) && b.volunteerId!==me.id && !canSignOff(b,me.id));
+  const paid=STATE.bounties.filter(b=>b.status==='paid').slice(0,4);
+  const form=isParent()?`
+    <form class="card rform" onsubmit="postBounty(event)">
+      <input name="title" placeholder="Chore or task — e.g. Rake the back yard" required>
+      <input name="detail" placeholder="What 'done' looks like (optional)" style="flex:1;min-width:190px">
+      <select name="domain">${STATE.domains.map(d=>`<option value="${d.id}">${d.icon} ${esc(d.name)}</option>`).join('')}</select>
+      <input class="num" name="stars" type="number" min="1" value="20" title="Stars" placeholder="⭐">
+      <input class="num" name="coins" type="number" min="0" value="16" title="Coins" placeholder="🪙">
+      <input name="due" type="date" value="${addDays(today(),3)}">
+      <select name="assignee" title="Assign directly, or leave open for volunteers"><option value="">🙋 Open to volunteers</option>${memberOpts(null,null,null)}</select>
+      <select name="verifier" title="Accountability partner">${memberOpts(null,null,'✍️ Anyone can sign off')}</select>
+      <button class="btn" type="submit">Post bounty</button>
+    </form>
+    <div class="note" style="margin:-6px 4px 16px">Stars are reserved from the treasury the moment you post, so a bounty is always funded. Cancel to get them back.</div>`
+    :`<div class="note" style="margin:0 4px 14px">Grab any open chore below. When you're done, your accountability partner signs off — then the stars are yours.</div>`;
+  return form+
+    (sign.length?bountySection('✍️ Waiting on your sign-off',sign,''):'')+
+    (isParent()&&rel.length?bountySection('💸 Signed off — release the stars',rel,''):'')+
+    (mine.length?bountySection(`🎯 ${esc(me.name)}'s chores in progress`,mine,''):'')+
+    bountySection('🙋 Open — volunteer now',open,'No open bounties right now. A parent can post one above.')+
+    (others.length?bountySection('👀 Other people are on these',others,''):'')+
+    (paid.length?bountySection('✅ Recently paid out',paid,''):'');
+}
+function ledgerIcon(t){ return {award:'⭐',gift:'🎁',deposit:'🏦',withdraw:'💸',interest:'📈',redeem:'🛍️',refund:'↩️'}[t]||'•'; }
+function renderBankTab(){
+  const me=activeMember(), gain=weeklyInterest(me);
+  const rows=STATE.members.map(m=>`<div class="bal">
+      <span class="row" style="gap:8px">${memberAv(m,28)} <b>${esc(m.name)}</b>${isParentMember(m.id)?'<span class="chip">parent</span>':''}</span>
+      <span class="muted" style="font-variant-numeric:tabular-nums">⭐ ${m.stars||0} · 🏦 ${m.bank||0}
+        <b style="color:var(--ink)">= ${(m.stars||0)+(m.bank||0)}</b></span></div>`).join('');
+  const led=STATE.starLedger.filter(l=>isParent()||l.memberId===me.id).slice(0,12);
+  const ledRows=led.length?led.map(l=>{ const m=memberById(l.memberId), up=['award','gift','interest','withdraw','refund'].includes(l.type);
+    return `<div class="lrow"><span style="font-size:16px">${ledgerIcon(l.type)}</span>
+      <span class="grow">${esc(l.note||l.type)}<div class="muted" style="font-size:11.5px">${esc(m?m.name:'')} · ${fmtDate(l.at)}</div></span>
+      <span class="lamt ${up?'lup':'ldn'}">${up?'+':'−'}${l.stars} ⭐</span></div>`; }).join('')
+    :`<div class="empty">No star activity yet.</div>`;
+  return `<div class="walletgrid">
+      <div class="card wcard"><div class="wlab">Wallet — ready to spend</div><div class="wnum" style="color:var(--accent2)">⭐ ${me.stars||0}</div></div>
+      <div class="card wcard"><div class="wlab">In the bank</div><div class="wnum" style="color:var(--green)">🏦 ${me.bank||0}</div></div>
+      <div class="card wcard"><div class="wlab">Interest rate</div><div class="wnum">${rw().bankRate}<span style="font-size:15px">% / week</span></div></div>
+      <div class="card wcard"><div class="wlab">Next payout ${nextInterestIn()}</div><div class="wnum" style="color:var(--green)">+${gain} ⭐</div></div>
+    </div>
+    <div class="card rform" style="margin-top:14px">
+      <label>Move stars</label>
+      <input class="num" id="bankamt" type="number" min="1" placeholder="0" style="width:110px">
+      <button class="btn ghost" onclick="bankAll('${me.id}')">All ${me.stars||0}</button>
+      <button class="btn" onclick="depositStars('${me.id}')">🏦 Bank it</button>
+      <button class="btn ghost" onclick="withdrawStars('${me.id}')">💸 Take out</button>
+      <div class="grow"></div>
+      ${isParent()?`<label>Rate %/week</label>
+        <input class="num" type="number" min="0" max="20" step="0.5" value="${rw().bankRate}" onchange="setBankRate(this.value)" style="width:88px">
+        <button class="btn ghost" onclick="advanceWeek()" title="Demo: pay a week of interest right now">⏩ Pay a week</button>`:''}
+    </div>
+    <div class="note" style="margin:8px 4px 0">Anything left in the bank earns <b>${rw().bankRate}% a week</b>, paid automatically every 7 days.
+      ${me.bank?`At this rate ${esc(me.name)}'s ${me.bank} ⭐ becomes <b>${Math.round((me.bank)*Math.pow(1+rw().bankRate/100,4))} ⭐</b> in a month if left alone.`:'Bank some stars to start earning.'}
+      Interest is paid out of the family treasury, so parents keep it funded from the Store.</div>
+    <div class="sec-title">Family balances</div><div class="card">${rows}</div>
+    <div class="sec-title">Star activity</div><div class="card">${ledRows}</div>`;
+}
+function renderPrizesTab(){
+  const me=activeMember();
+  const pend=STATE.redemptions.filter(r=>r.status==='requested'&&(isParent()||r.memberId===me.id));
+  const pendHTML=pend.length?`<div class="sec-title">🎁 Waiting to be handed over · ${pend.length}</div>
+    <div class="tasklist">`+pend.map(r=>{ const p=prizeById(r.prizeId), m=memberById(r.memberId);
+      return `<div class="trow"><span style="font-size:26px">${p?p.emoji:'🎁'}</span>
+        <div class="grow"><div class="tt">${esc(p?p.name:'Prize')}</div>
+          <div class="meta">${esc(m?m.name:'')} · ${r.stars} ⭐ · requested ${fmtDate(r.at)}</div></div>
+        ${isParent()?`<button class="btn" onclick="fulfillRedemption('${r.id}')">✓ Handed over</button>
+          <button class="btn ghost" onclick="declineRedemption('${r.id}')">↩ Refund</button>`
+          :`<span class="chip">waiting on a parent</span>`}</div>`;}).join('')+`</div>`:'';
+  const cards=STATE.prizes.map(p=>{
+    const short=(me.stars||0)<p.stars, out=p.stock<=0;
+    return `<div class="card pzcard${short||out?' short':''}">
+      <div class="pzem">${p.emoji}</div>
+      <div class="pzn">${esc(p.name)}</div>
+      <div class="pzc">${p.stars} ⭐</div>
+      <div class="muted" style="font-size:12px">${out?'Out of stock':`${p.stock} left`}</div>
+      <button class="btn${short||out?' ghost':''}" style="width:100%${out?';opacity:.5':''}" ${out?'disabled':''}
+        onclick="redeemPrize('${p.id}')">${out?'Sold out':short?`${p.stars-(me.stars||0)} ⭐ to go`:'Redeem'}</button>
+      ${isParent()?`<button class="btn ghost" style="width:100%;font-size:12px;padding:5px" onclick="removePrize('${p.id}')">Remove</button>`:''}
+    </div>`;}).join('');
+  const form=isParent()?`<div class="sec-title">Add a prize</div>
+    <form class="card rform" onsubmit="addPrize(event)">
+      <input name="pname" placeholder="Prize name — e.g. Trip to the pool" required style="flex:1;min-width:190px">
+      <input class="num" name="emoji" placeholder="🏊" style="width:80px">
+      <input class="num" name="stars" type="number" min="1" value="50" title="Star cost">
+      <input class="num" name="stock" type="number" min="1" value="1" title="How many available">
+      <button class="btn" type="submit">Add to catalogue</button>
+    </form>`:'';
+  return pendHTML+
+    `<div class="sec-title">🛍️ Prize catalogue · ${esc(me.name)} has ${me.stars||0} ⭐</div>
+     <div class="prizegrid">${cards}</div>`+form;
+}
+function renderStoreTab(){
+  if(!isParent()) return `<div class="card empty">
+      <div style="font-size:38px">🔒</div>
+      <b style="color:var(--ink)">The star store is parent-only</b>
+      <div class="note" style="margin-top:6px">Stars are bought here with real money, then handed out as rewards.<br>
+        A parent can unlock it with 👪 parent mode in the header.</div>
+      <button class="btn" style="margin-top:12px" onclick="toggleParentMode()">Switch to parent mode</button>
+    </div>`;
+  const packs=STAR_PACKS.map(p=>`<div class="card pack${p.best?' best':''}">
+      ${p.tag?`<span class="tag">${p.tag}</span>`:''}
+      <div class="pk">${p.emoji}</div>
+      <div class="ps">${p.stars.toLocaleString()} ⭐</div>
+      <div class="pp">$${p.price.toFixed(2)} · ${(p.price/p.stars*100).toFixed(1)}¢ a star</div>
+      <button class="btn" style="width:100%" onclick="buyStars('${p.id}')">Buy</button>
+    </div>`).join('');
+  const hist=(rw().purchases||[]).length?rw().purchases.map(p=>{ const m=memberById(p.by);
+      return `<div class="lrow"><span style="font-size:16px">🧾</span>
+        <span class="grow">${esc(p.pack)}<div class="muted" style="font-size:11.5px">${fmtDate(p.date)} · ${esc(m?m.name:'')}</div></span>
+        <span class="lamt lup">+${p.stars} ⭐</span><span class="muted" style="width:64px;text-align:right">$${p.price.toFixed(2)}</span></div>`;
+    }).join(''):'<div class="empty">No purchases yet.</div>';
+  const spend=(rw().purchases||[]).reduce((s,p)=>s+p.price,0);
+  return `<div class="walletgrid">
+      <div class="card wcard"><div class="wlab">Treasury — ready to hand out</div><div class="wnum" style="color:var(--accent2)">⭐ ${rw().treasury}</div></div>
+      <div class="card wcard"><div class="wlab">Reserved on bounties</div><div class="wnum">🔒 ${rw().escrow}</div></div>
+      <div class="card wcard"><div class="wlab">Held by the family</div><div class="wnum">${starsHeld()+starsBanked()}</div></div>
+      <div class="card wcard"><div class="wlab">Bought all-time</div><div class="wnum">${starsPurchased().toLocaleString()}</div>
+        <div class="muted" style="font-size:12px">$${spend.toFixed(2)} spent</div></div>
+    </div>
+    <div class="sec-title">Buy stars</div>
+    <div class="packgrid">${packs}</div>
+    <div class="note" style="margin:14px 4px 0">Demo checkout — no card is charged. Stars only enter the family economy here:
+      bounties, gifts and bank interest all draw on the treasury, so it never pays out more than you've bought.</div>
+    <div class="sec-title">🎁 Give stars directly</div>
+    <form class="card rform" onsubmit="giftStars(event)">
+      <select name="member">${memberOpts(kidMembers()[0]&&kidMembers()[0].id,null,null)}</select>
+      <input class="num" name="stars" type="number" min="1" value="10" title="Stars">
+      <input name="note" placeholder="What's it for? — e.g. Helped without being asked">
+      <button class="btn" type="submit">Give stars</button>
+    </form>
+    <div class="sec-title">Purchase history</div><div class="card">${hist}</div>`;
+}
+function renderRewards(){
+  const me=activeMember(), tab=STATE.rtab||'board';
+  const sign=signoffQueue(me.id).length + (isParent()?awaitingRelease().length+pendingRedemptions().length:0);
+  const tabs=[['board','⭐ Bounty board',openBounties().length+sign],['bank','🏦 Bank',0],
+    ['prizes','🛍️ Prizes',0],['store','🏛️ Store',0]];
+  const nav=`<div class="rtabs">`+tabs.map(([id,lb,n])=>
+    `<button class="rtab${id===tab?' on':''}" onclick="starTab('${id}')">${lb}${n?`<span class="badge">${n}</span>`:''}</button>`).join('')+`</div>`;
+  const body = tab==='bank'?renderBankTab() : tab==='prizes'?renderPrizesTab() : tab==='store'?renderStoreTab() : renderBountyBoard();
+  return backbar('⭐ Stars & Rewards')+whoBar()+nav+body;
 }
 
 /* ============================ ACTIONS ============================ */
@@ -2343,6 +2900,14 @@ STATE.goals=STATE.goals||[]; STATE.approvals=STATE.approvals||[]; STATE.points=S
 STATE.roleMode=STATE.roleMode||'play'; STATE.parents=STATE.parents||['m1','m2'];
 STATE.content=STATE.content||{}; if(!('pin' in STATE)) STATE.pin=null;
 STATE.tasks.forEach(t=>{ if(t.needsApproval===undefined)t.needsApproval=false; if(!t.reward)t.reward={coins:choreCoins(t)}; });
+// star economy — defaults so saves from before the rewards update still load
+STATE.rewards=Object.assign({treasury:0,escrow:0,redeemed:0,bankRate:2,lastInterest:null,purchases:[]}, STATE.rewards||{});
+STATE.bounties=STATE.bounties||[]; STATE.prizes=STATE.prizes||[];
+STATE.redemptions=STATE.redemptions||[]; STATE.starLedger=STATE.starLedger||[];
+STATE.members.forEach(m=>{ m.stars=m.stars||0; m.bank=m.bank||0; });
+if(!memberById(STATE.activeMemberId)) STATE.activeMemberId=(kidMembers()[0]||STATE.members[0]).id;
+STATE.rtab=STATE.rtab||'board';
+runInterest();
 GAME.coins = STATE.coins; GAME.gems = STATE.gems;
 initGame(); startClock();
 render();
