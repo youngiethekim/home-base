@@ -778,43 +778,43 @@ const STATE = {
       parts:[],serviceLog:[]},
   ],
   tasks:[
-    {id:'t1', domainId:'maintenance',assetId:'a1', title:'Replace HVAC air filter',   assigneeId:'m2',dueDate:'2026-07-01',recurring:{everyDays:90}, status:'open',xp:40},
-    {id:'t2', domainId:'kitchen',    assetId:'a2', title:'Clean fridge condenser fan', assigneeId:'m1',dueDate:'2026-07-14',recurring:{everyDays:180},status:'open',xp:35},
-    {id:'t3', domainId:'cleaning',   assetId:'a4', title:'Clean dryer lint vent',      assigneeId:'m1',dueDate:'2026-06-28',recurring:{everyDays:90}, status:'open',xp:30},
-    {id:'t4', domainId:'maintenance',assetId:'a6', title:'Flush water heater',         assigneeId:'m1',dueDate:'2026-06-01',recurring:{everyDays:365},status:'open',xp:50},
-    {id:'t5', domainId:'yard',       assetId:null, title:'Mow the lawn',               assigneeId:'m3',dueDate:'2026-07-31',recurring:{everyDays:7},  status:'open',xp:15},
-    {id:'t6', domainId:'cleaning',   assetId:null, title:'Take out trash & recycling', assigneeId:'m4',dueDate:'2026-07-30',recurring:{everyDays:7},  status:'open',xp:10},
-    {id:'t7', domainId:'cleaning',   assetId:'a3', title:'Run washer clean cycle',     assigneeId:'m2',dueDate:'2026-07-20',recurring:{everyDays:30}, status:'open',xp:15},
-    {id:'t8', domainId:'safety',     assetId:'a9', title:'Test smoke & CO detectors',  assigneeId:'m1',dueDate:'2026-08-04',recurring:{everyDays:30}, status:'open',xp:20},
-    {id:'t9', domainId:'kitchen',    assetId:'a5', title:'Clean dishwasher filter',    assigneeId:'m2',dueDate:'2026-08-04',recurring:{everyDays:60}, status:'open',xp:15},
-    {id:'t10',domainId:'maintenance',assetId:'a10',title:'Garage door safety test',    assigneeId:'m1',dueDate:'2026-08-09',recurring:{everyDays:180},status:'open',xp:20},
-    {id:'t11',domainId:'yard',       assetId:null, title:'Weed the garden beds',       assigneeId:'m3',dueDate:'2026-07-26',recurring:{everyDays:14}, status:'open',xp:15},
-    {id:'t12',domainId:'finances',   assetId:null, title:'Reconcile monthly home budget',assigneeId:'m2',dueDate:'2026-08-01',recurring:{everyDays:30},status:'open',xp:25},
-    {id:'t13',domainId:'kitchen',    assetId:'a2', title:'Replace fridge water filter',assigneeId:'m1',dueDate:'2026-10-28',recurring:{everyDays:180},status:'open',xp:15},
-    {id:'t14',domainId:'yard',       assetId:'a7', title:'Change mower oil',           assigneeId:'m3',dueDate:'2026-10-12',recurring:{everyDays:180},status:'open',xp:20},
-    {id:'t15',domainId:'kids',   assetId:null, title:'Sign Wonjoo’s field-trip slip',   assigneeId:'m1',dueDate:'2026-07-31',recurring:null,           status:'open',xp:10},
-    {id:'t16',domainId:'kids',   assetId:null, title:'Register Mira for fall soccer',  assigneeId:'m2',dueDate:'2026-08-05',recurring:null,           status:'open',xp:20},
-    {id:'t17',domainId:'kids',   assetId:null, title:'Buy school shoes (Mira)',        assigneeId:'m2',dueDate:'2026-07-26',recurring:null,           status:'open',xp:15},
-    {id:'t18',domainId:'kids',   assetId:null, title:'Pediatric checkup — Wonjoo',       assigneeId:'m1',dueDate:'2026-08-20',recurring:{everyDays:365},status:'open',xp:25},
-    {id:'t19',domainId:'kids',   assetId:null, title:'Back-to-school supplies run',    assigneeId:'m1',dueDate:'2026-08-25',recurring:null,           status:'open',xp:15},
-    {id:'t20',domainId:'auto',   assetId:'a13',title:'Oil change — Honda CR-V',        assigneeId:'m1',dueDate:'2026-07-15',recurring:{everyDays:180},status:'open',xp:30},
-    {id:'t21',domainId:'auto',   assetId:'a13',title:'Rotate tires — CR-V',            assigneeId:'m1',dueDate:'2026-09-10',recurring:{everyDays:180},status:'open',xp:20},
-    {id:'t22',domainId:'auto',   assetId:'a14',title:'Renew registration — Camry',     assigneeId:'m2',dueDate:'2026-08-31',recurring:{everyDays:365},status:'open',xp:20},
-    {id:'t23',domainId:'health', assetId:null, title:'Refill Young’s prescription',    assigneeId:'m1',dueDate:'2026-07-25',recurring:{everyDays:30}, status:'open',xp:15},
-    {id:'t24',domainId:'health', assetId:null, title:'Book family dental cleaning',    assigneeId:'m2',dueDate:'2026-08-10',recurring:{everyDays:180},status:'open',xp:20},
-    {id:'t25',domainId:'health', assetId:null, title:'Annual physical — Ivy',          assigneeId:'m2',dueDate:'2026-09-01',recurring:{everyDays:365},status:'open',xp:25},
-    {id:'t26',domainId:'health', assetId:null, title:'Replace toothbrush heads',       assigneeId:'m1',dueDate:'2026-08-15',recurring:{everyDays:90}, status:'open',xp:10},
-    {id:'t27',domainId:'pets',   assetId:null, title:'Dog vaccination booster (Mochi)',assigneeId:'m3',dueDate:'2026-07-20',recurring:{everyDays:365},status:'open',xp:20},
-    {id:'t28',domainId:'pets',   assetId:null, title:'Flea & tick treatment (Mochi)',  assigneeId:'m3',dueDate:'2026-08-08',recurring:{everyDays:30}, status:'open',xp:10},
-    {id:'t29',domainId:'pets',   assetId:null, title:'Buy dog food',                   assigneeId:'m4',dueDate:'2026-08-01',recurring:{everyDays:30}, status:'open',xp:10},
-    {id:'t30',domainId:'pets',   assetId:null, title:'Grooming appointment',           assigneeId:'m4',dueDate:'2026-08-18',recurring:{everyDays:60}, status:'open',xp:15},
-    {id:'t31',domainId:'safety',     assetId:'a15',title:'Check security cameras',       assigneeId:'m1',dueDate:'2026-07-19',recurring:{everyDays:90}, status:'open',xp:15},
-    {id:'t32',domainId:'safety',     assetId:'a16',title:'Test alarm system',            assigneeId:'m1',dueDate:'2026-08-01',recurring:{everyDays:30}, status:'open',xp:15},
-    {id:'t33',domainId:'safety',     assetId:'a17',title:'Charge video doorbell',         assigneeId:'m1',dueDate:'2026-08-12',recurring:{everyDays:120},status:'open',xp:10},
-    {id:'t34',domainId:'electronics',assetId:'a20',title:'Update Wi-Fi router firmware',  assigneeId:'m1',dueDate:'2026-07-22',recurring:{everyDays:90}, status:'open',xp:10},
-    {id:'t35',domainId:'electronics',assetId:'a19',title:'Back up the laptop',            assigneeId:'m2',dueDate:'2026-07-31',recurring:{everyDays:30}, status:'open',xp:15},
-    {id:'t36',domainId:'electronics',assetId:'a18',title:'Software update — Smart TV',     assigneeId:'m3',dueDate:'2026-08-09',recurring:{everyDays:180},status:'open',xp:10},
-    {id:'t37',domainId:'electronics',assetId:'a21',title:'Clean console fans (PS5)',       assigneeId:'m3',dueDate:'2026-09-11',recurring:{everyDays:180},status:'open',xp:10},
+    {id:'t1', domainId:'maintenance',assetId:'a1', title:'Replace HVAC air filter',   assigneeId:'m2',dueDate:'2026-07-01',recurring:{everyDays:90}, status:'open',xp:40,needsApproval:false,reward:{coins:32}},
+    {id:'t2', domainId:'kitchen',    assetId:'a2', title:'Clean fridge condenser fan', assigneeId:'m1',dueDate:'2026-07-14',recurring:{everyDays:180},status:'open',xp:35,needsApproval:false,reward:{coins:28}},
+    {id:'t3', domainId:'cleaning',   assetId:'a4', title:'Clean dryer lint vent',      assigneeId:'m1',dueDate:'2026-06-28',recurring:{everyDays:90}, status:'open',xp:30,needsApproval:false,reward:{coins:24}},
+    {id:'t4', domainId:'maintenance',assetId:'a6', title:'Flush water heater',         assigneeId:'m1',dueDate:'2026-06-01',recurring:{everyDays:365},status:'open',xp:50,needsApproval:false,reward:{coins:40}},
+    {id:'t5', domainId:'yard',       assetId:null, title:'Mow the lawn',               assigneeId:'m3',dueDate:'2026-07-31',recurring:{everyDays:7},  status:'open',xp:15,needsApproval:true, reward:{coins:12}},
+    {id:'t6', domainId:'cleaning',   assetId:null, title:'Take out trash & recycling', assigneeId:'m4',dueDate:'2026-07-30',recurring:{everyDays:7},  status:'open',xp:10,needsApproval:true, reward:{coins:8}},
+    {id:'t7', domainId:'cleaning',   assetId:'a3', title:'Run washer clean cycle',     assigneeId:'m2',dueDate:'2026-07-20',recurring:{everyDays:30}, status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t8', domainId:'safety',     assetId:'a9', title:'Test smoke & CO detectors',  assigneeId:'m1',dueDate:'2026-08-04',recurring:{everyDays:30}, status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t9', domainId:'kitchen',    assetId:'a5', title:'Clean dishwasher filter',    assigneeId:'m2',dueDate:'2026-08-04',recurring:{everyDays:60}, status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t10',domainId:'maintenance',assetId:'a10',title:'Garage door safety test',    assigneeId:'m1',dueDate:'2026-08-09',recurring:{everyDays:180},status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t11',domainId:'yard',       assetId:null, title:'Weed the garden beds',       assigneeId:'m3',dueDate:'2026-07-26',recurring:{everyDays:14}, status:'open',xp:15,needsApproval:true, reward:{coins:12}},
+    {id:'t12',domainId:'finances',   assetId:null, title:'Reconcile monthly home budget',assigneeId:'m2',dueDate:'2026-08-01',recurring:{everyDays:30},status:'open',xp:25,needsApproval:false,reward:{coins:20}},
+    {id:'t13',domainId:'kitchen',    assetId:'a2', title:'Replace fridge water filter',assigneeId:'m1',dueDate:'2026-10-28',recurring:{everyDays:180},status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t14',domainId:'yard',       assetId:'a7', title:'Change mower oil',           assigneeId:'m3',dueDate:'2026-10-12',recurring:{everyDays:180},status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t15',domainId:'kids',   assetId:null, title:'Sign Wonjoo’s field-trip slip',   assigneeId:'m1',dueDate:'2026-07-31',recurring:null,           status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t16',domainId:'kids',   assetId:null, title:'Register Mira for fall soccer',  assigneeId:'m2',dueDate:'2026-08-05',recurring:null,           status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t17',domainId:'kids',   assetId:null, title:'Buy school shoes (Mira)',        assigneeId:'m2',dueDate:'2026-07-26',recurring:null,           status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t18',domainId:'kids',   assetId:null, title:'Pediatric checkup — Wonjoo',       assigneeId:'m1',dueDate:'2026-08-20',recurring:{everyDays:365},status:'open',xp:25,needsApproval:false,reward:{coins:20}},
+    {id:'t19',domainId:'kids',   assetId:null, title:'Back-to-school supplies run',    assigneeId:'m1',dueDate:'2026-08-25',recurring:null,           status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t20',domainId:'auto',   assetId:'a13',title:'Oil change — Honda CR-V',        assigneeId:'m1',dueDate:'2026-07-15',recurring:{everyDays:180},status:'open',xp:30,needsApproval:false,reward:{coins:24}},
+    {id:'t21',domainId:'auto',   assetId:'a13',title:'Rotate tires — CR-V',            assigneeId:'m1',dueDate:'2026-09-10',recurring:{everyDays:180},status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t22',domainId:'auto',   assetId:'a14',title:'Renew registration — Camry',     assigneeId:'m2',dueDate:'2026-08-31',recurring:{everyDays:365},status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t23',domainId:'health', assetId:null, title:'Refill Young’s prescription',    assigneeId:'m1',dueDate:'2026-07-25',recurring:{everyDays:30}, status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t24',domainId:'health', assetId:null, title:'Book family dental cleaning',    assigneeId:'m2',dueDate:'2026-08-10',recurring:{everyDays:180},status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t25',domainId:'health', assetId:null, title:'Annual physical — Ivy',          assigneeId:'m2',dueDate:'2026-09-01',recurring:{everyDays:365},status:'open',xp:25,needsApproval:false,reward:{coins:20}},
+    {id:'t26',domainId:'health', assetId:null, title:'Replace toothbrush heads',       assigneeId:'m1',dueDate:'2026-08-15',recurring:{everyDays:90}, status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t27',domainId:'pets',   assetId:null, title:'Dog vaccination booster (Mochi)',assigneeId:'m3',dueDate:'2026-07-20',recurring:{everyDays:365},status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t28',domainId:'pets',   assetId:null, title:'Flea & tick treatment (Mochi)',  assigneeId:'m3',dueDate:'2026-08-08',recurring:{everyDays:30}, status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t29',domainId:'pets',   assetId:null, title:'Buy dog food',                   assigneeId:'m4',dueDate:'2026-08-01',recurring:{everyDays:30}, status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t30',domainId:'pets',   assetId:null, title:'Grooming appointment',           assigneeId:'m4',dueDate:'2026-08-18',recurring:{everyDays:60}, status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t31',domainId:'safety',     assetId:'a15',title:'Check security cameras',       assigneeId:'m1',dueDate:'2026-07-19',recurring:{everyDays:90}, status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t32',domainId:'safety',     assetId:'a16',title:'Test alarm system',            assigneeId:'m1',dueDate:'2026-08-01',recurring:{everyDays:30}, status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t33',domainId:'safety',     assetId:'a17',title:'Charge video doorbell',         assigneeId:'m1',dueDate:'2026-08-12',recurring:{everyDays:120},status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t34',domainId:'electronics',assetId:'a20',title:'Update Wi-Fi router firmware',  assigneeId:'m1',dueDate:'2026-07-22',recurring:{everyDays:90}, status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t35',domainId:'electronics',assetId:'a19',title:'Back up the laptop',            assigneeId:'m2',dueDate:'2026-07-31',recurring:{everyDays:30}, status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t36',domainId:'electronics',assetId:'a18',title:'Software update — Smart TV',     assigneeId:'m3',dueDate:'2026-08-09',recurring:{everyDays:180},status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t37',domainId:'electronics',assetId:'a21',title:'Clean console fans (PS5)',       assigneeId:'m3',dueDate:'2026-09-11',recurring:{everyDays:180},status:'open',xp:10,needsApproval:false,reward:{coins:8}},
   ],
   receipts:[
     {id:'r1', date:'2026-07-18', merchant:'Costco',              category:'kitchen',     amount:184.20, method:'Visa ••4291', note:'Groceries + household'},
@@ -838,7 +838,92 @@ const STATE = {
     vaccinations:[{name:'FVRCP',lastDone:'2026-01-10',nextDue:'2026-08-10'},{name:'Rabies',lastDone:'2025-11-05',nextDue:'2026-11-05'}],
     weightLog:[{date:'2026-06-01',kg:4.2},{date:'2026-07-15',kg:4.3}], meds:[], careHistory:[]},
   ],
+  goals:[
+   {id:'g1',scope:'family',title:'No overdue systems today',metric:'noOverdue',target:1,period:'day',bonus:{coins:150,points:10}},
+   {id:'g2',scope:'family',title:'Complete 40 tasks this month',metric:'tasksDoneMonth',target:40,period:'month',bonus:{coins:600,points:50}},
+   {id:'g3',scope:'member',memberId:'m3',title:'Wonjoo: 5 chores this week',metric:'memberDoneWeek',target:5,period:'month',bonus:{coins:120,points:8}},
+  ],
+  points:0,
 };
+
+/* ===== Chores ===== */
+function chores(){ return STATE.tasks; }
+function choreById(id){ return STATE.tasks.find(t=>t.id===id); }
+function choreCoins(t){ return (t.reward&&t.reward.coins)||Math.round((t.xp||0)*0.8); }
+function choreXp(t){ return t.xp||0; }
+
+/* ===== Goals ===== */
+function dayKey(){ return new Date().toISOString().slice(0,10); }
+function monthKey(){ return new Date().toISOString().slice(0,7); }
+function periodKey(g){ return g.period==='day'?dayKey():monthKey(); }
+const METRICS={
+  noOverdue:      ()=> Object.values(GAME.nodes).every(n=>n.state!=='overdue') ? 1 : 0,
+  tasksDoneMonth: ()=> STATE.done||0,                    // cumulative done counter (prototype proxy)
+  tasksDoneToday: ()=> STATE._doneToday||0,
+  memberDoneWeek: (g)=> (STATE._memberDone&&STATE._memberDone[g.memberId])||0,
+  vaccinationsCurrent: ()=> STATE.pets.every(p=>p.vaccinations.every(v=> new Date(v.nextDue)>=new Date())) ?1:0,
+};
+function goalProgress(g){ const v=(METRICS[g.metric]||(()=>0))(g); const pct=Math.min(100,Math.round(v/g.target*100));
+  return {value:v, target:g.target, pct, met:v>=g.target}; }
+function creditDone(memberId){ // shared counter bump for every credited completion (chore approval or immediate credit)
+  STATE.done=(STATE.done||0)+1;
+  if(memberId){ STATE._memberDone=STATE._memberDone||{}; STATE._memberDone[memberId]=(STATE._memberDone[memberId]||0)+1; }
+}
+function checkGoals(){
+  STATE.goals.forEach(g=>{ const pk=periodKey(g);
+    if(g.awardedKey===pk) return;               // already paid this period
+    if(goalProgress(g).met){ g.awardedKey=pk; GAME.coins+=g.bonus.coins; STATE.points=(STATE.points||0)+g.bonus.points;
+      pushToast(`🎯 Goal hit: ${g.title} (+${g.bonus.coins}🪙 +${g.bonus.points}pts)`,'good'); markDirty(); }
+  });
+}
+function resetGoal(id){ if(!isParent()) return; const g=STATE.goals.find(x=>x.id===id); if(!g) return;
+  g.awardedKey=null;
+  if(g.metric==='memberDoneWeek'){ STATE._memberDone=STATE._memberDone||{}; STATE._memberDone[g.memberId]=0; }
+  markDirty(); render(); }
+
+/* ===== Persistence ===== */
+const PKEY='homebase.v1';
+const PERSIST_SLICE=['tasks','assets','receipts','members','pets','goals','approvals',
+  'points','coins','gems','streak','done','roleMode','parents','content','pin'];
+function saveState(){
+  if(typeof GAME==='object'){ STATE.coins = Math.round(GAME.coins); STATE.gems = GAME.gems; }
+  try{ const slice={}; PERSIST_SLICE.forEach(k=>{ if(k in STATE) slice[k]=STATE[k]; });
+    localStorage.setItem(PKEY, JSON.stringify({v:1, data:slice})); }catch(e){ /* quota/private mode: skip */ }
+}
+let _saveT=null;
+function markDirty(){ clearTimeout(_saveT); _saveT=setTimeout(saveState, 250); }
+function loadState(){
+  try{ const raw=localStorage.getItem(PKEY); if(!raw) return false;
+    const parsed=JSON.parse(raw); if(!parsed||parsed.v!==1||!parsed.data) return false;
+    PERSIST_SLICE.forEach(k=>{ if(k in parsed.data) STATE[k]=parsed.data[k]; });
+    return true;
+  }catch(e){ return false; }
+}
+function resetDemo(){ try{ localStorage.removeItem(PKEY); }catch(e){} location.reload(); }
+
+/* ===== Parent mode + Approval ===== */
+function isParent(){ return STATE.roleMode==='parent'; }
+function toggleParentMode(){
+  if(STATE.roleMode==='parent'){ STATE.roleMode='play'; markDirty(); render(); return; }
+  if(STATE.pin){ const p=prompt('Enter parent PIN'); if(p!==STATE.pin){ pushToast('Wrong PIN','warn'); return; } }
+  STATE.roleMode='parent'; markDirty(); render();
+}
+function enterParentMode(pin){ if(STATE.pin && pin!==STATE.pin){ pushToast('Wrong PIN','warn'); return false; }
+  STATE.roleMode='parent'; markDirty(); render(); return true; }
+let _apprSeq=1;
+function pendingApprovals(){ return STATE.approvals.filter(a=>a.status==='pending'); }
+function submitForApproval(taskId, byMemberId){
+  STATE.approvals.unshift({id:'ap'+(_apprSeq++), taskId, byMemberId, submittedAt:Date.now(), note:'', status:'pending'});
+  markDirty();
+}
+function approve(id){ const a=STATE.approvals.find(x=>x.id===id); if(!a||a.status!=='pending') return;
+  a.status='approved'; const t=choreById(a.taskId); const m=STATE.members.find(x=>x.id===a.byMemberId);
+  if(t&&m){ GAME.coins+=choreCoins(t); m.xp+=choreXp(t); m.streak=(m.streak||0)+1; creditDone(m.id); }
+  pushToast('Approved — credited!','good'); markDirty(); checkGoals(); render();
+}
+function sendBack(id, note){ const a=STATE.approvals.find(x=>x.id===id); if(!a||a.status!=='pending') return;
+  a.status='sent_back'; a.note=note||''; pushToast('Sent back','info'); markDirty(); render(); }
+
 let RECEIPT_SEQ=100;
 let TASK_SEQ = 100;
 
@@ -981,7 +1066,7 @@ function updateRings(){ // cheap in-place ring refresh so health rings track liv
     const el=nodeEl(n.id); if(!el) return;
     const ring=el.querySelector('.nring'); if(ring) ring.style.setProperty('--h',Math.round(n.health)); });
 }
-function tick(){ GAME.t++; stepDecay(); stepEconomy(); stepJobs(); stepPets(); updateRings(); typeof renderHUD==='function' && renderHUD(); }
+function tick(){ GAME.t++; stepDecay(); stepEconomy(); stepJobs(); stepPets(); updateRings(); typeof renderHUD==='function' && renderHUD(); checkGoals(); }
 function startClock(){ if(GAME._timer) return; GAME.running=true; GAME._timer=setInterval(tick, TUNE.tickMs);
   if(!GAME._wanderTimer) GAME._wanderTimer=setInterval(wanderIdle, 3000); }
 function stopClock(){ clearInterval(GAME._timer); GAME._timer=null; GAME.running=false;
@@ -1065,13 +1150,21 @@ function completeJob(id){ const j=GAME.jobs[id]; if(!j) return; const n=GAME.nod
     pushToast(`${sp?sp.name:'Pet'} ${(CARE_LABEL[j.careKey]||j.careKey).toLowerCase()}! +${coins}`,'good');
   } else {
     n.health=100; n.state='healthy'; applyNodeState(n);
-    GAME.coins+=coins; coinFly(nodeEl(n.id), coins);
-    if(m){ m.xp+=TUNE.jobXpReward; m.streak++; }
-    writeServiceLog(n.domainId, m?m.name:'', `Serviced ${n.name}`);
-    pushToast(`${n.name} restored! +${coins}`,'good');
+    const chore=chores().find(t=>t.domainId===n.domainId && t.needsApproval && t.status!=='done');
+    if(chore){
+      submitForApproval(chore.id, u.id);
+      pushToast(`${m?m.name:'Someone'} submitted "${chore.title}" for approval`,'info');
+    } else {
+      GAME.coins+=coins; coinFly(nodeEl(n.id), coins);
+      if(m){ m.xp+=TUNE.jobXpReward; m.streak++; creditDone(m.id); }
+      writeServiceLog(n.domainId, m?m.name:'', `Serviced ${n.name}`);
+      pushToast(`${n.name} restored! +${coins}`,'good');
+    }
   }
   u.status='idle'; u.busyJob=null; typeof celebrate==='function'&&celebrate();
   typeof renderHUD==='function' && renderHUD();
+  typeof checkGoals==='function' && checkGoals();
+  markDirty();
 }
 function writeServiceLog(domainId, who, work){ const a=STATE.assets.find(x=>x.domainId===domainId);
   if(a&&a.serviceLog) a.serviceLog.unshift({date:today(),who,work,parts:'',cost:0}); }
@@ -1294,6 +1387,7 @@ function render(){
     : v==='receipts' ? renderReceipts()
     : v==='pets'     ? renderPetsIndex()
     : v==='family'   ? renderFamily()
+    : v==='approvals'? renderApprovals()
     : renderOverworld();
   if(v==='domain'){ renderConsole(); document.body.style.paddingBottom=''; }
   else if(v==='overworld'){ document.getElementById('console').innerHTML=''; document.body.style.paddingBottom='var(--tray-h)'; }
@@ -1438,10 +1532,11 @@ function renderDepartments(){
 function gameNav(active){
   const items=[['overworld','🗺️','Map',"openView('overworld')"],['campaign','🎯','Journey',"openView('campaign')"],['departments','🏠','Depts',"openView('departments')"],['calendar','🗓️','Calendar',"openView('calendar')"],
     ['vault','🗄️','Assets',"openView('vault')"],['receipts','🧾','Receipts',"openView('receipts')"],
-    ['pets','🐾','Pets',"openView('pets')"],
+    ['pets','🐾','Pets',"openView('pets')"],['approvals','📋','Approve',"openView('approvals')"],
     ['findpro','🔧','Find Pro',"openFindPro('handyman')"],['family','🏆','Family',"openView('family')"]];
+  const pend=pendingApprovals().length;
   return `<div class="gamenav">`+items.map(([id,ic,lb,act])=>
-    `<button class="gnav${id===active?' on':''}" onclick="${act}"><span class="gi">${ic}</span>${lb}</button>`).join('')+`</div>`;
+    `<button class="gnav${id===active?' on':''}" onclick="${act}" style="position:relative">${id==='approvals'&&pend?`<span class="badge">${pend}</span>`:''}<span class="gi">${ic}</span>${lb}</button>`).join('')+`</div>`;
 }
 /* ---- Home Mastery campaign (guided playbook, mirrors Command Control) ---- */
 const CAMPAIGN=[
@@ -1526,7 +1621,7 @@ function upgradeNode(id){ const n=GAME.nodes[id], cost=upgradeCost(n); if(GAME.c
   GAME.coins-=cost; n.level++; n.health=100; n.state='healthy'; const el=nodeEl(id);
   if(el){ applyNodeState(n); el.querySelector('.nlvl').textContent='Lv.'+n.level; el.classList.add('leveled'); setTimeout(()=>el.classList.remove('leveled'),700); }
   sparkle(el); pushToast(`${n.name} upgraded to Lv.${n.level}!`,'good');
-  typeof renderHUD==='function' && renderHUD(); refreshPanel(); }
+  typeof renderHUD==='function' && renderHUD(); refreshPanel(); markDirty(); }
 function sparkle(el){ if(!el) return; const r=el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
   for(let i=0;i<8;i++){ const s=document.createElement('div'); s.className='sparkle'; s.textContent='✨';
     s.style.left=cx+'px'; s.style.top=cy+'px'; s.style.transform='translate(-50%,-50%) scale(.4)';
@@ -1564,6 +1659,7 @@ function renderOverworld(){
           <span class="entxt"><span id="hud-energy-n">${Math.round(GAME.energy)}</span>/${TUNE.energyMax}</span></div>
         <div class="cur">🪙 <span id="hud-coins-n">${Math.round(GAME.coins).toLocaleString()}</span></div>
         <div class="cur">💎 <span id="hud-gems-n">${GAME.gems}</span></div>
+        <div class="cur" onclick="toggleParentMode()" title="Toggle parent mode" style="cursor:pointer">${isParent()?'👪 Parent':'🔓 Play'}</div>
       </div>
       <div class="topbar-nav">${gameNav('overworld')}</div>
     </div>
@@ -2048,7 +2144,7 @@ function fmtMoney(n){ return '$'+n.toLocaleString('en-US',{minimumFractionDigits
 function addReceipt(ev){ ev.preventDefault(); const f=ev.target;
   STATE.receipts.push({id:'r'+(RECEIPT_SEQ++), date:f.date.value, merchant:f.merchant.value.trim(),
     category:f.category.value, amount:Number(f.amount.value)||0, method:f.method.value.trim()||'—', note:f.note?f.note.value.trim():''});
-  toast('🧾 Receipt saved to Finances'); render(); }
+  toast('🧾 Receipt saved to Finances'); markDirty(); render(); }
 function renderReceipts(){
   const rs=[...STATE.receipts].sort((a,b)=>new Date(b.date)-new Date(a.date));
   const total=rs.reduce((s,r)=>s+r.amount,0);
@@ -2100,6 +2196,25 @@ function achievements(){
     {ic:'🛡️',name:'Warranty Wizard',desc:'5 active warranties',done:activeW>=5,prog:`${activeW}/5`},
   ];
 }
+function approvalRow(a){
+  const t=choreById(a.taskId), m=STATE.members.find(x=>x.id===a.byMemberId);
+  const actions=isParent()?
+    `<button class="check" title="Approve" onclick="approve('${a.id}')" style="background:#dcecd8;color:var(--green)">✓</button>
+     <button class="btn ghost" style="padding:4px 10px;font-size:12px" onclick="sendBack('${a.id}', prompt('Note (optional)')||'')">↩ Send back</button>`
+    : `<span class="muted" style="font-size:12px">waiting for a parent</span>`;
+  return `<div class="trow">
+    <div class="grow"><div class="tt">${esc(t?t.title:'(chore removed)')}</div>
+      <div class="meta">submitted by ${esc(m?m.name:'someone')} · ${new Date(a.submittedAt).toLocaleString()}</div></div>
+    ${actions}
+  </div>`;
+}
+function renderApprovals(){
+  const pend=pendingApprovals();
+  const rows=pend.length?pend.map(approvalRow).join(''):`<div class="empty card">Nothing waiting on approval. 🎉</div>`;
+  return backbar('📋 Approvals')+
+    `<div class="muted" style="margin:0 4px 12px">${pend.length} pending${isParent()?'':' · waiting for a parent to review'}</div>`+
+    `<div class="tasklist">${rows}</div>`;
+}
 function renderFamily(){
   const lb=leaderboard(), medals=['🥇','🥈','🥉','🎖️'];
   const lead=lb.map((m,i)=>`<div class="leadcard"><span class="rk">${medals[i]||''}</span>${memberAv(m,34)}
@@ -2132,7 +2247,10 @@ function renderFamily(){
     <div class="ach">`+ach.map(a=>`<div class="abadge${a.done?'':' locked'}">
       <div class="ai">${a.ic}</div><div class="an">${a.name}</div><div class="ad">${a.desc}</div>
       <div class="ap" style="color:${a.done?'var(--green)':'var(--muted)'}">${a.done?'✓ Earned':a.prog}</div></div>`).join('')+`</div>`;
-  return backbar('👨‍👩‍👧 Family')+reward+shelf+
+  return backbar('👨‍👩‍👧 Family')+
+    `<div style="display:flex;justify-content:flex-end;margin:-10px 0 12px">
+      <button class="btn ghost" style="font-size:12px;padding:6px 10px" onclick="if(confirm('Reset all Home Base data to the demo?')) resetDemo()">↺ Reset demo</button>
+    </div>`+reward+shelf+
     `<div class="sec-title">Leaderboard</div><div class="card lead">${lead}</div><div class="mcards">${cards}</div>`;
 }
 
@@ -2163,6 +2281,7 @@ function completeTask(id){
   if(L.level>lvlBefore){ celebrate(); celebrate(); toast(`🏆 LEVEL UP! You're now Lv.${L.level} — ${L.rank}`); }
   else { celebrate(); toast(`✓ ${t.title} — +${t.xp} XP to ${m?m.name:'the family'}!`); }
   reward(t.xp);
+  markDirty();
   render();
 }
 function reward(xp){ const cx=window.innerWidth/2, cy=window.innerHeight*0.3;
@@ -2170,7 +2289,7 @@ function reward(xp){ const cx=window.innerWidth/2, cy=window.innerHeight*0.3;
   x.style.cssText=`left:${cx}px;top:${cy}px;color:#e0a13c`; document.body.appendChild(x); setTimeout(()=>x.remove(),1400);
   for(let i=0;i<6;i++){ const c=document.createElement('div'); c.className='floater'; c.textContent='🪙';
     c.style.cssText=`left:${cx-40+Math.random()*80}px;top:${cy+16}px;animation-delay:${i*0.06}s`;
-    document.body.appendChild(c); setTimeout(()=>c.remove(),1500); } }
+    document.body.appendChild(c); setTimeout(()=>c.remove(),1500); } markDirty(); }
 
 let toastTimer=null;
 function toast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
@@ -2182,6 +2301,12 @@ function celebrate(){ const emojis=['🎉','✨','🎊','⭐','💫','🏡'];
     s.style.animationDelay=(Math.random()*0.25)+'s';
     document.body.appendChild(s); setTimeout(()=>s.remove(),1400); } }
 
+loadState();
+STATE.goals=STATE.goals||[]; STATE.approvals=STATE.approvals||[]; STATE.points=STATE.points||0;
+STATE.roleMode=STATE.roleMode||'play'; STATE.parents=STATE.parents||['m1','m2'];
+STATE.content=STATE.content||{}; if(!('pin' in STATE)) STATE.pin=null;
+STATE.tasks.forEach(t=>{ if(t.needsApproval===undefined)t.needsApproval=false; if(!t.reward)t.reward={coins:choreCoins(t)}; });
+GAME.coins = STATE.coins; GAME.gems = STATE.gems;
 initGame(); startClock();
 render();
 </script>
