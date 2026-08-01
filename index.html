@@ -551,7 +551,12 @@
   /* badge-style room node: solid dept-colored circle, health-colored ring border, icon centered */
   .nring{width:54px;height:54px;border-radius:50%;margin:0 auto;border:3.5px solid var(--hc,#fff);
     background:#fcf9f2;
-    display:grid;place-items:center;box-shadow:0 4px 11px rgba(40,25,10,.3);transition:border-color .3s var(--ease)}
+    display:grid;place-items:center;box-shadow:0 4px 11px rgba(40,25,10,.3);
+    transition:border-color .3s var(--ease),box-shadow .18s var(--ease),filter .18s var(--ease)}
+  .gnode:hover .nring{box-shadow:0 0 0 4px rgba(255,255,255,.65),0 0 22px 4px rgba(255,214,130,.8),0 5px 13px rgba(40,25,10,.34);filter:brightness(1.07)}
+  .gnode:hover .nico{filter:drop-shadow(0 0 4px rgba(255,224,150,.9))}
+  .sidenav .gnav.on{box-shadow:0 0 0 1px rgba(255,214,130,.4),0 0 16px rgba(255,214,130,.3)}
+  .trayitem:not(.busy):hover .trayring{box-shadow:0 0 0 3px rgba(255,255,255,.55),0 0 16px 3px rgba(255,214,130,.7)}
   .nico{font-size:27px;line-height:1}
   .nscore{margin-top:4px;font-size:10px;font-weight:800;background:#fffdf8;border-radius:8px;padding:1px 6px;
     display:inline-block;box-shadow:0 2px 5px rgba(40,25,10,.22)}
