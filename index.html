@@ -1317,12 +1317,15 @@ const GAME = { nodes:{}, units:{}, pets:{}, jobs:{}, alerts:[], coins:STATE.coin
 
 function initGame(){
   GAME.nodes = {};
-  // department nodes arranged in a ring around the house centre. RX/RY are % of the
-  // board's width/height; RX<RY so the ellipse reads as a circle on the wide board.
-  const N=STATE.domains.length, CX=44, CY=49, RX=24, RY=41;
-  const ROOM={};
-  STATE.domains.forEach((d,i)=>{ const a=(-90 + i*360/N)*Math.PI/180;
-    ROOM[d.id]={ x:+(CX+RX*Math.cos(a)).toFixed(1), y:+(CY+RY*Math.sin(a)).toFixed(1) }; });
+  // department nodes scattered over the rooms of the house (%, hand-placed so they read as
+  // rooms — like the reference mockup — instead of a tight ring). 3 loose rows across the top 2/3;
+  // the family sprites wander in the foreground band below.
+  const ROOM={
+    electronics:{x:13,y:16}, kitchen:{x:31,y:13}, cleaning:{x:49,y:16}, activities:{x:67,y:14}, maintenance:{x:85,y:20},
+    pets:{x:14,y:43}, health:{x:33,y:46}, safety:{x:58,y:44}, finances:{x:82,y:45},
+    auto:{x:22,y:70}, kids:{x:44,y:72}, yard:{x:67,y:68},
+  };
+  let _fi=0; STATE.domains.forEach(d=>{ if(!ROOM[d.id]){ ROOM[d.id]={x:20+(_fi%4)*20, y:88}; _fi++; } });
   STATE.domains.forEach(d=>{
     const h = typeof domainHealth==='function' ? domainHealth(d.id) : 80;
     GAME.nodes[d.id] = { id:d.id, domainId:d.id, name:d.name, icon:d.icon,
@@ -1331,7 +1334,7 @@ function initGame(){
   });
   GAME.units = {};
   STATE.members.forEach((m,i)=>{
-    GAME.units[m.id] = { id:m.id, name:m.name, pos:{x:20+i*12,y:64},
+    GAME.units[m.id] = { id:m.id, name:m.name, pos:{x:30+i*11,y:85},
       target:null, status:'idle', affinity: AFFINITY[m.id]||null, busyJob:null };
   });
   GAME.pets = {};
@@ -1339,7 +1342,7 @@ function initGame(){
   STATE.pets.forEach((p,i)=>{
     const ch = Math.min(...Object.values(p.care).map(c=>c.meter));
     GAME.pets[p.id] = { id:p.id, name:p.name, care:p.care,
-      pos:{x:petBase.x-6+i*14, y:66+i*4}, careHealth:ch, state:stateFor(ch) };
+      pos:{x:34+i*16, y:86+i*3}, careHealth:ch, state:stateFor(ch) };
   });
 }
 const AFFINITY = { m1:'maintenance', m2:'cleaning', m3:'kids', m4:'pets' };
@@ -1372,9 +1375,9 @@ function movePet(id,x,y){ const p=GAME.pets[id], el=petEl(id); if(!p||!el) retur
   el.style.left=x+'%'; el.style.top=y+'%';
   setTimeout(()=>{ p.pos={x,y}; el.classList.remove('walking'); }, TUNE.unitWalkMs); }
 function wanderIdle(){ Object.values(GAME.units).forEach(u=>{ if(u.status!=='idle') return;
-  if(Math.random()<0.25){ const x=14+Math.random()*46, y=58+Math.random()*16; moveUnit(u.id,x,y); } });
+  if(Math.random()<0.25){ const x=26+Math.random()*40, y=82+Math.random()*9; moveUnit(u.id,x,y); } });
   Object.values(GAME.pets).forEach(p=>{
-    if(Math.random()<0.25){ const x=14+Math.random()*46, y=58+Math.random()*16; movePet(p.id,x,y); } }); }
+    if(Math.random()<0.25){ const x=26+Math.random()*40, y=83+Math.random()*8; movePet(p.id,x,y); } }); }
 
 function stepDecay(){
   Object.values(GAME.nodes).forEach(n=>{
