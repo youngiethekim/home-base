@@ -548,10 +548,10 @@
   .gnode{position:absolute;z-index:2;transform:translate(-50%,-50%);width:64px;text-align:center;cursor:pointer;transition:transform .15s var(--ease)}
   .gnode:hover{transform:translate(-50%,-50%) translateY(-3px) scale(1.07);z-index:3}
   /* badge-style room node: solid dept-colored circle, health-colored ring border, icon centered */
-  .nring{width:52px;height:52px;border-radius:50%;margin:0 auto;border:3px solid var(--hc,#fff);
-    background:var(--nc);
-    display:grid;place-items:center;box-shadow:0 5px 13px rgba(40,25,10,.34);transition:border-color .3s var(--ease)}
-  .nico{font-size:24px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+  .nring{width:54px;height:54px;border-radius:50%;margin:0 auto;border:3.5px solid var(--hc,#fff);
+    background:#fcf9f2;
+    display:grid;place-items:center;box-shadow:0 4px 11px rgba(40,25,10,.3);transition:border-color .3s var(--ease)}
+  .nico{font-size:27px;line-height:1}
   .nscore{margin-top:4px;font-size:10px;font-weight:800;background:#fffdf8;border-radius:8px;padding:1px 6px;
     display:inline-block;box-shadow:0 2px 5px rgba(40,25,10,.22)}
   .nlabel{margin-top:3px;font-size:11px;font-weight:800;background:#2b2017;color:#f6e8cf;border-radius:8px;
@@ -1323,10 +1323,10 @@ function initGame(){
   // department nodes scattered over the rooms of the house (%, hand-placed so they read as
   // rooms — like the reference mockup — instead of a tight ring). 3 loose rows across the top 2/3;
   // the family sprites wander in the foreground band below.
-  const ROOM={
-    electronics:{x:7,y:15}, kitchen:{x:27,y:11}, cleaning:{x:48,y:14}, activities:{x:69,y:11}, maintenance:{x:91,y:17},
-    pets:{x:9,y:43}, health:{x:35,y:46}, safety:{x:62,y:43}, finances:{x:90,y:45},
-    auto:{x:16,y:70}, kids:{x:47,y:72}, yard:{x:78,y:67},
+  const ROOM={ // tidy, evenly-spaced rows (5 / 4 / 3) so the icons read as an ordered set
+    electronics:{x:9,y:15}, kitchen:{x:29,y:15}, cleaning:{x:49,y:15}, activities:{x:69,y:15}, maintenance:{x:89,y:15},
+    pets:{x:14,y:44}, health:{x:38,y:44}, safety:{x:62,y:44}, finances:{x:86,y:44},
+    auto:{x:24,y:65}, kids:{x:50,y:65}, yard:{x:76,y:65},
   };
   let _fi=0; STATE.domains.forEach(d=>{ if(!ROOM[d.id]){ ROOM[d.id]={x:20+(_fi%4)*20, y:88}; _fi++; } });
   STATE.domains.forEach(d=>{
