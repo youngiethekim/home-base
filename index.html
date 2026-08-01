@@ -178,6 +178,13 @@
   .addform input.wide{grid-column:span 2}
   .barcode{margin-top:6px}
 
+  /* ---- Builder (guided authoring) ---- */
+  .bfield{width:100%;font-size:15px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;
+    background:var(--card);color:var(--ink);margin-top:6px}
+  .bdots{display:flex;gap:6px;align-items:center}
+  .bdot{width:8px;height:8px;border-radius:50%;background:var(--bg2)}
+  .bdot.on{background:var(--accent)}
+
   /* ---- Family ---- */
   .lead{display:flex;gap:10px;flex-wrap:wrap;padding:16px;margin-bottom:16px}
   .leadcard{flex:1;min-width:140px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--bg2)}
@@ -233,6 +240,19 @@
   .deptcard .drole{font-size:12px;color:var(--muted);margin-top:2px}
   .deptcard .dmeta{font-size:12px;color:var(--muted);margin-top:4px}
   .deptcard .dh{margin-left:auto;font-weight:800;font-size:22px;align-self:flex-start}
+  .depthead{display:flex;gap:14px;align-items:center;padding:16px;margin-bottom:14px}
+  .depthead .dface{width:56px;height:56px;border-radius:16px;object-fit:cover;flex:none;border:2px solid var(--line);background:var(--bg2)}
+  .depthead .dnm{font-size:18px;font-weight:800}
+  .depthead .drole{font-size:12px;color:var(--muted);margin-top:2px}
+  .depthead .dbar{height:9px;background:#eadfca;border-radius:6px;overflow:hidden;margin-top:9px}
+  .depthead .dbar i{display:block;height:100%;border-radius:6px;transition:width .5s}
+  .dtabs{display:flex;gap:8px;margin:0 0 14px;flex-wrap:wrap}
+  .dtab{flex:1;min-width:78px;padding:10px 6px;border-radius:12px;background:var(--card);border:1px solid var(--line);
+    font-weight:700;font-size:13px;color:var(--muted);text-align:center;transition:transform .07s var(--ease)}
+  .dtab:active{transform:translateY(2px)}
+  .dtab.on{background:var(--accent);color:#fff;border-color:var(--accent2)}
+  @media(max-width:480px){.dtabs{gap:5px}.dtab{font-size:10.5px;padding:9px 3px;min-width:0}}
+  .histprev{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}
   .stage{margin-bottom:14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
   .stage.locked{opacity:.55}
   .stagehd{display:flex;gap:12px;align-items:flex-start;padding:14px}
@@ -900,6 +920,200 @@ function resetGoal(id){ if(!isParent()) return; const g=STATE.goals.find(x=>x.id
   if(g.metric==='memberDoneWeek'){ STATE._memberDone=STATE._memberDone||{}; STATE._memberDone[g.memberId]=0; }
   markDirty(); render(); }
 
+/* ===== Builder (guided parent-mode authoring: chore / record / goal + log-service) ===== */
+const METRIC_LABELS={ noOverdue:'No overdue items (house-wide)', tasksDoneMonth:'Tasks done this month',
+  tasksDoneToday:'Tasks done today', memberDoneWeek:'Chores done this week (person)', vaccinationsCurrent:'All pet vaccinations current' };
+const BUILDER_STEPS={chore:3, record:4, goal:4};
+function builderDeptDefault(){ return (STATE.view==='dept' && STATE.activeDept) ? STATE.activeDept : STATE.domains[0].id; }
+function builderDefaultDraft(kind){
+  const deptId=builderDeptDefault();
+  if(kind==='chore') return {title:'', deptId, assigneeId:STATE.members[0].id, cadenceType:'once', everyDays:7, coins:10, xp:10, needsApproval:false};
+  if(kind==='record') return {name:'', deptId, brand:'', model:'', serial:'', warrantyProvider:'', warrantyExpiry:'', price:'', receiptNote:''};
+  if(kind==='goal') return {scope:'family', memberId:STATE.members[0].id, title:'', metric:'noOverdue', target:1, period:'day', bonusCoins:50, bonusPoints:5, deptId};
+  return {};
+}
+function builderDraftFromExisting(kind,id){
+  if(kind==='chore'){ const t=choreById(id);
+    return {title:t.title, deptId:t.domainId, assigneeId:t.assigneeId,
+      cadenceType: t.recurring ? (t.recurring.everyDays===7?'weekly':'every') : 'once',
+      everyDays: t.recurring?t.recurring.everyDays:7, coins:choreCoins(t), xp:choreXp(t), needsApproval:!!t.needsApproval}; }
+  if(kind==='record'){ const a=assetById(id);
+    return {name:a.name, deptId:a.domainId, brand:a.brand, model:a.model, serial:a.serial,
+      warrantyProvider:a.warranty.provider, warrantyExpiry:a.warranty.expiryDate, price:a.price, receiptNote:''}; }
+  if(kind==='goal'){ const g=STATE.goals.find(x=>x.id===id);
+    return {scope:g.scope, memberId:g.memberId||STATE.members[0].id, title:g.title, metric:g.metric,
+      target:g.target, period:g.period, bonusCoins:g.bonus.coins, bonusPoints:g.bonus.points, deptId:g.deptId||''}; }
+  return {};
+}
+function openBuilder(kind, editId){
+  if(!isParent()) return;
+  const draft = editId ? builderDraftFromExisting(kind, editId) : builderDefaultDraft(kind);
+  STATE.builder = {kind, editId: editId||null, step:1, draft};
+  document.getElementById('modal').innerHTML = renderBuilder();
+}
+function builderRefresh(){ document.getElementById('modal').innerHTML=renderBuilder(); }
+function bset(field,val){ if(STATE.builder) STATE.builder.draft[field]=val; }
+function builderNext(){ const b=STATE.builder; if(!b) return; b.step=Math.min(BUILDER_STEPS[b.kind], b.step+1); builderRefresh(); }
+function builderBack(){ const b=STATE.builder; if(!b) return; b.step=Math.max(1, b.step-1); builderRefresh(); }
+function choiceBtns(field,current,options){
+  return `<div class="row" style="gap:8px;flex-wrap:wrap">`+options.map(([v,l])=>
+    `<button type="button" class="btn ${current===v?'':'ghost'}" style="flex:1;min-width:100px" onclick="bset('${field}','${v}');builderRefresh()">${esc(l)}</button>`).join('')+`</div>`;
+}
+function choreStepUI(step,d){
+  if(step===1) return `<div class="sec-title" style="margin-top:0">What needs doing?</div>
+    <input class="bfield" placeholder="e.g. Mow the lawn" value="${esc(d.title||'')}" oninput="bset('title',this.value)" autofocus>
+    <div class="sec-title">Which department?</div>
+    <select class="bfield" onchange="bset('deptId',this.value)">${STATE.domains.map(dm=>`<option value="${dm.id}" ${dm.id===d.deptId?'selected':''}>${dm.icon} ${esc(dm.name)}</option>`).join('')}</select>`;
+  if(step===2) return `<div class="sec-title" style="margin-top:0">Who's doing it?</div>
+    <div class="row" style="gap:8px;flex-wrap:wrap">${STATE.members.map(m=>
+      `<button type="button" class="btn ${d.assigneeId===m.id?'':'ghost'}" style="flex:1;min-width:90px" onclick="bset('assigneeId','${m.id}');builderRefresh()">${m.avatar} ${esc(m.name)}</button>`).join('')}</div>
+    <div class="sec-title">How often?</div>
+    ${choiceBtns('cadenceType', d.cadenceType, [['once','One-time'],['weekly','Weekly'],['every','Every N days']])}
+    ${d.cadenceType==='every'?`<input class="bfield" type="number" min="1" placeholder="Every how many days?" value="${esc(d.everyDays||'')}" oninput="bset('everyDays',this.value)">`:''}`;
+  return `<div class="sec-title" style="margin-top:0">Reward</div>
+    <div class="row" style="gap:10px">
+      <div class="grow"><label class="muted" style="font-size:12px">Coins 🪙</label>
+        <input class="bfield" type="number" min="0" value="${esc(d.coins!=null?d.coins:10)}" oninput="bset('coins',this.value)"></div>
+      <div class="grow"><label class="muted" style="font-size:12px">XP ⭐</label>
+        <input class="bfield" type="number" min="0" value="${esc(d.xp!=null?d.xp:10)}" oninput="bset('xp',this.value)"></div>
+    </div>
+    <label class="row" style="gap:10px;margin-top:14px;cursor:pointer">
+      <input type="checkbox" ${d.needsApproval?'checked':''} onchange="bset('needsApproval',this.checked)" style="width:22px;height:22px">
+      <span>Needs a parent's approval before it counts</span>
+    </label>`;
+}
+function recordStepUI(step,d){
+  if(step===1) return `<div class="sec-title" style="margin-top:0">What is it?</div>
+    <input class="bfield" placeholder="e.g. Microwave" value="${esc(d.name||'')}" oninput="bset('name',this.value)" autofocus>
+    <div class="sec-title">Which department?</div>
+    <select class="bfield" onchange="bset('deptId',this.value)">${STATE.domains.map(dm=>`<option value="${dm.id}" ${dm.id===d.deptId?'selected':''}>${dm.icon} ${esc(dm.name)}</option>`).join('')}</select>`;
+  if(step===2) return `<div class="sec-title" style="margin-top:0">Brand &amp; model</div>
+    <input class="bfield" placeholder="Brand (e.g. LG)" value="${esc(d.brand||'')}" oninput="bset('brand',this.value)">
+    <input class="bfield" placeholder="Model" value="${esc(d.model||'')}" oninput="bset('model',this.value)">
+    <div class="sec-title">Serial number (optional)</div>
+    <input class="bfield" placeholder="Serial #" value="${esc(d.serial||'')}" oninput="bset('serial',this.value)">`;
+  if(step===3) return `<div class="sec-title" style="margin-top:0">Warranty provider</div>
+    <input class="bfield" placeholder="e.g. Samsung, AppleCare" value="${esc(d.warrantyProvider||'')}" oninput="bset('warrantyProvider',this.value)">
+    <div class="sec-title">Warranty expires</div>
+    <input class="bfield" type="date" value="${esc(d.warrantyExpiry||'')}" oninput="bset('warrantyExpiry',this.value)">`;
+  return `<div class="sec-title" style="margin-top:0">Purchase price (optional)</div>
+    <input class="bfield" type="number" min="0" placeholder="$" value="${esc(d.price||'')}" oninput="bset('price',this.value)">
+    <div class="sec-title">Receipt note (optional)</div>
+    <input class="bfield" placeholder="e.g. Bought at Best Buy" value="${esc(d.receiptNote||'')}" oninput="bset('receiptNote',this.value)">`;
+}
+function goalStepUI(step,d){
+  if(step===1) return `<div class="sec-title" style="margin-top:0">Who is this goal for?</div>
+    <div class="row" style="gap:8px;flex-wrap:wrap">
+      <button type="button" class="btn ${d.scope==='family'?'':'ghost'}" style="flex:1;min-width:120px" onclick="bset('scope','family');builderRefresh()">👨‍👩‍👧 Whole family</button>
+      <button type="button" class="btn ${d.scope==='member'?'':'ghost'}" style="flex:1;min-width:120px" onclick="bset('scope','member');builderRefresh()">🧑 One person</button>
+    </div>
+    ${d.scope==='member'?`<div class="sec-title">Which family member?</div>
+      <select class="bfield" onchange="bset('memberId',this.value)">${STATE.members.map(m=>`<option value="${m.id}" ${m.id===d.memberId?'selected':''}>${m.avatar} ${esc(m.name)}</option>`).join('')}</select>`:''}`;
+  if(step===2) return `<div class="sec-title" style="margin-top:0">Goal title</div>
+    <input class="bfield" placeholder="e.g. No overdue systems today" value="${esc(d.title||'')}" oninput="bset('title',this.value)">
+    <div class="sec-title">What are we measuring?</div>
+    <select class="bfield" onchange="bset('metric',this.value)">${Object.keys(METRICS).map(k=>`<option value="${k}" ${k===d.metric?'selected':''}>${esc(METRIC_LABELS[k]||k)}</option>`).join('')}</select>`;
+  if(step===3) return `<div class="sec-title" style="margin-top:0">Target</div>
+    <input class="bfield" type="number" min="1" value="${esc(d.target!=null?d.target:1)}" oninput="bset('target',this.value)">
+    <div class="sec-title">Over what period?</div>
+    <div class="row" style="gap:8px">
+      <button type="button" class="btn ${d.period==='day'?'':'ghost'}" style="flex:1" onclick="bset('period','day');builderRefresh()">Daily</button>
+      <button type="button" class="btn ${d.period==='month'?'':'ghost'}" style="flex:1" onclick="bset('period','month');builderRefresh()">Monthly</button>
+    </div>`;
+  return `<div class="sec-title" style="margin-top:0">Reward for hitting it</div>
+    <div class="row" style="gap:10px">
+      <div class="grow"><label class="muted" style="font-size:12px">Coins 🪙</label>
+        <input class="bfield" type="number" min="0" value="${esc(d.bonusCoins!=null?d.bonusCoins:50)}" oninput="bset('bonusCoins',this.value)"></div>
+      <div class="grow"><label class="muted" style="font-size:12px">Points ⭐</label>
+        <input class="bfield" type="number" min="0" value="${esc(d.bonusPoints!=null?d.bonusPoints:5)}" oninput="bset('bonusPoints',this.value)"></div>
+    </div>
+    <div class="sec-title">Tag to a department? (optional)</div>
+    <select class="bfield" onchange="bset('deptId',this.value)">
+      <option value="">— No department (Family screen only) —</option>
+      ${STATE.domains.map(dm=>`<option value="${dm.id}" ${dm.id===d.deptId?'selected':''}>${dm.icon} ${esc(dm.name)}</option>`).join('')}
+    </select>`;
+}
+const BUILDER_TITLES={chore:'Chore', record:'Record', goal:'Goal'};
+function renderBuilder(){
+  const b=STATE.builder; if(!b || !isParent()) return '';
+  const d=b.draft, total=BUILDER_STEPS[b.kind];
+  const stepHTML = b.kind==='chore'?choreStepUI(b.step,d) : b.kind==='record'?recordStepUI(b.step,d) : goalStepUI(b.step,d);
+  const dots=Array.from({length:total},(_,i)=>`<span class="bdot${i+1<=b.step?' on':''}"></span>`).join('');
+  return `<div class="backdrop" onclick="if(event.target===this)closeModal()">
+    <div class="sheet">
+      <div class="hd">
+        <div class="grow"><h2>${b.editId?'Edit ':'Add '}${BUILDER_TITLES[b.kind]}</h2>
+          <div class="bdots" style="margin-top:8px">${dots}<span class="muted" style="margin-left:6px;font-size:12px">Step ${b.step} of ${total}</span></div></div>
+        <button class="x" onclick="closeModal()">✕</button>
+      </div>
+      <div class="bd" style="padding-top:10px">
+        ${stepHTML}
+        <div class="row" style="justify-content:space-between;margin-top:20px">
+          ${b.step>1?`<button class="btn ghost" onclick="builderBack()">← Back</button>`:'<span></span>'}
+          ${b.step<total?`<button class="btn" onclick="builderNext()">Next →</button>`:`<button class="btn" onclick="builderSave()">✓ Save</button>`}
+        </div>
+      </div>
+    </div></div>`;
+}
+function builderSave(){
+  const b=STATE.builder; if(!b) return; const d=b.draft;
+  if(b.kind==='chore'){
+    if(!(d.title||'').trim()){ pushToast('Give the chore a title','warn'); return; }
+    const cadence = d.cadenceType==='once'?null : d.cadenceType==='weekly'?{everyDays:7}:{everyDays:Math.max(1,+d.everyDays||1)};
+    saveChore({editId:b.editId, title:d.title.trim(), deptId:d.deptId, assigneeId:d.assigneeId, cadence, xp:d.xp, coins:d.coins, needsApproval:!!d.needsApproval});
+  } else if(b.kind==='record'){
+    if(!(d.name||'').trim()){ pushToast('Give the record a name','warn'); return; }
+    saveRecord({editId:b.editId, name:d.name.trim(), deptId:d.deptId, brand:d.brand, model:d.model, serial:d.serial,
+      warrantyProvider:d.warrantyProvider, warrantyExpiry:d.warrantyExpiry, price:d.price, receiptNote:d.receiptNote});
+  } else if(b.kind==='goal'){
+    if(!(d.title||'').trim()){ pushToast('Give the goal a title','warn'); return; }
+    saveGoal({editId:b.editId, scope:d.scope, memberId:d.memberId, title:d.title.trim(), metric:d.metric,
+      target:d.target, period:d.period, bonusCoins:d.bonusCoins, bonusPoints:d.bonusPoints, deptId:d.deptId});
+  }
+}
+let _taskSeq=1000;
+function saveChore(f){
+  if(f.editId){ const t=choreById(f.editId); Object.assign(t,{title:f.title,domainId:f.deptId,assigneeId:f.assigneeId,
+      recurring:f.cadence, xp:+f.xp, reward:{coins:+f.coins}, needsApproval:!!f.needsApproval}); }
+  else { STATE.tasks.push({id:'t'+(_taskSeq++), domainId:f.deptId, title:f.title, assigneeId:f.assigneeId,
+      dueDate: dayKey(), recurring:f.cadence, status:'open', xp:+f.xp, reward:{coins:+f.coins}, needsApproval:!!f.needsApproval}); }
+  markDirty(); closeModal(); render(); pushToast('Chore saved','good');
+}
+let _assetSeq=100;
+function saveRecord(f){
+  const price=+f.price||0, expiry=f.warrantyExpiry||addDays(today(),365);
+  let assetId=f.editId;
+  if(f.editId){ const a=assetById(f.editId);
+    Object.assign(a,{name:f.name, domainId:f.deptId, brand:f.brand||'—', model:f.model||'—', serial:f.serial||'—', price,
+      warranty:{...a.warranty, provider:f.warrantyProvider||'—', expiryDate:expiry}}); }
+  else { assetId='a'+(_assetSeq++);
+    STATE.assets.push({id:assetId, domainId:f.deptId, name:f.name, brand:f.brand||'—', model:f.model||'—',
+      serial:f.serial||'—', barcode:'—', purchaseDate:today(), price,
+      vendor:{name:'—',phone:'—'}, warranty:{provider:f.warrantyProvider||'—', months:12, expiryDate:expiry},
+      schedule:[], parts:[], serviceLog:[]});
+    if(price>0 || (f.receiptNote||'').trim()) STATE.receipts.push({id:'r'+(RECEIPT_SEQ++), date:today(),
+      merchant:(f.receiptNote||'').trim()||f.name, category:f.deptId, amount:price, method:'—', assetId, note:f.receiptNote||''}); }
+  markDirty(); closeModal(); render(); pushToast('Record saved','good');
+}
+let _goalSeq=100;
+function saveGoal(f){
+  const bonus={coins:+f.bonusCoins||0, points:+f.bonusPoints||0}, memberId=f.scope==='member'?f.memberId:null, deptId=f.deptId||null;
+  if(f.editId){ const g=STATE.goals.find(x=>x.id===f.editId);
+    Object.assign(g,{scope:f.scope, memberId, title:f.title, metric:f.metric, target:+f.target||1, period:f.period, bonus, deptId}); }
+  else { STATE.goals.push({id:'g'+(_goalSeq++), scope:f.scope, memberId, title:f.title, metric:f.metric,
+      target:+f.target||1, period:f.period, bonus, deptId}); }
+  markDirty(); closeModal(); render(); pushToast('Goal saved','good');
+}
+function deleteItem(kind,id){
+  if(!isParent()) return;
+  const labels={chore:'chore', record:'record', goal:'goal'};
+  if(!confirm('Delete this '+(labels[kind]||'item')+'?')) return;
+  if(kind==='chore') STATE.tasks=STATE.tasks.filter(t=>t.id!==id);
+  else if(kind==='record') STATE.assets=STATE.assets.filter(a=>a.id!==id);
+  else if(kind==='goal') STATE.goals=STATE.goals.filter(g=>g.id!==id);
+  closeModal(); markDirty(); render(); pushToast('Deleted','info');
+}
+
 /* ===== Persistence ===== */
 const PKEY='homebase.v1';
 const PERSIST_SLICE=['tasks','assets','receipts','members','pets','goals','approvals',
@@ -1256,7 +1470,9 @@ console.assert(typeof computeHomeHealth()==='number','health is number');
 /* ============================ NAV ============================ */
 function openView(v){ STATE.view=v; closeModal(); render(); }
 function openDomain(id){ STATE.activeDomain=id; STATE.view='domain'; closeModal(); render(); }
-function closeModal(){ STATE.activeAsset=null; document.getElementById('modal').innerHTML=''; }
+function openDept(id){ STATE.activeDept=id; STATE.deptTab='records'; STATE.view='dept'; closeModal(); render(); }
+function setDeptTab(t){ STATE.deptTab=t; render(); }
+function closeModal(){ STATE.activeAsset=null; STATE.builder=null; document.getElementById('modal').innerHTML=''; }
 
 /* ============================ LEVELS ============================ */
 const RANKS=[[0,'Newcomer'],[150,'Tidy Tenant'],[350,'Home Helper'],[600,'Caretaker'],
@@ -1398,6 +1614,7 @@ function render(){
   // persistent header + swappable middle + persistent bottom bar; only the middle animates in on a view change
   app.innerHTML = `<div class="gv${STATE.booted?'':' boot'}">
       <div id="toasts"></div>
+      <div class="housebg"></div>
       ${shellHeader()}
       <div id="middle" class="middle">${viewMiddle(v)}</div>
     </div>${renderTray()}`;
@@ -1419,8 +1636,8 @@ function hud(){
   </div>`;
 }
 function backbar(label){
-  return `<div class="backbar"><button class="btn ghost" onclick="openView('overworld')">← Home</button>
-    <h2>${label}</h2></div>`;
+  // navigation is handled by the persistent top nav now, so this is just the section title
+  return `<div class="backbar"><h2>${label}</h2></div>`;
 }
 
 /* ----- isometric map geometry ----- */
@@ -1529,7 +1746,7 @@ function busiestDomain(mid){ const cnt={};
   const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0]; return top?domainById(top[0]).name.split(/[ &]/)[0]:null; }
 function renderDepartments(){
   const cards=STATE.domains.map(d=>{ const h=domainHealth(d.id), due=dueCountForDomain(d.id);
-    return `<div class="deptcard card" style="--dc:${HEX[d.id]||'#c9754d'}" onclick="openDomain('${d.id}')">
+    return `<div class="deptcard card" style="--dc:${HEX[d.id]||'#c9754d'}" onclick="openDept('${d.id}')">
       <img class="dface" src="${agentImg(d.id)}" alt="${esc(d.agentName)}" onerror="this.style.display='none'">
       <div class="grow"><div class="dnm">${d.icon} ${esc(d.name)}</div>
         <div class="drole">${esc(d.agentName)} · ${esc(d.agentRole)}</div>
@@ -1605,7 +1822,7 @@ function deptInfoHTML(id){ const d=domainById(id); if(!d) return '';
     <div class="dibar"><i style="width:${h}%;background:${healthColor(h)}"></i></div>
     <div class="dimeta">${tasksForDomain(id).length} tasks · ${assetsForDomain(id).length} assets${due?` · <b style="color:#eb8a7f">${due} due</b>`:''}</div>
     ${top?`<div class="ditop"><small>TOP PRIORITY</small><div class="ditopt">${statusDot(dueStatus(top))} ${esc(top.title)}</div></div>`:''}
-    <button class="btn" style="width:100%;margin-top:12px" onclick="openDomain('${id}')">Enter ${esc(d.name.split(/[ &]/)[0])} →</button>`; }
+    <button class="btn" style="width:100%;margin-top:12px" onclick="openDept('${id}')">Enter ${esc(d.name.split(/[ &]/)[0])} →</button>`; }
 function renderBoard(){
   return Object.values(GAME.nodes).map(n=>`
     <div class="gnode n-${n.state}" data-node="${n.id}" style="left:${n.pos.x}%;top:${n.pos.y}%;--nc:${HEX[n.id]||'#c9754d'}"
@@ -1678,8 +1895,7 @@ function mapMiddle(){
   if(!STATE.selDept || !domainById(STATE.selDept))
     STATE.selDept=[...STATE.domains].sort((a,b)=>domainHealth(a.id)-domainHealth(b.id))[0].id;
   const sel=STATE.selDept;
-  return `<div class="housebg"></div>
-    <div class="gwrap">
+  return `<div class="gwrap">
       <div class="scene">
         <div class="board" id="board">${renderUnits()}${renderPets()}${renderBoard()}</div>
         <div class="ov br"><div class="glass streakbadge"><span class="n">🔥 ${STATE.streak}</span><span>day<br>streak</span></div></div>
@@ -1697,6 +1913,7 @@ function viewMiddle(v){
     : v==='schedule' ? renderSchedule()
     : v==='calendar' ? renderCalendar()
     : v==='departments'? renderDepartments()
+    : v==='dept'     ? renderDept(STATE.activeDept)
     : v==='campaign' ? renderCampaign()
     : v==='vault'    ? renderVault()
     : v==='receipts' ? renderReceipts()
@@ -1773,6 +1990,92 @@ function taskRow(t){
   </div>`;
 }
 
+/* ---- Department database (four-tab: records/chores/goals/content), in-shell ---- */
+function histPreview(a){
+  const log=[...a.serviceLog].sort((x,y)=>new Date(y.date)-new Date(x.date)).slice(0,2);
+  if(!log.length) return '<div class="histprev muted">No service history yet</div>';
+  return `<div class="histprev">${log.map(e=>`🛠 ${esc(e.who)} · ${fmtDate(e.date)}`).join('<br>')}</div>`;
+}
+function editDelBtns(kind,id){ return isParent()?`<span style="display:flex;gap:4px;flex:none">
+    <button class="check" title="Edit" onclick="event.stopPropagation();openBuilder('${kind}','${id}')">✎</button>
+    <button class="check" title="Delete" onclick="event.stopPropagation();deleteItem('${kind}','${id}')">🗑</button>
+  </span>`:''; }
+function deptRecords(id){
+  const assets=assetsForDomain(id);
+  const addBtn=isParent()?`<button class="btn" style="margin-bottom:12px" onclick="openBuilder('record')">+ Add record</button>`:'';
+  if(!assets.length) return addBtn+`<div class="empty card">No records in this department yet.</div>`;
+  const rows=assets.map(a=>{
+    const w=warrantyStatus(a), linked=STATE.receipts.filter(r=>r.assetId===a.id).length;
+    return `<div class="vrow card" onclick="openAsset('${a.id}')">
+      <span style="font-size:26px;width:34px;text-align:center;flex:none">${assetIcon(a)}</span>
+      <div class="grow">
+        <div class="nm">${esc(a.name)} <span class="muted" style="font-weight:500">· ${esc(a.brand)}</span></div>
+        <div class="docs"><span class="doc" onclick="event.stopPropagation();openAssetTab('${a.id}','docs')">🧾 Receipts${linked?` (${linked})`:''}</span></div>
+        ${histPreview(a)}
+      </div>
+      <div class="vend" style="text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <span class="pill ${w.cls}">${w.label}</span>${editDelBtns('record',a.id)}</div>
+    </div>`;
+  }).join('');
+  return addBtn+`<div class="vlist">${rows}</div>`;
+}
+function deptChoreRow(t){
+  const s=dueStatus(t), m=memberById(t.assigneeId), cad=t.recurring?`every ${t.recurring.everyDays}d`:'one-time';
+  return `<div class="trow ${s==='done'?'done':''}">
+    ${statusDot(s)}${memberAv(m,28)}
+    <div class="grow"><div class="tt">${esc(t.title)}</div>
+      <div class="meta">${cad} · ${s==='done'?'done':fmtDate(t.dueDate)+' · '+relDay(t.dueDate)}</div></div>
+    <span class="chip">🪙${choreCoins(t)} · ${choreXp(t)}xp</span>
+    ${t.needsApproval?'<span class="pill amber" style="font-size:10px;white-space:nowrap">Needs approval</span>':''}
+    ${editDelBtns('chore',t.id)}
+  </div>`;
+}
+function deptChores(id){
+  const list=chores().filter(t=>t.domainId===id).slice().sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+  const addBtn=isParent()?`<button class="btn" style="margin-bottom:12px" onclick="openBuilder('chore')">+ Add chore</button>`:'';
+  if(!list.length) return addBtn+`<div class="empty card">No chores in this department yet. 🎉</div>`;
+  return addBtn+`<div class="tasklist">${list.map(deptChoreRow).join('')}</div>`;
+}
+function deptGoalRow(g){
+  const p=goalProgress(g);
+  return `<div class="trow"><div class="grow"><div class="tt">${esc(g.title)}</div>
+      <div class="meta">${p.value}/${p.target} · ${p.pct}%</div></div>
+    <span class="chip">🎁 ${g.bonus.coins}🪙</span>
+    ${editDelBtns('goal',g.id)}
+  </div>`;
+}
+function deptGoals(id){
+  const gs=STATE.goals.filter(g=>g.deptId===id);
+  const addBtn=isParent()?`<button class="btn" style="margin-bottom:12px" onclick="openBuilder('goal')">+ Add goal</button>`:'';
+  if(!gs.length) return addBtn+`<div class="empty card">No department goals yet.<div class="muted" style="font-size:12px;margin-top:6px">Family & member goals live on the Family screen.</div></div>`;
+  return addBtn+`<div class="tasklist">${gs.map(deptGoalRow).join('')}</div>`;
+}
+function deptContent(id){
+  return `<div class="empty card">No content yet.<div class="muted" style="font-size:12px;margin-top:6px">Recipes, guides & shopping lists for this department will live here.</div></div>`;
+}
+function deptHeader(d){
+  const h=domainHealth(d.id), due=dueCountForDomain(d.id);
+  return `<div class="depthead card">
+    <img class="dface" src="${agentImg(d.id)}" alt="${esc(d.agentName)}" onerror="this.style.display='none'">
+    <div class="grow"><div class="dnm">${d.icon} ${esc(d.name)}</div>
+      <div class="drole">${esc(d.agentName)} · ${esc(d.agentRole)}</div>
+      <div class="dbar"><i style="width:${h}%;background:${healthColor(h)}"></i></div></div>
+    <div style="text-align:center;flex:none">
+      <b style="font-size:22px;color:${healthColor(h)}">${h}</b><div class="muted" style="font-size:10px">HEALTH</div>
+      ${due?`<div style="font-size:11px;color:var(--red);font-weight:700">${due} due</div>`:''}
+    </div>
+  </div>`;
+}
+function renderDept(id){
+  const d=domainById(id);
+  if(!d) return backbar('Department')+`<div class="empty card">Department not found.</div>`;
+  const tab=STATE.deptTab||'records';
+  const tabs=[['records','📋 Records'],['chores','✅ Chores'],['goals','🎯 Goals'],['content','📖 Content']];
+  const strip=tabs.map(([t,l])=>`<button class="dtab${t===tab?' on':''}" onclick="setDeptTab('${t}')">${l}</button>`).join('');
+  const body = tab==='records'?deptRecords(id) : tab==='chores'?deptChores(id) : tab==='goals'?deptGoals(id) : deptContent(id);
+  return backbar(d.icon+' '+esc(d.name))+deptHeader(d)+`<div class="dtabs">${strip}</div>`+body;
+}
+
 function renderDomain(){
   const d=domainById(STATE.activeDomain);
   const assets=assetsForDomain(d.id), tasks=tasksForDomain(d.id)
@@ -1824,6 +2127,7 @@ function warrantyText(a){ const n=daysUntil(a.warranty.expiryDate);
 
 function openAsset(id){ STATE.activeAsset=id; STATE.assetTab='overview'; document.getElementById('modal').innerHTML=renderAssetModal(); }
 function setAssetTab(t){ STATE.assetTab=t; document.getElementById('modal').innerHTML=renderAssetModal(); }
+function openAssetTab(id,t){ STATE.activeAsset=id; STATE.assetTab=t; document.getElementById('modal').innerHTML=renderAssetModal(); }
 function renderAssetModal(){
   const a=assetById(STATE.activeAsset); if(!a)return '';
   const tab=STATE.assetTab||'overview', w=warrantyText(a), ws=warrantyStatus(a), nm=esc(a.name).replace(/'/g,'');
@@ -1855,13 +2159,14 @@ function renderAssetModal(){
         <div class="cost">${e.cost?'$'+e.cost:'—'}</div></div>`).join('')
       :`<div class="muted" style="padding:8px 0">No service history yet.</div>`;
     body=`<div class="block"><div class="sec-title" style="margin:0 0 6px">Service history</div>${log}
-        <form class="addform" onsubmit="submitService(event,'${a.id}')">
-          <input class="wide" name="work" placeholder="What was done?" required>
-          <input name="who" placeholder="Who (vendor/person)" required>
-          <input name="cost" type="number" min="0" placeholder="Cost $">
-          <input class="wide" name="parts" placeholder="Parts used (optional)">
-          <button class="btn wide" type="submit" style="grid-column:span 2">+ Add service entry</button>
-        </form></div>`;
+        ${isParent()?`<form class="addform" onsubmit="submitService(event,'${a.id}')">
+          <input name="who" placeholder="Who (person/vendor)" required>
+          <input name="date" type="date" value="${today()}" required>
+          <input class="wide" name="work" placeholder="What did they do?" required>
+          <input name="parts" placeholder="Parts used (optional)">
+          <input name="cost" type="number" min="0" placeholder="Cost $ (optional)">
+          <button class="btn wide" type="submit" style="grid-column:span 2">+ Log service</button>
+        </form>`:''}</div>`;
   } else if(tab==='parts'){
     const parts=a.parts.length?a.parts.map(p=>`<div class="row" style="justify-content:space-between;font-size:14px;padding:5px 0;border-bottom:1px dashed var(--line)">
         <span>🔩 ${esc(p.name)}</span><span class="mono muted">${esc(p.partNumber)}</span></div>`).join('')
@@ -1893,12 +2198,13 @@ function renderAssetModal(){
       <div class="bd" style="padding-top:6px">${body}</div>
     </div></div>`;
 }
-function submitService(ev,id){ ev.preventDefault(); const f=ev.target;
-  addServiceEntry(id,{date:today(),who:f.who.value,work:f.work.value,parts:f.parts.value||'—',cost:Number(f.cost.value)||0});
+function submitService(ev,id){ if(!isParent()) return; ev.preventDefault(); const f=ev.target;
+  addServiceEntry(id,{date:f.date.value||today(),who:f.who.value,work:f.work.value,parts:f.parts.value||'—',cost:Number(f.cost.value)||0});
 }
 function addServiceEntry(assetId,e){ const a=assetById(assetId); a.serviceLog.unshift(e);
   if(e.cost>0) STATE.receipts.push({id:'r'+(RECEIPT_SEQ++), date:e.date, merchant:e.who||'Service',
     category:a.domainId, amount:e.cost, method:'—', assetId, note:e.work});   // service cost → receipt
+  markDirty();
   document.getElementById('modal').innerHTML=renderAssetModal();
   toast(e.cost>0?`Service logged 📝 · ${fmtMoney(e.cost)} added to receipts`:'Service entry logged 📝'); }
 
@@ -2300,6 +2606,10 @@ function addTask(ev){ ev.preventDefault(); const f=ev.target;
 
 function completeTask(id){
   const t=STATE.tasks.find(x=>x.id===id); if(!t||t.status==='done')return;
+  // approval gate: a needs-approval chore marked done in play mode goes to the queue, not instant credit
+  if(t.needsApproval && !isParent()){ submitForApproval(t.id, t.assigneeId||'m1');
+    pushToast(`Submitted "${esc(t.title)}" for a parent to approve`,'info'); markDirty();
+    if(typeof render==='function') render(); return; }
   const lvlBefore=houseLevel().level;
   t.status='done';
   const m=memberById(t.assigneeId);
