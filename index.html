@@ -429,7 +429,11 @@
     font-size:18px;color:var(--ink-dark);cursor:pointer;display:grid;place-items:center;transition:transform .1s var(--ease),box-shadow .1s var(--ease),background .1s}
   .hicon:hover{transform:translateY(-1px);box-shadow:0 0 13px rgba(255,214,130,.4)}
   .hicon.on{background:var(--card);box-shadow:0 0 0 1px rgba(255,214,130,.55),0 0 12px rgba(255,214,130,.3)}
-  .hicon .badge{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#d64535;color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center}
+  .hicon .badge{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#d64535;color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;z-index:1}
+  .hicon::after{content:attr(data-tip);position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(2px);
+    background:#2b2017;color:#fff;font-size:11px;font-weight:700;padding:4px 9px;border-radius:8px;white-space:nowrap;
+    opacity:0;pointer-events:none;transition:opacity .12s var(--ease),transform .12s var(--ease);box-shadow:0 5px 14px rgba(40,25,10,.45);z-index:70}
+  .hicon:hover::after{opacity:1;transform:translateX(-50%) translateY(6px)}
   .settingsmenu{display:none;position:fixed;top:66px;right:22px;z-index:60;background:var(--card);border:1px solid var(--line);
     border-radius:16px;box-shadow:0 14px 36px rgba(10,25,20,.35);padding:8px;min-width:230px;max-width:86vw}
   .settingsmenu.open{display:block;animation:midIn .18s var(--ease)}
@@ -2283,14 +2287,14 @@ function sparkle(el){ if(!el) return; const r=el.getBoundingClientRect(), cx=r.l
 // compact header nav — quick-access utility icons + a Settings menu (replaces the old side menu)
 function headerIcons(){
   const pend=pendingApprovals().length;
-  const b=(view,ic,label,badge)=>`<button class="hicon${STATE.view===view?' on':''}" onclick="openView('${view}')" title="${label}">${badge?`<span class="badge">${badge}</span>`:''}${ic}</button>`;
+  const b=(view,ic,tip,badge)=>`<button class="hicon${STATE.view===view?' on':''}" onclick="openView('${view}')" data-tip="${tip}" title="${tip}">${badge?`<span class="badge">${badge}</span>`:''}${ic}</button>`;
   return `<div class="hicons">
-    <button class="hicon${STATE.view==='overworld'?' on':''}" onclick="openView('overworld')" title="Home Base (HQ)">🏠</button>
-    ${b('receipts','💰','Money — Finance & Receipts')}
+    <button class="hicon${STATE.view==='overworld'?' on':''}" onclick="openView('overworld')" data-tip="Home Base (HQ)" title="Home Base (HQ)">🏠</button>
+    ${b('receipts','💰','Money — Finance')}
     ${b('calendar','📅','Calendar')}
     ${b('checklist','✅','To-Do — all tasks')}
     ${b('approvals','📋','Approvals', pend)}
-    <button class="hicon gearbtn" onclick="toggleSettings()" title="Settings &amp; more">⚙️</button>
+    <button class="hicon gearbtn" onclick="toggleSettings()" data-tip="Settings &amp; more" title="Settings &amp; more">⚙️</button>
   </div>`;
 }
 function settingsMenu(){
