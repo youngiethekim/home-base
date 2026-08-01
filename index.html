@@ -189,6 +189,34 @@
   .bdot{width:8px;height:8px;border-radius:50%;background:var(--bg2)}
   .bdot.on{background:var(--accent)}
 
+  /* ---- Suggestion wizard ---- */
+  .wizard{padding:20px}
+  .wizhead{font-size:18px;font-weight:800;margin-bottom:4px}
+  .wizsub{font-size:13px;color:var(--muted);margin:2px 0 14px}
+  .wizpick{display:flex;gap:14px;margin:18px 0}
+  .wizbig{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 14px;
+    border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:var(--shadow);
+    transition:transform .12s var(--ease),box-shadow .12s var(--ease)}
+  .wizbig:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(40,25,10,.18)}
+  .wizbig span{font-size:32px}
+  .wizbig b{font-size:15px}
+  .wizbig small{color:var(--muted);font-size:12px}
+  .wizclose{margin-top:6px;width:100%}
+  .wizgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+  .wizcard{display:flex;align-items:center;gap:10px;padding:12px 13px;border:1px solid var(--line);border-radius:14px;
+    background:var(--card);text-align:left;transition:transform .1s var(--ease),box-shadow .1s var(--ease)}
+  .wizcard:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--shadow)}
+  .wizcard:disabled{cursor:default}
+  .wizcard.on{background:#eef6ea;border-color:var(--green)}
+  .wizcard.custom{border-style:dashed;background:transparent}
+  .wt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .wt b{font-size:14px}
+  .wt small{color:var(--muted);font-size:11.5px}
+  .wa{font-weight:800;font-size:16px;flex:none;color:var(--accent)}
+  .wizcard.on .wa{color:var(--green);font-size:12px}
+  .wizfoot{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+  @media(max-width:480px){.wizpick{flex-direction:column}.wizgrid{grid-template-columns:1fr}}
+
   /* ---- Family ---- */
   .lead{display:flex;gap:10px;flex-wrap:wrap;padding:16px;margin-bottom:16px}
   .leadcard{flex:1;min-width:140px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--bg2)}
@@ -360,7 +388,7 @@
   }
 
   /* ============ Modern Cozy shell: left sidebar + header + tray ============ */
-  .gv{max-width:1240px;margin:0 auto;padding:14px 16px 30px;display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:start}
+  .gv{max-width:1240px;margin:0 auto;padding:14px 16px 30px;display:block}
   .maincol{display:flex;flex-direction:column;min-width:0}
   .sidenav{background:linear-gradient(180deg,var(--panel1),var(--panel2));border:1px solid var(--pill-border);
     border-radius:20px;padding:14px 8px;display:flex;flex-direction:column;gap:2px;position:sticky;top:14px;
@@ -379,7 +407,7 @@
     .sidenav .gamenav{flex-direction:row;gap:4px}
     .sidenav .gnav{flex-direction:column;padding:8px 10px;font-size:10.5px;gap:3px}
   }
-  .apphead{background:linear-gradient(180deg,var(--panel1),var(--panel2));border:1px solid var(--pill-border);
+  .apphead{position:sticky;top:8px;z-index:40;background:linear-gradient(180deg,var(--panel1),var(--panel2));border:1px solid var(--pill-border);
     border-radius:20px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;row-gap:8px;
     color:var(--ink-dark);box-shadow:0 8px 22px rgba(10,25,20,.25)}
   .ah-brand{font-size:18px;font-weight:800;line-height:1.2}
@@ -396,6 +424,20 @@
   .statpill.lvlpill .spt .lab{color:var(--gold-ink)}
   .gearbtn{width:34px;height:34px;border-radius:10px;background:var(--pill-bg);border:1px solid var(--pill-border);
     font-size:16px;color:var(--ink-dark)}
+  .hicons{display:flex;align-items:center;gap:6px}
+  .hicon{position:relative;width:37px;height:37px;border-radius:11px;background:var(--pill-bg);border:1px solid var(--pill-border);
+    font-size:18px;color:var(--ink-dark);cursor:pointer;display:grid;place-items:center;transition:transform .1s var(--ease),box-shadow .1s var(--ease),background .1s}
+  .hicon:hover{transform:translateY(-1px);box-shadow:0 0 13px rgba(255,214,130,.4)}
+  .hicon.on{background:var(--card);box-shadow:0 0 0 1px rgba(255,214,130,.55),0 0 12px rgba(255,214,130,.3)}
+  .hicon .badge{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#d64535;color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center}
+  .settingsmenu{display:none;position:fixed;top:66px;right:22px;z-index:60;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;box-shadow:0 14px 36px rgba(10,25,20,.35);padding:8px;min-width:230px;max-width:86vw}
+  .settingsmenu.open{display:block;animation:midIn .18s var(--ease)}
+  .smhead{font-size:10.5px;letter-spacing:.6px;color:var(--muted);font-weight:800;padding:6px 10px 8px}
+  .smitem{display:block;width:100%;text-align:left;padding:10px 11px;border-radius:10px;background:none;border:none;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer}
+  .smitem:hover{background:var(--card-2,#f0ece2)}
+  .smitem.danger{color:#c0392b}
+  .smsep{height:1px;background:var(--line);margin:5px 6px}
   @keyframes numPop{0%{transform:scale(1)}50%{transform:scale(1.22)}100%{transform:scale(1)}}
   .pop{display:inline-block;animation:numPop .28s ease}
   :root{--tray-h:110px}
@@ -555,6 +597,17 @@
     transition:border-color .3s var(--ease),box-shadow .18s var(--ease),filter .18s var(--ease)}
   .gnode:hover .nring{box-shadow:0 0 0 4px rgba(255,255,255,.65),0 0 22px 4px rgba(255,214,130,.8),0 5px 13px rgba(40,25,10,.34);filter:brightness(1.07)}
   .gnode:hover .nico{filter:drop-shadow(0 0 4px rgba(255,224,150,.9))}
+  /* ambient life — birds drift across, leaves fall, a butterfly flutters (behind the icons) */
+  .ambient{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+  .ambient .bird{position:absolute;left:-8%;font-size:19px;opacity:.8;will-change:transform;animation:birdFly 28s linear infinite}
+  .ambient .bird.b2{font-size:15px;animation-duration:38s}
+  .ambient .bird.b3{font-size:17px;animation-duration:32s}
+  @keyframes birdFly{0%{transform:translate(-10vw,0)}45%{transform:translate(45vw,-16px)}55%{transform:translate(55vw,-6px)}100%{transform:translate(120vw,4px)}}
+  .ambient .leaf{position:absolute;top:-7%;font-size:15px;opacity:.7;will-change:transform;animation:leafFall linear infinite}
+  @keyframes leafFall{0%{transform:translateY(-7%) translateX(0) rotate(0deg)}50%{transform:translateY(46vh) translateX(24px) rotate(180deg)}100%{transform:translateY(102vh) translateX(-12px) rotate(360deg)}}
+  .ambient .flutter{position:absolute;font-size:16px;opacity:.8;will-change:transform;animation:flutterAbout 16s ease-in-out infinite}
+  @keyframes flutterAbout{0%{transform:translate(0,0) rotate(-6deg)}25%{transform:translate(60px,-30px) rotate(8deg)}50%{transform:translate(140px,10px) rotate(-6deg)}75%{transform:translate(70px,40px) rotate(8deg)}100%{transform:translate(0,0) rotate(-6deg)}}
+  @media(prefers-reduced-motion:reduce){.ambient{display:none}}
   .sidenav .gnav.on{box-shadow:0 0 0 1px rgba(255,214,130,.4),0 0 16px rgba(255,214,130,.3)}
   .trayitem:not(.busy):hover .trayring{box-shadow:0 0 0 3px rgba(255,255,255,.55),0 0 16px 3px rgba(255,214,130,.7)}
   .nico{font-size:27px;line-height:1}
@@ -1369,6 +1422,37 @@ function addSuggestedItem(deptId,i){ if(!isParent()) return; const s=_si(deptId)
     parts:[], serviceLog:[], vendor:{name:'',phone:''} });
   markDirty(); }
 
+function openWizard(deptId, type){ if(!isParent()) return; STATE.wizard={deptId, type:type||null}; drawWizard(); }
+function drawWizard(){ const m=document.getElementById('modal'); if(!m) return; m.innerHTML=renderWizard(); }
+function setWizardType(t){ if(STATE.wizard) STATE.wizard.type=t; drawWizard(); }
+function renderWizard(){ const w=STATE.wizard; if(!w) return ''; const d=domainById(w.deptId);
+  const head=`<div class="wizhead">${d.icon} Add to ${esc(d.name)}</div>`;
+  if(!w.type){ return `<div class="backdrop" onclick="if(event.target===this)closeModal()"><div class="sheet wizard">${head}
+     <div class="wizpick">
+       <button class="wizbig" onclick="setWizardType('chore')"><span>✅</span><b>Add a Task</b><small>Chores &amp; to-dos</small></button>
+       <button class="wizbig" onclick="setWizardType('item')"><span>🗄️</span><b>Add an Item</b><small>Appliances &amp; things</small></button>
+     </div>
+     <button class="btn ghost wizclose" onclick="closeModal()">Close</button></div></div>`; }
+  const list = w.type==='chore' ? _sc(w.deptId) : _si(w.deptId);
+  const added = (i)=> w.type==='chore'?suggestChoreAdded(w.deptId,i):suggestItemAdded(w.deptId,i);
+  const hint = (s)=> w.type==='chore'
+     ? `${cadenceLabel(s.cad)} · +${s.coins}🪙${s.appr?' · needs ✔':''}`
+     : `${s.warr?s.warr+'-mo warranty':'no warranty'}${(s.sched&&s.sched[0])?' · '+esc(s.sched[0].job):''}`;
+  const cards=list.map((s,i)=>`<button class="wizcard${added(i)?' on':''}" ${added(i)?'disabled':''}
+     onclick="${w.type==='chore'?`addSuggestedChore`:`addSuggestedItem`}('${w.deptId}',${i});drawWizard()">
+     <div class="wt"><b>${esc(s.title||s.name)}</b><small>${hint(s)}</small></div>
+     <span class="wa">${added(i)?'✓ added':'＋'}</span></button>`).join('');
+  return `<div class="backdrop" onclick="if(event.target===this)closeModal()"><div class="sheet wizard">${head}
+     <div class="wizsub">Tap to add — everything's filled in for you. You can edit later.</div>
+     <div class="wizgrid">${cards}
+       <button class="wizcard custom" onclick="closeModal();openBuilder('${w.type==='chore'?'chore':'record'}')">
+         <div class="wt"><b>✎ Custom…</b><small>Type your own</small></div><span class="wa">›</span></button>
+     </div>
+     <div class="wizfoot"><button class="btn ghost" onclick="setWizardType(null)">‹ Back</button>
+       <button class="btn" onclick="closeModal();render()">Done</button></div></div></div>`; }
+function cadenceLabel(cad){ const n=cad.everyDays; if(!n) return 'once'; if(n===1) return 'daily'; if(n===7) return 'weekly';
+  if(n%30===0) return 'every '+(n/30)+' mo'; return 'every '+n+' days'; }
+
 /* ===== Persistence ===== */
 const PKEY='homebase.v1';
 const PERSIST_SLICE=['tasks','assets','receipts','members','pets','goals','approvals',
@@ -1884,12 +1968,11 @@ function render(){
   app.innerHTML = `<div class="gv${STATE.booted?'':' boot'}">
       <div id="toasts"></div>
       <div class="housebg"></div>
-      <aside class="sidenav">${gameNav(v)}</aside>
       <div class="maincol">
         ${shellHeader()}
         <div id="middle" class="middle">${viewMiddle(v)}</div>
       </div>
-    </div>${renderTray()}`;
+    </div>${renderTray()}${settingsMenu()}`;
   if(con) con.innerHTML='';
   document.body.style.paddingBottom='var(--tray-h)';
   STATE.booted=true;   // boot animation runs once
@@ -2112,6 +2195,13 @@ function deptInfoHTML(id){ const d=domainById(id); if(!d) return '';
     <div class="dimeta">${tasksForDomain(id).length} tasks · ${assetsForDomain(id).length} assets${due?` · <b style="color:#eb8a7f">${due} due</b>`:''}</div>
     ${top?`<div class="ditop"><small>TOP PRIORITY</small><div class="ditopt">${statusDot(dueStatus(top))} ${esc(top.title)}</div></div>`:''}
     <button class="btn" style="width:100%;margin-top:12px" onclick="openDept('${id}')">Enter ${esc(d.name.split(/[ &]/)[0])} →</button>`; }
+// ambient life over the yard — drifting birds + falling leaves (decorative, behind the icons)
+function ambientHTML(){
+  const leaves=Array.from({length:7},(_,i)=>`<span class="leaf" style="left:${6+i*13}%;animation-delay:${(-i*2.4).toFixed(1)}s;animation-duration:${9+(i%3)*3}s">${['🍃','🍂'][i%2]}</span>`).join('');
+  const birds=`<span class="bird" style="top:10%;animation-delay:-4s">🐦</span><span class="bird b2" style="top:20%;animation-delay:-13s">🕊️</span><span class="bird b3" style="top:15%;animation-delay:-22s">🐦</span>`;
+  const bug=`<span class="flutter" style="top:64%;left:20%;animation-delay:-2s">🦋</span>`;
+  return `<div class="ambient">${birds}${leaves}${bug}</div>`;
+}
 function renderBoard(){
   return Object.values(GAME.nodes).map(n=>{ const hv=Math.round(n.health);
     return `
@@ -2184,6 +2274,37 @@ function sparkle(el){ if(!el) return; const r=el.getBoundingClientRect(), cx=r.l
     setTimeout(()=>s.remove(),650);
   }
 }
+// compact header nav — quick-access utility icons + a Settings menu (replaces the old side menu)
+function headerIcons(){
+  const pend=pendingApprovals().length;
+  const b=(view,ic,label,badge)=>`<button class="hicon${STATE.view===view?' on':''}" onclick="openView('${view}')" title="${label}">${badge?`<span class="badge">${badge}</span>`:''}${ic}</button>`;
+  return `<div class="hicons">
+    <button class="hicon${STATE.view==='overworld'?' on':''}" onclick="openView('overworld')" title="Home Base (HQ)">🏠</button>
+    ${b('receipts','💰','Money — Finance & Receipts')}
+    ${b('calendar','📅','Calendar')}
+    ${b('checklist','✅','To-Do — all tasks')}
+    ${b('approvals','📋','Approvals', pend)}
+    <button class="hicon gearbtn" onclick="toggleSettings()" title="Settings &amp; more">⚙️</button>
+  </div>`;
+}
+function settingsMenu(){
+  const link=(act,ic,label)=>`<button class="smitem" onclick="closeSettings();${act}">${ic} ${label}</button>`;
+  return `<div class="settingsmenu${STATE.settingsOpen?' open':''}" id="settingsmenu">
+    <div class="smhead">Settings &amp; More</div>
+    <button class="smitem" onclick="toggleParentMode()">${isParent()?'👪 Parent mode — ON':'🔓 Play mode'} · tap to switch</button>
+    <div class="smsep"></div>
+    ${link("openView('departments')",'🏠','Departments')}
+    ${link("openView('vault')",'🗄️','Assets &amp; Records')}
+    ${link("openView('family')",'🏆','Family &amp; Levels')}
+    ${link("openView('campaign')",'🎯','Journey')}
+    ${link("openView('pets')",'🐾','Pets')}
+    ${link("openFindPro('handyman')",'🔧','Find a Pro')}
+    <div class="smsep"></div>
+    <button class="smitem danger" onclick="if(confirm('Reset all Home Base data to the demo?'))resetDemo()">↺ Reset demo</button>
+  </div>`;
+}
+function toggleSettings(){ STATE.settingsOpen=!STATE.settingsOpen; const m=document.getElementById('settingsmenu'); if(m) m.classList.toggle('open',STATE.settingsOpen); }
+function closeSettings(){ STATE.settingsOpen=false; }
 // persistent top header (brand + live HUD chips + nav) — shown on every top-level view
 function clockText(){ const d=new Date();
   return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})
@@ -2200,7 +2321,7 @@ function shellHeader(){
       <div class="statpill lvlpill" title="Household level ${L.level} — ${esc(L.rank)}"><b>⭐ Lv.${L.level}</b><div class="spt"><span class="lab">${esc(L.rank)}</span></div></div>
       <div class="statpill cur"><b>🪙 <span id="hud-coins-n">${Math.round(GAME.coins).toLocaleString()}</span></b></div>
       <div class="statpill"><b>💎 <span id="hud-gems-n">${GAME.gems}</span></b></div>
-      <button class="gearbtn" onclick="toggleParentMode()" title="Settings / Parent mode — currently ${isParent()?'Parent':'Play'}">⚙️</button>
+      ${headerIcons()}
     </div>`;
 }
 // World Events: overdue/upcoming maintenance, drawn from task due-dates + asset service schedules.
@@ -2222,7 +2343,7 @@ function mapMiddle(){
   // full-width board — the room icons spread across the whole house (no side panel)
   return `<div class="gwrap gwrap-full">
       <div class="scene">
-        <div class="board" id="board">${renderUnits()}${renderPets()}${renderBoard()}</div>
+        <div class="board" id="board">${ambientHTML()}${renderUnits()}${renderPets()}${renderBoard()}</div>
       </div>
     </div>`;
 }
@@ -2323,7 +2444,7 @@ function editDelBtns(kind,id){ return isParent()?`<span style="display:flex;gap:
   </span>`:''; }
 function deptRecords(id){
   const assets=assetsForDomain(id);
-  const addBtn=isParent()?`<button class="btn" style="margin-bottom:12px" onclick="openBuilder('record')">+ Add record</button>`:'';
+  const addBtn=isParent()?`<button class="btn" style="margin-bottom:12px" onclick="openWizard('${id}','item')">＋ Add an item</button>`:'';
   if(!assets.length) return addBtn+`<div class="empty card">No records in this department yet.</div>`;
   const rows=assets.map(a=>{
     const w=warrantyStatus(a), linked=STATE.receipts.filter(r=>r.assetId===a.id).length;
@@ -2342,19 +2463,22 @@ function deptRecords(id){
 }
 function deptChoreRow(t){
   const s=dueStatus(t), m=memberById(t.assigneeId), cad=t.recurring?`every ${t.recurring.everyDays}d`:'one-time';
-  return `<div class="trow ${s==='done'?'done':''}">
-    ${statusDot(s)}${memberAv(m,28)}
+  const due=s==='overdue'?`<span style="color:var(--red);font-weight:700">${relDay(t.dueDate)}</span>`:relDay(t.dueDate);
+  return `<div class="trow">
+    ${statusDot(s)}${m?memberAv(m,28):''}
     <div class="grow"><div class="tt">${esc(t.title)}</div>
-      <div class="meta">${cad} · ${s==='done'?'done':fmtDate(t.dueDate)+' · '+relDay(t.dueDate)}</div></div>
-    <span class="chip">🪙${choreCoins(t)} · ${choreXp(t)}xp</span>
+      <div class="meta">${cad} · ${due}</div></div>
+    <span class="chip">+${choreCoins(t)}🪙</span>
     ${t.needsApproval?'<span class="pill amber" style="font-size:10px;white-space:nowrap">Needs approval</span>':''}
     ${editDelBtns('chore',t.id)}
   </div>`;
 }
 function deptChores(id){
-  const list=chores().filter(t=>t.domainId===id).slice().sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
-  const addBtn=isParent()?`<button class="btn" style="margin-bottom:12px" onclick="openBuilder('chore')">+ Add chore</button>`:'';
-  if(!list.length) return addBtn+`<div class="empty card">No chores in this department yet. 🎉</div>`;
+  const list=STATE.tasks.filter(t=>t.domainId===id && t.status!=='done').slice().sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+  const addBtn=isParent()?`<button class="btn" style="width:100%;margin-bottom:12px" onclick="openWizard('${id}','chore')">＋ Add a task</button>`:'';
+  if(!list.length) return addBtn+(isParent()
+    ?`<div class="empty card">No tasks yet — <button style="color:var(--accent);font-weight:700;text-decoration:underline" onclick="openWizard('${id}','chore')">add some →</button></div>`
+    :`<div class="empty card">No tasks yet. 🎉</div>`);
   return addBtn+`<div class="tasklist">${list.map(deptChoreRow).join('')}</div>`;
 }
 function deptGoalRow(g){
@@ -2404,7 +2528,7 @@ function deptHub(id){
     <button class="hubopt" onclick="setDeptTab('records')"><span class="ho-ic">🗄️</span><span class="ho-tx"><b>See our records</b><small>Warranties, receipts &amp; service history</small></span><span class="ho-rw">›</span></button>
     <button class="hubopt" onclick="setDeptTab('goals')"><span class="ho-ic">🎯</span><span class="ho-tx"><b>Check our goals</b><small>What we're aiming for</small></span><span class="ho-rw">›</span></button>`;
   const parent = isParent() ? `
-    <button class="hubopt add" onclick="openBuilder('chore')"><span class="ho-ic">＋</span><span class="ho-tx"><b>Add a new chore</b><small>Create a task for this department</small></span><span class="ho-rw">›</span></button>` : '';
+    <button class="hubopt add" onclick="openWizard('${id}','chore')"><span class="ho-ic">＋</span><span class="ho-tx"><b>Add a new chore</b><small>Create a task for this department</small></span><span class="ho-rw">›</span></button>` : '';
   return `<div class="depthub card">
     <div class="hubagent">
       <img class="hubface" src="${agentImg(id)}" alt="${esc(d.agentName)}" onerror="this.style.display='none'">
