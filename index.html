@@ -253,6 +253,25 @@
   .dtab.on{background:var(--accent);color:#fff;border-color:var(--accent2)}
   @media(max-width:480px){.dtabs{gap:5px}.dtab{font-size:10.5px;padding:9px 3px;min-width:0}}
   .histprev{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}
+  /* dept AI-helper hub (video-game landing) */
+  .depthub{padding:18px}
+  .hubagent{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}
+  .hubface{width:74px;height:74px;border-radius:18px;object-fit:cover;flex:none;border:3px solid #fff;box-shadow:0 4px 12px rgba(40,25,10,.25)}
+  .hubbubble{position:relative;background:var(--card-2,#f3ece0);border:1px solid var(--line);border-radius:16px;padding:12px 15px;flex:1;animation:midIn .35s var(--ease)}
+  .hubbubble:before{content:"";position:absolute;left:-8px;top:22px;width:14px;height:14px;background:var(--card-2,#f3ece0);border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
+  .hubwho{font-weight:800;font-size:13px}.hubwho span{font-weight:600;color:var(--muted)}
+  .hubbubble p{margin:5px 0 0;font-size:15px;line-height:1.5}
+  .hubopts{display:flex;flex-direction:column;gap:10px}
+  .hubopt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 15px;border-radius:15px;
+    background:var(--card);border:2px solid var(--line);cursor:pointer;transition:transform .12s var(--ease),border-color .12s,box-shadow .12s}
+  .hubopt:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(40,25,10,.16)}
+  .hubopt .ho-ic{font-size:24px;width:34px;text-align:center;flex:none}
+  .hubopt .ho-tx{flex:1;display:flex;flex-direction:column}
+  .hubopt .ho-tx b{font-size:15px}.hubopt .ho-tx small{color:var(--muted);font-size:12px;margin-top:1px}
+  .hubopt .ho-rw{font-weight:800;color:var(--ink);flex:none;font-size:15px}
+  .hubopt.do{border-color:color-mix(in srgb,var(--green) 55%,var(--line))}
+  .hubopt.do:hover{border-color:var(--green)}
+  .hubopt.add{border-style:dashed}
   .stage{margin-bottom:14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
   .stage.locked{opacity:.55}
   .stagehd{display:flex;gap:12px;align-items:flex-start;padding:14px}
@@ -1470,7 +1489,7 @@ console.assert(typeof computeHomeHealth()==='number','health is number');
 /* ============================ NAV ============================ */
 function openView(v){ STATE.view=v; closeModal(); render(); }
 function openDomain(id){ STATE.activeDomain=id; STATE.view='domain'; closeModal(); render(); }
-function openDept(id){ STATE.activeDept=id; STATE.deptTab='records'; STATE.view='dept'; closeModal(); render(); }
+function openDept(id){ STATE.activeDept=id; STATE.deptTab='hub'; STATE.view='dept'; closeModal(); render(); }
 function setDeptTab(t){ STATE.deptTab=t; render(); }
 function closeModal(){ STATE.activeAsset=null; STATE.builder=null; document.getElementById('modal').innerHTML=''; }
 
@@ -2066,13 +2085,39 @@ function deptHeader(d){
     </div>
   </div>`;
 }
+// video-game-style landing: the department's AI manager greets you and offers easy options
+function deptHub(id){
+  const d=domainById(id);
+  const due=tasksForDomain(id).filter(t=>t.status!=='done').sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate)).slice(0,3);
+  const n=dueCountForDomain(id);
+  const ask = due.length
+    ? `There ${n===1?'is':'are'} <b>${n||due.length}</b> thing${(n||due.length)>1?'s':''} I could use a hand with. What would you like to tackle today?`
+    : `Everything's looking great in here! 🎉 Want to browse the records or set something up?`;
+  const first = t=>esc((memberById(t.assigneeId)||{}).name||'Anyone');
+  const doBtns = due.map(t=>`<button class="hubopt do" onclick="completeTask('${t.id}')">
+      <span class="ho-ic">✓</span>
+      <span class="ho-tx"><b>${esc(t.title)}</b><small>${statusDot(dueStatus(t))} ${first(t)}${t.needsApproval?' · needs ✔ approval':''}</small></span>
+      <span class="ho-rw">+${choreCoins(t)} 🪙</span></button>`).join('');
+  const nav = `
+    <button class="hubopt" onclick="setDeptTab('records')"><span class="ho-ic">🗄️</span><span class="ho-tx"><b>See our records</b><small>Warranties, receipts &amp; service history</small></span><span class="ho-rw">›</span></button>
+    <button class="hubopt" onclick="setDeptTab('goals')"><span class="ho-ic">🎯</span><span class="ho-tx"><b>Check our goals</b><small>What we're aiming for</small></span><span class="ho-rw">›</span></button>`;
+  const parent = isParent() ? `
+    <button class="hubopt add" onclick="openBuilder('chore')"><span class="ho-ic">＋</span><span class="ho-tx"><b>Add a new chore</b><small>Create a task for this department</small></span><span class="ho-rw">›</span></button>` : '';
+  return `<div class="depthub card">
+    <div class="hubagent">
+      <img class="hubface" src="${agentImg(id)}" alt="${esc(d.agentName)}" onerror="this.style.display='none'">
+      <div class="hubbubble"><div class="hubwho">${esc(d.agentName)} <span>· ${esc(d.agentRole)}</span></div><p>Hi! ${ask}</p></div>
+    </div>
+    <div class="hubopts">${doBtns}${nav}${parent}</div>
+  </div>`;
+}
 function renderDept(id){
   const d=domainById(id);
   if(!d) return backbar('Department')+`<div class="empty card">Department not found.</div>`;
-  const tab=STATE.deptTab||'records';
-  const tabs=[['records','📋 Records'],['chores','✅ Chores'],['goals','🎯 Goals'],['content','📖 Content']];
+  const tab=STATE.deptTab||'hub';
+  const tabs=[['hub','👋 Today'],['records','📋 Records'],['chores','✅ Chores'],['goals','🎯 Goals'],['content','📖 Content']];
   const strip=tabs.map(([t,l])=>`<button class="dtab${t===tab?' on':''}" onclick="setDeptTab('${t}')">${l}</button>`).join('');
-  const body = tab==='records'?deptRecords(id) : tab==='chores'?deptChores(id) : tab==='goals'?deptGoals(id) : deptContent(id);
+  const body = tab==='hub'?deptHub(id) : tab==='records'?deptRecords(id) : tab==='chores'?deptChores(id) : tab==='goals'?deptGoals(id) : deptContent(id);
   return backbar(d.icon+' '+esc(d.name))+deptHeader(d)+`<div class="dtabs">${strip}</div>`+body;
 }
 
