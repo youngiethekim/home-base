@@ -1372,7 +1372,7 @@ function addSuggestedItem(deptId,i){ if(!isParent()) return; const s=_si(deptId)
 /* ===== Persistence ===== */
 const PKEY='homebase.v1';
 const PERSIST_SLICE=['tasks','assets','receipts','members','pets','goals','approvals',
-  'points','coins','gems','streak','done','roleMode','parents','content','pin','captains','milestones'];
+  'points','coins','gems','streak','done','roleMode','parents','content','pin','captains','milestones','nodePos'];
 function saveState(){
   if(typeof GAME==='object'){ STATE.coins = Math.round(GAME.coins); STATE.gems = GAME.gems; }
   try{ const slice={}; PERSIST_SLICE.forEach(k=>{ if(k in STATE) slice[k]=STATE[k]; });
@@ -1448,7 +1448,7 @@ function initGame(){
   STATE.domains.forEach(d=>{
     const h = typeof domainHealth==='function' ? domainHealth(d.id) : 80;
     GAME.nodes[d.id] = { id:d.id, domainId:d.id, name:d.name, icon:d.icon,
-      pos: ROOM[d.id]||{x:50,y:50}, level:1, health:h, coinAcc:0,
+      pos: (STATE.nodePos&&STATE.nodePos[d.id]) || ROOM[d.id] || {x:50,y:50}, level:1, health:h, coinAcc:0,
       state: stateFor(h), job:null };
   });
   GAME.units = {};
@@ -1894,7 +1894,24 @@ function render(){
   document.body.style.paddingBottom='var(--tray-h)';
   STATE.booted=true;   // boot animation runs once
   typeof attachDrag==='function' && attachDrag();
+  typeof attachNodeDrag==='function' && attachNodeDrag();
 }
+// let the player drag room icons around the house to reposition them; positions persist. A tap still opens the department.
+function attachNodeDrag(){ const board=document.getElementById('board'); if(!board) return;
+  board.querySelectorAll('.gnode').forEach(el=>{ if(el._ndrag) return; el._ndrag=1; el.style.cursor='grab';
+    const id=el.getAttribute('data-node');
+    el.addEventListener('pointerdown', e=>{ if(e.button&&e.button!==0) return;
+      const b=board.getBoundingClientRect(); const sx=e.clientX, sy=e.clientY; let moved=false;
+      try{ el.setPointerCapture(e.pointerId); }catch(_){}
+      const mv=ev=>{ if(!moved && Math.hypot(ev.clientX-sx,ev.clientY-sy)>4){ moved=true; el.style.cursor='grabbing'; el.style.zIndex=5; }
+        if(!moved) return;
+        const x=Math.max(3,Math.min(97,(ev.clientX-b.left)/b.width*100)), y=Math.max(5,Math.min(95,(ev.clientY-b.top)/b.height*100));
+        el.style.left=x+'%'; el.style.top=y+'%'; if(GAME.nodes[id]) GAME.nodes[id].pos={x:+x.toFixed(1),y:+y.toFixed(1)}; };
+      const up=()=>{ el.removeEventListener('pointermove',mv); el.removeEventListener('pointerup',up); el.style.cursor='grab'; el.style.zIndex='';
+        if(moved && GAME.nodes[id]){ STATE.nodePos=STATE.nodePos||{}; STATE.nodePos[id]={...GAME.nodes[id].pos}; markDirty();
+          el.addEventListener('click', ce=>{ ce.stopPropagation(); ce.preventDefault(); }, {once:true, capture:true}); } };
+      el.addEventListener('pointermove',mv); el.addEventListener('pointerup',up); });
+  }); }
 
 function hud(){
   return `<div class="hud">
@@ -3023,7 +3040,7 @@ loadState();
 STATE.goals=STATE.goals||[]; STATE.approvals=STATE.approvals||[]; STATE.points=STATE.points||0;
 STATE.roleMode=STATE.roleMode||'play'; STATE.parents=STATE.parents||['m1','m2'];
 STATE.content=STATE.content||{}; if(!('pin' in STATE)) STATE.pin=null;
-STATE.captains=STATE.captains||{}; STATE.milestones=STATE.milestones||[];
+STATE.captains=STATE.captains||{}; STATE.milestones=STATE.milestones||[]; STATE.nodePos=STATE.nodePos||{};
 STATE.tasks.forEach(t=>{ if(t.needsApproval===undefined)t.needsApproval=false; if(!t.reward)t.reward={coins:choreCoins(t)}; });
 GAME.coins = STATE.coins; GAME.gems = STATE.gems;
 initGame(); startClock();
