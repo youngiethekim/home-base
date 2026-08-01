@@ -257,12 +257,12 @@
   .depthub{padding:18px}
   .hubagent{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}
   .hubface{width:74px;height:74px;border-radius:18px;object-fit:cover;flex:none;border:3px solid #fff;box-shadow:0 4px 12px rgba(40,25,10,.25)}
-  .hubbubble{position:relative;background:var(--card-2,#f3ece0);border:1px solid var(--line);border-radius:16px;padding:12px 15px;flex:1;animation:midIn .35s var(--ease)}
+  .hubbubble{position:relative;background:var(--card-2,#f3ece0);border:1px solid var(--line);border-radius:16px;padding:12px 15px;flex:1;color:var(--ink);animation:midIn .35s var(--ease)}
   .hubbubble:before{content:"";position:absolute;left:-8px;top:22px;width:14px;height:14px;background:var(--card-2,#f3ece0);border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
   .hubwho{font-weight:800;font-size:13px}.hubwho span{font-weight:600;color:var(--muted)}
   .hubbubble p{margin:5px 0 0;font-size:15px;line-height:1.5}
   .hubopts{display:flex;flex-direction:column;gap:10px}
-  .hubopt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 15px;border-radius:15px;
+  .hubopt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 15px;border-radius:15px;color:var(--ink);
     background:var(--card);border:2px solid var(--line);cursor:pointer;transition:transform .12s var(--ease),border-color .12s,box-shadow .12s}
   .hubopt:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(40,25,10,.16)}
   .hubopt .ho-ic{font-size:24px;width:34px;text-align:center;flex:none}
@@ -272,6 +272,19 @@
   .hubopt.do{border-color:color-mix(in srgb,var(--green) 55%,var(--line))}
   .hubopt.do:hover{border-color:var(--green)}
   .hubopt.add{border-style:dashed}
+  /* compact variant for the map right-panel */
+  .sideagent{display:flex;gap:11px;align-items:flex-start}
+  .hubface.sm{width:52px;height:52px;border-radius:14px;border-width:2px}
+  .hubbubble.sm{padding:9px 11px;border-radius:13px}
+  .hubbubble.sm:before{top:18px}
+  .hubbubble.sm p{font-size:13px;margin-top:3px}
+  .hubbubble.sm .hubwho{font-size:11.5px}
+  .hubopts.sm{gap:8px}
+  .hubopt.sm{padding:10px 12px;border-radius:12px;border-width:1.5px}
+  .hubopt.sm .ho-ic{font-size:19px;width:26px}
+  .hubopt.sm .ho-tx b{font-size:13px}
+  .hubopt.sm .ho-tx small{font-size:11px}
+  .hubopt.sm .ho-rw{font-size:13px}
   .stage{margin-bottom:14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
   .stage.locked{opacity:.55}
   .stagehd{display:flex;gap:12px;align-items:flex-start;padding:14px}
@@ -1858,10 +1871,28 @@ function refreshPanel(){ const el=document.getElementById('deptinfo'); if(!el) r
   el.innerHTML = sidePanelHTML(STATE.selNode||STATE.selDept);
   el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
 // combined right-panel: the clicked department's info + its node level & upgrade control
-function sidePanelHTML(id){ const n=GAME.nodes[id]; if(!n) return deptInfoHTML(id); const cost=upgradeCost(n);
-  return deptInfoHTML(id)
-    + `<div class="dirow" style="margin-top:12px"><span>Node level</span><b>Lv.${n.level}</b></div>`
-    + `<button class="btn up" style="width:100%;margin-top:6px" ${GAME.coins<cost?'disabled':''} onclick="upgradeNode('${id}')">⬆ Upgrade — ${cost} 🪙</button>`; }
+// right-panel when a node is selected: the department's AI agent greets you + a summary of what you can do
+function sidePanelHTML(id){ const d=domainById(id); if(!d) return ''; const n=GAME.nodes[id];
+  const h=domainHealth(id), due=dueCountForDomain(id);
+  const dueTasks=tasksForDomain(id).filter(t=>t.status!=='done').sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate)).slice(0,3);
+  const ask = due ? `I've got <b>${due}</b> thing${due>1?'s':''} that need${due>1?'':'s'} a hand. What would you like to do?`
+                  : `Everything's in great shape here! 🎉 Want to browse or set something up?`;
+  const nm = t=>esc((memberById(t.assigneeId)||{}).name||'Anyone');
+  const doBtns=dueTasks.map(t=>`<button class="hubopt do sm" onclick="completeTask('${t.id}')">
+      <span class="ho-ic">✓</span><span class="ho-tx"><b>${esc(t.title)}</b><small>${statusDot(dueStatus(t))} ${nm(t)}${t.needsApproval?' · ✔ approval':''}</small></span>
+      <span class="ho-rw">+${choreCoins(t)}🪙</span></button>`).join('');
+  const cost = n?upgradeCost(n):0;
+  return `<div class="sideagent">
+      <img class="hubface sm" src="${agentImg(id)}" alt="${esc(d.agentName)}" onerror="this.style.display='none'">
+      <div class="hubbubble sm"><div class="hubwho">${d.icon} ${esc(d.agentName)} <span>· ${esc(d.agentRole)}</span></div><p>Hi! ${ask}</p></div>
+    </div>
+    <div class="dirow" style="margin-top:12px"><span>Department health</span><b style="color:${healthColor(h)}">${h}</b></div>
+    <div class="dibar"><i style="width:${h}%;background:${healthColor(h)}"></i></div>
+    <div class="hubopts sm" style="margin-top:12px">${doBtns}
+      <button class="hubopt sm" onclick="openDept('${id}')"><span class="ho-ic">📋</span><span class="ho-tx"><b>Open ${esc(d.name.split(/[ &]/)[0])}</b><small>Records · chores · goals · service log</small></span><span class="ho-rw">›</span></button>
+    </div>
+    ${n?`<div class="dirow" style="margin-top:12px"><span>Node level</span><b>Lv.${n.level}</b></div>
+    <button class="btn up" style="width:100%;margin-top:6px" ${GAME.coins<cost?'disabled':''} onclick="upgradeNode('${id}')">⬆ Upgrade — ${cost} 🪙</button>`:''}`; }
 function upgradeCost(n){ return Math.round(TUNE.upgradeCostBase*Math.pow(TUNE.upgradeCostMul,n.level-1)); }
 function renderNodePanel(id){ const n=GAME.nodes[id]; const cost=upgradeCost(n);
   const regBtn = id==='pets' ? `<button class="btn" onclick="openView('pets')">Open pet care ›</button>`
@@ -1905,12 +1936,6 @@ function shellHeader(){
 }
 // the map view's middle content (board + contextual right panel). housebg lives here so it only shows on the map.
 function mapMiddle(){
-  const q=todaysQuests();
-  const questRows=q.length?q.map(t=>{ const d=domainById(t.domainId);
-    return `<div class="quest" onclick="completeTask('${t.id}')" title="Mark done"><div class="qc">✓</div>
-      <div class="qt">${esc(t.title)}<small>${d.icon} ${esc(d.name.split(/[ &]/)[0])}</small></div>
-      <div class="qx">+${t.xp} XP</div></div>`; }).join('')
-    : `<div style="color:#bfa886;font-size:12px;padding:4px 0">All clear — no quests due. 🎉</div>`;
   if(!STATE.selDept || !domainById(STATE.selDept))
     STATE.selDept=[...STATE.domains].sort((a,b)=>domainHealth(a.id)-domainHealth(b.id))[0].id;
   const sel=STATE.selDept;
@@ -1921,8 +1946,6 @@ function mapMiddle(){
       </div>
       <div class="sidebar">
         <div class="glass deptinfo" id="deptinfo">${sidePanelHTML(sel)}</div>
-        <div class="glass questpanel"><h5>TODAY'S QUESTS</h5>${questRows}
-          <div class="viewall" onclick="openView('checklist')">View all (${STATE.tasks.filter(t=>t.status!=='done').length}) ›</div></div>
       </div>
     </div>`;
 }
