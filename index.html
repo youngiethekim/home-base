@@ -1254,6 +1254,116 @@ function deleteItem(kind,id){
   closeModal(); markDirty(); render(); pushToast('Deleted','info');
 }
 
+/* ===== Suggest catalog + wizard ===== */
+function isoPlus(days){ return addDays(today(), days); } // date string, days from app "today"
+// cadence helpers keep the existing recurring shape
+const EV=n=>({everyDays:n}), WK=()=>({everyDays:7});
+const SUGGEST={
+  kitchen:{ chores:[
+    {title:'Wipe range-hood filter',cad:EV(30),xp:15,coins:12,appr:false},
+    {title:'Clean fridge coils',cad:EV(180),xp:30,coins:24,appr:false},
+    {title:'Descale the dishwasher',cad:EV(90),xp:25,coins:20,appr:false},
+    {title:'Deep-clean the oven',cad:EV(120),xp:35,coins:28,appr:false},
+    {title:'Replace fridge water filter',cad:EV(180),xp:20,coins:16,appr:false}],
+    items:[ {name:'Refrigerator',warr:12,sched:[{job:'Replace water filter',intervalDays:180},{job:'Clean coils',intervalDays:180}]},
+    {name:'Dishwasher',warr:12,sched:[{job:'Descale',intervalDays:90}]},
+    {name:'Oven / Range',warr:12,sched:[{job:'Deep clean',intervalDays:120}]},
+    {name:'Microwave',warr:12,sched:[]} ]},
+  maintenance:{ chores:[
+    {title:'Replace HVAC air filter',cad:EV(90),xp:40,coins:32,appr:false},
+    {title:'Flush the water heater',cad:EV(365),xp:50,coins:40,appr:false},
+    {title:'Test smoke & CO detectors',cad:EV(180),xp:20,coins:16,appr:false},
+    {title:'Clean the dryer vent',cad:EV(180),xp:30,coins:24,appr:false},
+    {title:'Check for leaks under sinks',cad:EV(90),xp:15,coins:12,appr:false}],
+    items:[ {name:'Furnace / HVAC',warr:120,sched:[{job:'Replace filter',intervalDays:90},{job:'Pro tune-up',intervalDays:365}]},
+    {name:'Water heater',warr:72,sched:[{job:'Flush tank',intervalDays:365}]},
+    {name:'Washer / Dryer',warr:24,sched:[{job:'Clean dryer vent',intervalDays:180}]} ]},
+  cleaning:{ chores:[
+    {title:'Vacuum the whole house',cad:WK(),xp:20,coins:16,appr:false},
+    {title:'Mop hard floors',cad:WK(),xp:20,coins:16,appr:false},
+    {title:'Clean bathrooms',cad:WK(),xp:25,coins:20,appr:true},
+    {title:'Change bed sheets',cad:EV(14),xp:15,coins:12,appr:false},
+    {title:'Dust surfaces & shelves',cad:EV(14),xp:12,coins:10,appr:false}],
+    items:[ {name:'Vacuum cleaner',warr:24,sched:[{job:'Empty & clean filter',intervalDays:30}]},
+    {name:'Robot vacuum',warr:12,sched:[{job:'Replace brushes',intervalDays:180}]} ]},
+  yard:{ chores:[
+    {title:'Mow the lawn',cad:WK(),xp:30,coins:24,appr:true},
+    {title:'Weed the garden beds',cad:EV(21),xp:20,coins:16,appr:true},
+    {title:'Water the plants',cad:EV(3),xp:10,coins:8,appr:false},
+    {title:'Sharpen the mower blade',cad:EV(180),xp:25,coins:20,appr:false},
+    {title:'Trim hedges',cad:EV(60),xp:25,coins:20,appr:false}],
+    items:[ {name:'Lawn mower',warr:24,sched:[{job:'Sharpen blade',intervalDays:180},{job:'Change oil',intervalDays:365}]},
+    {name:'Irrigation system',warr:60,sched:[{job:'Check heads',intervalDays:180}]} ]},
+  auto:{ chores:[
+    {title:'Check tire pressure',cad:EV(30),xp:12,coins:10,appr:false},
+    {title:'Oil change',cad:EV(180),xp:40,coins:32,appr:false},
+    {title:'Rotate the tires',cad:EV(180),xp:30,coins:24,appr:false},
+    {title:'Replace wiper blades',cad:EV(365),xp:15,coins:12,appr:false},
+    {title:'Wash the car',cad:EV(21),xp:15,coins:12,appr:true}],
+    items:[ {name:'Family car',warr:36,sched:[{job:'Oil change',intervalDays:180},{job:'Rotate tires',intervalDays:180}]} ]},
+  electronics:{ chores:[
+    {title:'Update Wi-Fi router firmware',cad:EV(180),xp:20,coins:16,appr:false},
+    {title:'Back up computers',cad:EV(30),xp:25,coins:20,appr:false},
+    {title:'Dust PC & console vents',cad:EV(90),xp:15,coins:12,appr:false},
+    {title:'Test smoke-alarm batteries',cad:EV(180),xp:15,coins:12,appr:false}],
+    items:[ {name:'Wi-Fi router',warr:12,sched:[{job:'Firmware update',intervalDays:180}]},
+    {name:'TV',warr:12,sched:[]}, {name:'Laptop',warr:12,sched:[{job:'Backup',intervalDays:30}]} ]},
+  safety:{ chores:[
+    {title:'Test smoke detectors',cad:EV(180),xp:15,coins:12,appr:false},
+    {title:'Check fire extinguisher gauge',cad:EV(180),xp:15,coins:12,appr:false},
+    {title:'Review emergency plan',cad:EV(365),xp:20,coins:16,appr:false},
+    {title:'Test security cameras',cad:EV(90),xp:15,coins:12,appr:false}],
+    items:[ {name:'Security camera system',warr:24,sched:[{job:'Clean lenses / test',intervalDays:90}]},
+    {name:'Fire extinguisher',warr:72,sched:[{job:'Inspect',intervalDays:180}]} ]},
+  health:{ chores:[
+    {title:'Refill the first-aid kit',cad:EV(180),xp:15,coins:12,appr:false},
+    {title:'Check medicine expiry dates',cad:EV(180),xp:15,coins:12,appr:false},
+    {title:'Book annual check-ups',cad:EV(365),xp:25,coins:20,appr:false},
+    {title:'Log weights & heights',cad:EV(90),xp:15,coins:12,appr:false}],
+    items:[ {name:'First-aid kit',warr:0,sched:[{job:'Restock',intervalDays:180}]},
+    {name:'Bathroom scale',warr:12,sched:[]} ]},
+  pets:{ chores:[
+    {title:'Feed the pets',cad:EV(1),xp:8,coins:6,appr:false},
+    {title:'Walk the dog',cad:EV(1),xp:10,coins:8,appr:true},
+    {title:'Groom the pets',cad:EV(30),xp:20,coins:16,appr:true},
+    {title:'Book vet check-up',cad:EV(365),xp:25,coins:20,appr:false},
+    {title:'Refill pet food',cad:EV(30),xp:12,coins:10,appr:false}],
+    items:[ {name:'Pet supplies kit',warr:0,sched:[{job:'Restock food',intervalDays:30}]} ]},
+  kids:{ chores:[
+    {title:'Tidy the bedroom',cad:EV(1),xp:10,coins:8,appr:true},
+    {title:'Pack the school bag',cad:EV(1),xp:8,coins:6,appr:true},
+    {title:'Do homework',cad:EV(1),xp:15,coins:12,appr:true},
+    {title:'Put away laundry',cad:EV(3),xp:10,coins:8,appr:true}],
+    items:[ {name:'School supplies kit',warr:0,sched:[{job:'Restock',intervalDays:180}]} ]},
+  finances:{ chores:[
+    {title:'Review monthly budget',cad:EV(30),xp:25,coins:20,appr:false},
+    {title:'Pay recurring bills',cad:EV(30),xp:20,coins:16,appr:false},
+    {title:'Review insurance policies',cad:EV(365),xp:30,coins:24,appr:false},
+    {title:'Check subscriptions',cad:EV(90),xp:15,coins:12,appr:false}],
+    items:[ {name:'Home insurance policy',warr:12,sched:[{job:'Annual review',intervalDays:365}]} ]},
+  activities:{ chores:[
+    {title:'Piano practice',cad:EV(1),xp:12,coins:10,appr:true,minLevel:1},
+    {title:'Prep for swimming lesson',cad:WK(),xp:15,coins:12,appr:true},
+    {title:'Plan a family outing',cad:EV(14),xp:20,coins:16,appr:false},
+    {title:'Perform a recital piece',cad:EV(30),xp:40,coins:32,appr:true,minLevel:5}],
+    items:[ {name:'Piano',warr:0,sched:[{job:'Tune',intervalDays:365}]} ]},
+};
+function _sc(deptId){ return (SUGGEST[deptId]||{}).chores||[]; }
+function _si(deptId){ return (SUGGEST[deptId]||{}).items||[]; }
+function suggestChoreAdded(deptId,i){ const s=_sc(deptId)[i]; return !!s && STATE.tasks.some(t=>t.domainId===deptId && t.title===s.title); }
+function suggestItemAdded(deptId,i){ const s=_si(deptId)[i]; return !!s && STATE.assets.some(a=>a.domainId===deptId && a.name===s.name); }
+function addSuggestedChore(deptId,i){ if(!isParent()) return; const s=_sc(deptId)[i]; if(!s || suggestChoreAdded(deptId,i)) return;
+  const iv=s.cad.everyDays||7;
+  STATE.tasks.push({ id:'t'+(_taskSeq++), domainId:deptId, title:s.title, assigneeId: s.appr?'m3':'m1',
+    dueDate: isoPlus(iv), recurring:{...s.cad}, status:'open', xp:s.xp, reward:{coins:s.coins}, needsApproval:!!s.appr, minLevel:s.minLevel||1 });
+  markDirty(); }
+function addSuggestedItem(deptId,i){ if(!isParent()) return; const s=_si(deptId)[i]; if(!s || suggestItemAdded(deptId,i)) return;
+  STATE.assets.push({ id:'a'+(_assetSeq++), domainId:deptId, name:s.name, brand:'—', model:'—', serial:'—', barcode:'—',
+    warranty:{provider:'—', months:s.warr||0, expiryDate: isoPlus((s.warr||0)*30)}, price:0, purchaseDate:today(),
+    schedule:(s.sched||[]).map(j=>({job:j.job, intervalDays:j.intervalDays, nextDue:isoPlus(j.intervalDays), lastDone:today(), howTo:''})),
+    parts:[], serviceLog:[], vendor:{name:'',phone:''} });
+  markDirty(); }
+
 /* ===== Persistence ===== */
 const PKEY='homebase.v1';
 const PERSIST_SLICE=['tasks','assets','receipts','members','pets','goals','approvals',
@@ -2053,10 +2163,14 @@ function sparkle(el){ if(!el) return; const r=el.getBoundingClientRect(), cx=r.l
   }
 }
 // persistent top header (brand + live HUD chips + nav) — shown on every top-level view
+function clockText(){ const d=new Date();
+  return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})
+    + ' · ' + d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); }
 function shellHeader(){
   const hh=liveHomeHealth(), mood=liveMood(hh), L=houseLevel();
   return `<div class="apphead">
       <div class="ah-brand">🏡 Home Base<div class="ah-sub">${esc(STATE.household.name)}</div></div>
+      <div class="statpill clockpill"><b>🗓️ <span id="hud-clock">${clockText()}</span></b></div>
       <div class="sp"></div>
       <div class="statpill" id="hud-hh"><b id="hud-hh-num" style="color:${healthColor(hh)}">${hh}</b>
         <div class="spt"><span class="lab">HOME HEALTH</span><span class="val" id="hud-hh-mood">${mood.word} ${mood.face}</span></div></div>
@@ -2142,6 +2256,7 @@ function updateTray(){
 function popNum(el){ if(!el) return; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
 function setNum(el,val){ if(!el) return; const s=String(val); if(el.textContent!==s){ el.textContent=s; popNum(el); } }
 function renderHUD(){
+  const ce=document.getElementById('hud-clock'); if(ce) ce.textContent=clockText();   // live clock (all views)
   if(STATE.view!=='overworld') return;                    // top bar + tray only exist on the overworld screen
   const coins=Math.round(GAME.coins), energy=Math.round(GAME.energy), gems=GAME.gems;
   const hh=liveHomeHealth(), mood=liveMood(hh);
