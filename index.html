@@ -597,6 +597,11 @@
     transition:border-color .3s var(--ease),box-shadow .18s var(--ease),filter .18s var(--ease)}
   .gnode:hover .nring{box-shadow:0 0 0 4px rgba(255,255,255,.65),0 0 22px 4px rgba(255,214,130,.8),0 5px 13px rgba(40,25,10,.34);filter:brightness(1.07)}
   .gnode:hover .nico{filter:drop-shadow(0 0 4px rgba(255,224,150,.9))}
+  .gnode .ntip{position:absolute;left:50%;bottom:100%;transform:translateX(-50%) translateY(-4px);background:#2b2017;color:#fff;
+    font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:9px;white-space:nowrap;opacity:0;pointer-events:none;
+    transition:opacity .12s var(--ease),transform .12s var(--ease);box-shadow:0 5px 14px rgba(40,25,10,.45);z-index:6}
+  .gnode .ntip:after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#2b2017}
+  .gnode:hover .ntip{opacity:1;transform:translateX(-50%) translateY(-8px)}
   /* ambient life — birds drift across, leaves fall, a butterfly flutters (behind the icons) */
   .ambient{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
   .ambient .bird{position:absolute;left:-8%;font-size:19px;opacity:.8;will-change:transform;animation:birdFly 28s linear infinite}
@@ -2205,8 +2210,9 @@ function ambientHTML(){
 function renderBoard(){
   return Object.values(GAME.nodes).map(n=>{ const hv=Math.round(n.health);
     return `
-    <div class="gnode n-${n.state}" data-node="${n.id}" style="left:${n.pos.x}%;top:${n.pos.y}%;--nc:${HEX[n.id]||'#c9754d'};--hc:${healthColor(hv)}"
+    <div class="gnode n-${n.state}" data-node="${n.id}" title="${esc(n.name)} · Lv.${n.level} · health ${hv}" style="left:${n.pos.x}%;top:${n.pos.y}%;--nc:${HEX[n.id]||'#c9754d'};--hc:${healthColor(hv)}"
          onclick="selectNode('${n.id}')">
+      <div class="ntip">${esc(n.name)}</div>
       <div class="nring" style="--h:${hv}"><span class="nico">${n.icon}</span></div>
       <div class="nlv">Lv.${n.level}</div>
       <div class="nscore" style="color:${healthColor(hv)}">${hv}</div>
