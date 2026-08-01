@@ -401,6 +401,7 @@
   :root{--tray-h:110px}
   @media(max-width:640px){:root{--tray-h:88px}}
   .gwrap{display:grid;grid-template-columns:1fr minmax(280px,330px);gap:16px;align-items:start;margin-bottom:4px}
+  .gwrap-full{grid-template-columns:1fr!important}
   @media(max-width:860px){.gwrap{grid-template-columns:1fr}}
   .deptinfo.flash{animation:panelFlash .32s var(--ease)}
   @keyframes panelFlash{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -1321,9 +1322,9 @@ function initGame(){
   // rooms — like the reference mockup — instead of a tight ring). 3 loose rows across the top 2/3;
   // the family sprites wander in the foreground band below.
   const ROOM={
-    electronics:{x:13,y:16}, kitchen:{x:31,y:13}, cleaning:{x:49,y:16}, activities:{x:67,y:14}, maintenance:{x:85,y:20},
-    pets:{x:14,y:43}, health:{x:33,y:46}, safety:{x:58,y:44}, finances:{x:82,y:45},
-    auto:{x:22,y:70}, kids:{x:44,y:72}, yard:{x:67,y:68},
+    electronics:{x:7,y:15}, kitchen:{x:27,y:11}, cleaning:{x:48,y:14}, activities:{x:69,y:11}, maintenance:{x:91,y:17},
+    pets:{x:9,y:43}, health:{x:35,y:46}, safety:{x:62,y:43}, finances:{x:90,y:45},
+    auto:{x:16,y:70}, kids:{x:47,y:72}, yard:{x:78,y:67},
   };
   let _fi=0; STATE.domains.forEach(d=>{ if(!ROOM[d.id]){ ROOM[d.id]={x:20+(_fi%4)*20, y:88}; _fi++; } });
   STATE.domains.forEach(d=>{
@@ -2073,30 +2074,10 @@ function worldEventRow(it){
 }
 // the map view's middle content (board + Quests/World Events panel). housebg lives here so it only shows on the map.
 function mapMiddle(){
-  const quests=todaysQuests();
-  const questRows = quests.length ? quests.map(t=>{ const d=domainById(t.domainId);
-    return `<div class="trow" style="cursor:pointer" onclick="completeTask('${t.id}')">
-      ${statusDot(dueStatus(t))}
-      <div class="grow"><div class="tt">${esc(t.title)}</div><div class="meta">${d?d.icon+' '+esc(d.name.split(/[ &]/)[0]):''}</div></div>
-      <span class="xpchip">+${choreXp(t)} XP</span>
-    </div>`; }).join('') : `<div class="empty">All caught up! 🎉</div>`;
-  const events=worldEvents();
-  const eventRows = events.length ? events.map(worldEventRow).join('') : `<div class="empty">Nothing due soon.</div>`;
-  return `<div class="gwrap">
+  // full-width board — the room icons spread across the whole house (no side panel)
+  return `<div class="gwrap gwrap-full">
       <div class="scene">
         <div class="board" id="board">${renderUnits()}${renderPets()}${renderBoard()}</div>
-      </div>
-      <div class="sidebar">
-        <div class="card panelcard">
-          <h4>Quests</h4>
-          <div class="psub">Daily Quests</div>
-          <div class="tasklist">${questRows}</div>
-          <button class="viewall2" onclick="openView('checklist')">View all quests ›</button>
-        </div>
-        <div class="card panelcard">
-          <h4>World Events</h4>
-          <div class="tasklist" style="margin-top:10px">${eventRows}</div>
-        </div>
       </div>
     </div>`;
 }
