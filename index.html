@@ -610,7 +610,7 @@
   @media(max-width:720px){.ov.tr{width:190px}}
 
   /* ---- bottom unit tray ---- */
-  .tray{position:fixed;left:0;right:0;bottom:0;z-index:45;display:flex;gap:10px;overflow-x:auto;
+  .tray{position:fixed;left:0;right:0;bottom:0;z-index:45;display:flex;gap:12px;overflow-x:auto;justify-content:center;align-items:center;
     background:linear-gradient(#3c2d21,#2b2017);border-top:3px solid #5a4432;
     padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 30px rgba(40,25,10,.3);scrollbar-width:none}
   .tray::-webkit-scrollbar{display:none}
@@ -633,7 +633,7 @@
   .trayitem.petitem{cursor:pointer}
   .trayring.pet{background:none}
   .trayring.pet .pfp{border-color:#caa877;background:#fff}
-  .shopbtn{flex:none;align-self:center;margin-left:auto;background:linear-gradient(180deg,var(--gold1),var(--gold2));
+  .shopbtn{flex:none;align-self:center;margin-left:6px;background:linear-gradient(180deg,var(--gold1),var(--gold2));
     color:var(--gold-ink);font-weight:800;font-size:12.5px;padding:11px 16px;border-radius:999px;
     box-shadow:0 3px 0 #a97e22;white-space:nowrap;transition:transform .08s var(--ease),box-shadow .08s var(--ease)}
   .shopbtn:active{transform:translateY(2px);box-shadow:0 1px 0 #a97e22}
