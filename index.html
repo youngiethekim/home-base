@@ -411,6 +411,14 @@
   .sidebar>.glass{width:100%}
   .sidebar .questpanel{width:100%;max-width:none}
   @media(max-width:860px){.gwrap{grid-template-columns:1fr}}
+  /* ---- map right panel: Quests + World Events cream cards ---- */
+  .panelcard{padding:16px}
+  .panelcard h4{margin:0;font-size:15px;font-weight:800;color:var(--ink)}
+  .panelcard .psub{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin:2px 0 10px}
+  .panelcard .tasklist .trow{background:var(--bg)}
+  .xpchip{flex:none;font-size:11px;font-weight:800;color:#a06a12;background:#fbe6b0;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .viewall2{display:block;width:100%;text-align:right;margin-top:10px;font-size:12px;font-weight:700;color:var(--accent2)}
+  .evic{font-size:14px;flex:none;width:18px;text-align:center}
   .topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
     background:linear-gradient(#3c2d21,#2b2017);border:1px solid #5a4432;border-radius:16px;
     padding:9px 14px;color:#f6e8cf;box-shadow:0 8px 22px rgba(40,25,10,.2);margin-bottom:14px}
@@ -538,18 +546,21 @@
   .board{position:relative;width:100%;height:100%}
   .gnode{position:absolute;z-index:2;transform:translate(-50%,-50%);width:64px;text-align:center;cursor:pointer;transition:transform .15s var(--ease)}
   .gnode:hover{transform:translate(-50%,-50%) translateY(-3px) scale(1.07);z-index:3}
-  .nring{width:52px;height:52px;border-radius:50%;margin:0 auto;border:3px solid #fff;
-    background:conic-gradient(var(--nc) calc(var(--h)*1%), rgba(0,0,0,.14) 0);
-    display:grid;place-items:center;box-shadow:0 0 0 2.5px var(--nc),0 5px 13px rgba(40,25,10,.34);transition:--h .9s linear}
-  .nico{position:relative;top:-40px;font-size:24px;line-height:1;text-shadow:0 1px 3px rgba(255,255,255,.75)}
-  .nlvl{position:relative;top:-35px;font-size:9px;font-weight:800;color:#5b4636}
-  .nlabel{position:relative;top:-31px;font-size:11px;font-weight:800;background:#fff;border-radius:8px;padding:1.5px 7px;display:inline-block;white-space:nowrap;box-shadow:0 2px 5px rgba(40,25,10,.28)}
+  /* badge-style room node: solid dept-colored circle, health-colored ring border, icon centered */
+  .nring{width:52px;height:52px;border-radius:50%;margin:0 auto;border:3px solid var(--hc,#fff);
+    background:var(--nc);
+    display:grid;place-items:center;box-shadow:0 5px 13px rgba(40,25,10,.34);transition:border-color .3s var(--ease)}
+  .nico{font-size:24px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+  .nscore{margin-top:4px;font-size:10px;font-weight:800;background:#fffdf8;border-radius:8px;padding:1px 6px;
+    display:inline-block;box-shadow:0 2px 5px rgba(40,25,10,.22)}
+  .nlabel{margin-top:3px;font-size:11px;font-weight:800;background:#2b2017;color:#f6e8cf;border-radius:8px;
+    padding:2px 8px;display:inline-block;white-space:nowrap;box-shadow:0 2px 5px rgba(40,25,10,.28)}
   @media(max-width:640px){ /* must come after the base .gnode/.nring rules above (same specificity) so it actually wins — smaller here so the ring doesn't overlap on the narrow board */
     .gnode{width:48px}
-    .nring{width:40px;height:40px;border-width:2.5px;box-shadow:0 0 0 2px var(--nc),0 3px 9px rgba(40,25,10,.32)}
-    .nico{font-size:18px;top:-33px}
-    .nlvl{top:-28px;font-size:8px}
-    .nlabel{font-size:8px;top:-25px;padding:1px 4px}
+    .nring{width:40px;height:40px;border-width:2.5px;box-shadow:0 3px 9px rgba(40,25,10,.32)}
+    .nico{font-size:18px}
+    .nscore{font-size:8px;padding:0 5px}
+    .nlabel{font-size:8px;padding:1px 5px}
   }
   .n-due .nring{animation:duePulse 1.4s ease-in-out infinite}
   .n-overdue .nring{box-shadow:0 0 0 4px rgba(214,69,53,.35),0 4px 12px rgba(40,25,10,.3)}
@@ -1376,7 +1387,10 @@ function stepDecay(){
   GAME.alerts = Object.values(GAME.nodes).filter(n=>n.state==='due'||n.state==='overdue').map(n=>n.id);
 }
 function applyNodeState(n){ const el=nodeEl(n.id); if(!el) return;
-  el.className='gnode n-'+n.state; el.querySelector('.nring').style.setProperty('--h',Math.round(n.health));
+  const hv=Math.round(n.health);
+  el.className='gnode n-'+n.state; el.querySelector('.nring').style.setProperty('--h',hv);
+  el.style.setProperty('--hc',healthColor(hv));
+  const scoreEl=el.querySelector('.nscore'); if(scoreEl){ scoreEl.textContent=hv; scoreEl.style.color=healthColor(hv); }
   let pin=el.querySelector('.npin');
   if(n.state==='overdue'){ if(!pin){ pin=document.createElement('div'); pin.className='npin'; pin.textContent='!'; el.appendChild(pin); } }
   else if(pin) pin.remove();
@@ -1418,8 +1432,10 @@ function stepPets(){
 function updateRings(){ // cheap in-place ring refresh so health rings track live decay every tick,
   // not just on state transitions; working nodes keep their job-progress ring from stepJobs()
   Object.values(GAME.nodes).forEach(n=>{ if(n.state==='working') return;
-    const el=nodeEl(n.id); if(!el) return;
-    const ring=el.querySelector('.nring'); if(ring) ring.style.setProperty('--h',Math.round(n.health)); });
+    const el=nodeEl(n.id); if(!el) return; const hv=Math.round(n.health);
+    const ring=el.querySelector('.nring'); if(ring) ring.style.setProperty('--h',hv);
+    el.style.setProperty('--hc',healthColor(hv));
+    const scoreEl=el.querySelector('.nscore'); if(scoreEl){ scoreEl.textContent=hv; scoreEl.style.color=healthColor(hv); } });
 }
 function tick(){ GAME.t++; stepDecay(); stepEconomy(); stepJobs(); stepPets(); updateRings(); typeof renderHUD==='function' && renderHUD(); checkGoals(); }
 function startClock(){ if(GAME._timer) return; GAME.running=true; GAME._timer=setInterval(tick, TUNE.tickMs);
@@ -1953,18 +1969,20 @@ function deptInfoHTML(id){ const d=domainById(id); if(!d) return '';
     ${top?`<div class="ditop"><small>TOP PRIORITY</small><div class="ditopt">${statusDot(dueStatus(top))} ${esc(top.title)}</div></div>`:''}
     <button class="btn" style="width:100%;margin-top:12px" onclick="openDept('${id}')">Enter ${esc(d.name.split(/[ &]/)[0])} →</button>`; }
 function renderBoard(){
-  return Object.values(GAME.nodes).map(n=>`
-    <div class="gnode n-${n.state}" data-node="${n.id}" style="left:${n.pos.x}%;top:${n.pos.y}%;--nc:${HEX[n.id]||'#c9754d'}"
+  return Object.values(GAME.nodes).map(n=>{ const hv=Math.round(n.health);
+    return `
+    <div class="gnode n-${n.state}" data-node="${n.id}" style="left:${n.pos.x}%;top:${n.pos.y}%;--nc:${HEX[n.id]||'#c9754d'};--hc:${healthColor(hv)}"
          onclick="selectNode('${n.id}')">
-      <div class="nring" style="--h:${Math.round(n.health)}"></div>
-      <div class="nico">${n.icon}</div>
-      <div class="nlvl">Lv.${n.level}</div>
+      <div class="nring" style="--h:${hv}"><span class="nico">${n.icon}</span></div>
+      <div class="nscore" style="color:${healthColor(hv)}">${hv}</div>
       <div class="nlabel">${esc(n.name.split(/[ &]/)[0])}</div>
       ${n.state==='overdue'?'<div class="npin">!</div>':''}
       ${captainOf(n.id)?`<div class="ncap" title="Captain: ${esc((memberById(captainOf(n.id))||{}).name||'')}">👑</div>`:''}
-    </div>`).join('');
+    </div>`;}).join('');
 }
-function selectNode(id){ STATE.selNode=id; STATE.selDept=id; STATE.panel='node'; refreshPanel(); }
+// clicking a room node opens that department's Focus Mode (4-tab view + AI helper),
+// rather than the old inline side panel.
+function selectNode(id){ STATE.selNode=id; STATE.selDept=id; openDept(id); }
 function refreshPanel(){ const el=document.getElementById('deptinfo'); if(!el) return;
   el.innerHTML = sidePanelHTML(STATE.selNode||STATE.selDept);
   el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
@@ -2009,9 +2027,9 @@ function renderNodePanel(id){ const n=GAME.nodes[id]; const cost=upgradeCost(n);
     ${regBtn}</div>`; }
 function upgradeNode(id){ const n=GAME.nodes[id], cost=upgradeCost(n); if(GAME.coins<cost) return;
   GAME.coins-=cost; n.level++; n.health=100; n.state='healthy'; const el=nodeEl(id);
-  if(el){ applyNodeState(n); el.querySelector('.nlvl').textContent='Lv.'+n.level; el.classList.add('leveled'); setTimeout(()=>el.classList.remove('leveled'),700); }
+  if(el){ applyNodeState(n); el.classList.add('leveled'); setTimeout(()=>el.classList.remove('leveled'),700); }
   sparkle(el); pushToast(`${n.name} upgraded to Lv.${n.level}!`,'good');
-  typeof renderHUD==='function' && renderHUD(); refreshPanel(); markDirty(); }
+  typeof renderHUD==='function' && renderHUD(); markDirty(); render(); }
 function sparkle(el){ if(!el) return; const r=el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
   for(let i=0;i<8;i++){ const s=document.createElement('div'); s.className='sparkle'; s.textContent='✨';
     s.style.left=cx+'px'; s.style.top=cy+'px'; s.style.transform='translate(-50%,-50%) scale(.4)';
@@ -2036,17 +2054,46 @@ function shellHeader(){
       <button class="gearbtn" onclick="toggleParentMode()" title="Settings / Parent mode — currently ${isParent()?'Parent':'Play'}">⚙️</button>
     </div>`;
 }
-// the map view's middle content (board + contextual right panel). housebg lives here so it only shows on the map.
+// World Events: overdue/upcoming maintenance, drawn from task due-dates + asset service schedules.
+function worldEvents(){
+  return scheduleItems()
+    .filter(it=>daysUntil(it.date)<=14)
+    .sort((a,b)=>new Date(a.date)-new Date(b.date))
+    .slice(0,4);
+}
+function worldEventRow(it){
+  const n=daysUntil(it.date), title=it.maint?it.job:it.t.title;
+  const rel = n<0 ? 'overdue' : n===0 ? 'due today' : 'due '+relDay(it.date);
+  return `<div class="trow"><span class="evic">${n<0?'🔴':'🟠'}</span>
+    <div class="grow"><div class="tt">${esc(title)}</div><div class="meta">${esc(rel)}</div></div>
+  </div>`;
+}
+// the map view's middle content (board + Quests/World Events panel). housebg lives here so it only shows on the map.
 function mapMiddle(){
-  if(!STATE.selDept || !domainById(STATE.selDept))
-    STATE.selDept=[...STATE.domains].sort((a,b)=>domainHealth(a.id)-domainHealth(b.id))[0].id;
-  const sel=STATE.selDept;
+  const quests=todaysQuests();
+  const questRows = quests.length ? quests.map(t=>{ const d=domainById(t.domainId);
+    return `<div class="trow" style="cursor:pointer" onclick="completeTask('${t.id}')">
+      ${statusDot(dueStatus(t))}
+      <div class="grow"><div class="tt">${esc(t.title)}</div><div class="meta">${d?d.icon+' '+esc(d.name.split(/[ &]/)[0]):''}</div></div>
+      <span class="xpchip">+${choreXp(t)} XP</span>
+    </div>`; }).join('') : `<div class="empty">All caught up! 🎉</div>`;
+  const events=worldEvents();
+  const eventRows = events.length ? events.map(worldEventRow).join('') : `<div class="empty">Nothing due soon.</div>`;
   return `<div class="gwrap">
       <div class="scene">
         <div class="board" id="board">${renderUnits()}${renderPets()}${renderBoard()}</div>
       </div>
       <div class="sidebar">
-        <div class="glass deptinfo" id="deptinfo">${sidePanelHTML(sel)}</div>
+        <div class="card panelcard">
+          <h4>Quests</h4>
+          <div class="psub">Daily Quests</div>
+          <div class="tasklist">${questRows}</div>
+          <button class="viewall2" onclick="openView('checklist')">View all quests ›</button>
+        </div>
+        <div class="card panelcard">
+          <h4>World Events</h4>
+          <div class="tasklist" style="margin-top:10px">${eventRows}</div>
+        </div>
       </div>
     </div>`;
 }
@@ -2234,6 +2281,26 @@ function deptHub(id){
       <div class="hubbubble"><div class="hubwho">${esc(d.agentName)} <span>· ${esc(d.agentRole)}</span></div><p>Hi! ${ask}</p></div>
     </div>
     <div class="hubopts">${doBtns}${nav}${parent}</div>
+    ${deptProgress(id)}
+  </div>`;
+}
+// room level + captain + upgrade — used to live in the map's side panel; now lives in the dept hub
+// since node-click opens Focus Mode instead (see selectNode).
+function deptProgress(id){
+  const n=GAME.nodes[id]; if(!n) return '';
+  const cost=upgradeCost(n), capId=captainOf(id);
+  const eligible=STATE.members.filter(mm=>memberLevel(mm)>=5);
+  const capRow = isParent()
+    ? `<div class="row" style="justify-content:space-between;margin-top:8px"><span class="muted">👑 Captain</span>
+       <select onchange="setCaptain('${id}', this.value||null)">
+         <option value="">${eligible.length?'— none —':'— none (need Lv5+) —'}</option>
+         ${eligible.map(mm=>`<option value="${mm.id}" ${capId===mm.id?'selected':''}>${esc(mm.name)} (Lv.${memberLevel(mm)})</option>`).join('')}
+       </select></div>`
+    : (capId ? `<div class="row" style="justify-content:space-between;margin-top:8px"><span class="muted">👑 Captain</span><b>${esc((memberById(capId)||{}).name)}</b></div>` : '');
+  return `<div class="block">
+    <div class="row" style="justify-content:space-between"><span class="muted">Room level</span><b>Lv.${n.level}</b></div>
+    ${capRow}
+    <button class="btn up" style="width:100%;margin-top:10px" ${GAME.coins<cost?'disabled':''} onclick="upgradeNode('${id}')">⬆ Upgrade — ${cost} 🪙</button>
   </div>`;
 }
 function renderDept(id){
