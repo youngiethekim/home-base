@@ -2574,7 +2574,7 @@ function renderDept(id){
   const tabs=[['hub','👋 Today'],['records','📋 Records'],['chores','✅ Chores'],['goals','🎯 Goals'],['content','📖 Content']];
   const strip=tabs.map(([t,l])=>`<button class="dtab${t===tab?' on':''}" onclick="setDeptTab('${t}')">${l}</button>`).join('');
   const body = tab==='hub'?deptHub(id) : tab==='records'?deptRecords(id) : tab==='chores'?deptChores(id) : tab==='goals'?deptGoals(id) : deptContent(id);
-  return backbar(d.icon+' '+esc(d.name))+deptHeader(d)+`<div class="dtabs">${strip}</div>`+body;
+  return deptHeader(d)+`<div class="dtabs">${strip}</div>`+body;
 }
 
 function renderDomain(){
