@@ -1,0 +1,203 @@
+{
+  "exportedFrom": "Home Base — 1803-8 Smithe Mews",
+  "exportedOn": "2026-09-09",
+  "household": {
+    "name": "1803 – 8 Smithe Mews",
+    "address": "1803-8 Smithe Mews, Vancouver, BC V6B 0A5",
+    "buzzer": "6088"
+  },
+  "asset": {
+    "id": "a1",
+    "domainId": "maintenance",
+    "name": "Toilet — TOTO Aquia (dual flush)",
+    "brand": "TOTO",
+    "model": "Aquia CST414M (Dual-Max) · tank ST413M#01",
+    "serial": "Tank stamp: 483 · 080421 · #01(W)",
+    "barcode": "ST413M-080421",
+    "purchaseDate": "2008-04-21",
+    "purchaseNote": "tank manufacture date read from the stamp inside the tank; the building was completed in 2008",
+    "price": 0,
+    "location": "Bathroom",
+    "vendor": {
+      "name": "TOTO technical support (from tank label)",
+      "phone": "1-888-295-8134"
+    },
+    "warranty": {
+      "provider": "TOTO (1-year limited on vitreous china; long expired)",
+      "months": 12,
+      "expiryDate": "2009-04-21"
+    },
+    "issue": "Reported broken, Sep 2026. Handyman has asked for photos — they are on the Photos tab with a copy-paste summary. Before the visit, note the exact symptom here: won’t flush / keeps running / weak flush / leaking at the base / button stuck.",
+    "notes": [
+      "Model identification: the tank exterior is printed “1.6 Gpf / 6.0 Lpf · 0.9 Gpf / 3.4 Lpf” — a dual flush. Of the three tanks on the parts label, only the Aquia (ID mark ST413M) is dual flush; both Drakes are 1.6 gpf single flush. ST413M is the tank of TOTO’s Aquia CST414M two-piece set (12″ rough-in, elongated, skirted, universal height, chrome push-button).",
+      "The bowl was not photographed. TOTO’s CST414M set pairs the ST413M tank with the CT414 bowl — confirm with the stamp on the bowl (underside / rear) when the handyman is here.",
+      "Colour code #01 = Cotton White (the “#01(W)” stamp). Order parts in #01 where colour matters (push button plate is chrome: #CP).",
+      "Tank label says DO NOT use chlorine-based disinfectants (drop-in tablets) in the tank — they degrade the flush valve seal.",
+      "Parts label revision 0EU047 REV 03/06; the fill valve in the photos is the older green-tinted assembly showing mineral scale — a likely culprit if the tank refills slowly or runs.",
+      "Where to look next: the ID mark is usually stamped into the porcelain on the inside rear wall of the tank; the bowl model is stamped on the bowl itself."
+    ],
+    "photos": [
+      {
+        "src": "photos/toilet-overview.jpg",
+        "cap": "Whole unit — elongated, skirted (smooth-sided) bowl with a close-coupled tank. Seat and lid show staining; the seat is a separate part."
+      },
+      {
+        "src": "photos/toilet-tank-flush-rating.jpg",
+        "cap": "Tank exterior: “TOTO · 1.6 Gpf / 6.0 Lpf · 0.9 Gpf / 3.4 Lpf” — dual-flush rating that identifies the Aquia Dual-Max."
+      },
+      {
+        "src": "photos/toilet-tank-parts-label.jpg",
+        "cap": "Parts label inside the tank lid/tank: Aquia row = ST413M · fill valve TSU09A.8 · flush valve THU224 · seal gasket 9BU064E · push button THU221#CP."
+      },
+      {
+        "src": "photos/toilet-tank-parts-label-2.jpg",
+        "cap": "Same label, second angle (Drake rows are for other tanks — not this one)."
+      },
+      {
+        "src": "photos/toilet-tank-interior-stamp.jpg",
+        "cap": "Inside the tank: stamp “483 · 080421 · #01(W)” (Cotton White, made 2008-04-21) and the scaled fill-valve base."
+      }
+    ],
+    "handymanSummary": "Toilet: TOTO Aquia two-piece dual flush (1.6 / 0.9 gpf), model CST414M — tank ST413M, colour #01 Cotton White, tank date stamp 08/04/21. TOTO part numbers from the tank label: fill valve TSU09A.8, flush valve THU224, seal gasket 9BU064E, push button THU221#CP. Elongated skirted bowl, 12\" rough-in. Address: 1803-8 Smithe Mews, Vancouver BC V6B 0A5, buzzer 6088.",
+    "schedule": [
+      {
+        "job": "Open tank: inspect & photograph internals",
+        "intervalDays": 365,
+        "lastDone": "2026-09-08",
+        "nextDue": "2027-09-08",
+        "howTo": "Lift the lid, photograph the parts label, the fill valve (left tower), flush valve/seal (centre) and the push-button linkage. Compare with last year’s photos for scale build-up or a warped seal."
+      },
+      {
+        "job": "Dye test for silent tank leaks",
+        "intervalDays": 180,
+        "lastDone": null,
+        "nextDue": "2026-10-01",
+        "howTo": "Put a few drops of food colouring in the tank, wait 15 minutes without flushing. Colour in the bowl means the seal gasket (9BU064E) is leaking — replace it."
+      },
+      {
+        "job": "Clean seat, hinges & rim jets",
+        "intervalDays": 90,
+        "lastDone": null,
+        "nextDue": "2026-10-08",
+        "howTo": "Unclip the seat, wash the hinge area, scrub under the rim with a brush and a non-chlorine cleaner. Never drop chlorine tablets in the tank."
+      },
+      {
+        "job": "Check tank-to-bowl bolts & base for seepage",
+        "intervalDays": 365,
+        "lastDone": null,
+        "nextDue": "2027-03-01",
+        "howTo": "Run a dry paper towel around the tank-to-bowl joint and around the base after a flush; any damp spot means a gasket or the wax ring needs attention."
+      }
+    ],
+    "parts": [
+      {
+        "name": "Fill valve (Aquia / ST413M)",
+        "partNumber": "TSU09A.8"
+      },
+      {
+        "name": "Flush valve assembly",
+        "partNumber": "THU224"
+      },
+      {
+        "name": "Seal gasket (flush valve seal)",
+        "partNumber": "9BU064E"
+      },
+      {
+        "name": "Push button, chrome",
+        "partNumber": "THU221#CP"
+      },
+      {
+        "name": "Elongated seat — TOTO SoftClose fits Aquia (confirm hinge spacing before ordering)",
+        "partNumber": "SS114#01"
+      }
+    ],
+    "serviceLog": [
+      {
+        "date": "2026-09-08",
+        "who": "Young",
+        "work": "Toilet reported broken. Opened the tank, photographed the parts label, tank stamp and flush rating; identified the model as TOTO Aquia CST414M (tank ST413M). Photos sent to the handyman.",
+        "parts": "None yet",
+        "cost": 0
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "t1",
+      "domainId": "maintenance",
+      "assetId": "a1",
+      "title": "Send toilet photos + model info to handyman",
+      "assigneeId": "m1",
+      "dueDate": "2026-09-09",
+      "recurring": null,
+      "status": "open",
+      "xp": 15,
+      "needsApproval": false,
+      "reward": {
+        "coins": 12
+      }
+    },
+    {
+      "id": "t2",
+      "domainId": "maintenance",
+      "assetId": "a1",
+      "title": "Write the exact toilet symptom on its record",
+      "assigneeId": "m1",
+      "dueDate": "2026-09-09",
+      "recurring": null,
+      "status": "open",
+      "xp": 10,
+      "needsApproval": false,
+      "reward": {
+        "coins": 8
+      }
+    },
+    {
+      "id": "t3",
+      "domainId": "maintenance",
+      "assetId": "a1",
+      "title": "Handyman visit — fix the toilet",
+      "assigneeId": "m1",
+      "dueDate": "2026-09-15",
+      "recurring": null,
+      "status": "open",
+      "xp": 40,
+      "needsApproval": false,
+      "reward": {
+        "coins": 32
+      }
+    },
+    {
+      "id": "t4",
+      "domainId": "maintenance",
+      "assetId": "a1",
+      "title": "Log the repair + parts on the toilet’s History tab",
+      "assigneeId": "m1",
+      "dueDate": "2026-09-16",
+      "recurring": null,
+      "status": "open",
+      "xp": 15,
+      "needsApproval": false,
+      "reward": {
+        "coins": 12
+      }
+    },
+    {
+      "id": "t5",
+      "domainId": "maintenance",
+      "assetId": "a1",
+      "title": "Toilet dye test (silent leak)",
+      "assigneeId": "m1",
+      "dueDate": "2026-10-01",
+      "recurring": {
+        "everyDays": 180
+      },
+      "status": "open",
+      "xp": 15,
+      "needsApproval": false,
+      "reward": {
+        "coins": 12
+      }
+    }
+  ]
+}
