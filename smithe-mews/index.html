@@ -749,6 +749,20 @@
   .axis small{font-size:8.5px;font-weight:700;letter-spacing:.5px;color:var(--muted)}
   .fblock{margin-top:7px;font-size:12px;color:var(--muted);background:var(--bg2);padding:5px 10px;border-radius:9px;display:inline-block}
   .frow.blocked{opacity:.78}
+  .fwrap{display:flex;flex-direction:column}
+  .frowbtns{display:flex;gap:6px;flex:none}
+  .check.tunebtn{font-size:15px}
+  .check.tunebtn.on{background:var(--accent);color:#fff}
+  .scorefield{display:flex;flex-direction:column;gap:3px;min-width:150px}
+  .scorefield small{font-size:9.5px;font-weight:800;letter-spacing:.5px;color:var(--muted)}
+  .scorefield select,.scorefield input{font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
+    border-radius:10px;background:var(--card);color:var(--ink);width:100%}
+  .scorefield.grow{flex:1;min-width:220px}
+  .scoregrid{display:flex;gap:10px;flex-wrap:wrap;width:100%;padding-top:10px;margin-top:4px;border-top:1px dashed var(--line)}
+  .whyfield{width:100%;font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+  .tuneform{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;padding:14px 15px;margin:-4px 0 0 14px;
+    border:1px solid var(--accent);border-top:none;border-radius:0 0 14px 14px;background:var(--bg2)}
+  .tunerow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%}
   /* ---- Stars, bounties, bank & prizes ---- */
   .whobar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 14px;margin-bottom:14px}
   .whobar select{font:inherit;font-weight:700;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
@@ -3148,17 +3162,26 @@ function chkRow(t){ const s=dueStatus(t), d=domainById(t.domainId), m=memberById
     ${t.status==='done'?'<span class="check" style="background:#dcecd8;color:var(--green)">✓</span>'
       :`<button class="check" onclick="completeTask('${t.id}')">✓</button>`}
   </div>`; }
-function renderChecklist(){ const g=groupTasks();
-  const open=STATE.tasks.filter(t=>t.status!=='done').length;
-  const deptOpts=STATE.domains.map(d=>`<option value="${d.id}">${d.icon} ${esc(d.name)}</option>`).join('');
-  const memOpts=STATE.members.map(m=>`<option value="${m.id}">${m.avatar} ${esc(m.name)}</option>`).join('');
-  const form=`<form class="todoform card" onsubmit="addTask(event)">
-      <input name="title" placeholder="Add a to-do… (e.g. Book chimney sweep)" required>
+
+function addTaskForm(deptOpts,memOpts){
+  deptOpts = deptOpts || STATE.domains.map(d=>`<option value="${d.id}">${d.icon} ${esc(d.name)}</option>`).join('');
+  memOpts  = memOpts  || STATE.members.map(m=>`<option value="${m.id}">${m.avatar} ${esc(m.name)}</option>`).join('');
+  return `<form class="todoform card" onsubmit="addTask(event)">
+      <input name="title" placeholder="Add a to-do\u2026 (e.g. Book chimney sweep)" required>
       <select name="domain">${deptOpts}</select>
       <select name="assignee">${memOpts}</select>
       <input name="due" type="date" value="${today()}" required>
       <button class="btn" type="submit">+ Add</button>
+      <input name="why" class="whyfield" placeholder="What happens if it never gets done? (one line \u2014 shows on the card)">
+      <div class="scoregrid">${scoreFields(null)}</div>
     </form>`;
+}
+
+function renderChecklist(){ const g=groupTasks();
+  const open=STATE.tasks.filter(t=>t.status!=='done').length;
+  const deptOpts=STATE.domains.map(d=>`<option value="${d.id}">${d.icon} ${esc(d.name)}</option>`).join('');
+  const memOpts=STATE.members.map(m=>`<option value="${m.id}">${m.avatar} ${esc(m.name)}</option>`).join('');
+  const form=addTaskForm(deptOpts,memOpts);
   return backbar('✅ Household To-Do')+
     `<div class="muted" style="margin:0 4px 12px">${open} open · <b style="color:var(--red)">${g.overdue.length} overdue</b> · ${g.soon.length} due this week · like a project board for your home.</div>`+
     form+
@@ -3448,12 +3471,63 @@ function renderFamily(){
 }
 
 
+
+/* ---- setting and correcting the scores ---- */
+// Worded options, not bare numbers. People answer "what actually happens" honestly;
+// they cannot calibrate an abstract 1-to-5 against anything.
+const SKIP_LABELS=['nothing really happens','a minor annoyance','it starts to cost me','real damage or real money','serious — safety or big money'];
+const LIFE_LABELS=['no change day to day','slightly nicer','noticeably better','much better day to day','changes how we live'];
+function scoreSelect(name,val,labels,title){
+  return `<label class="scorefield"><small>${title}</small>
+    <select name="${name}">`+labels.map((l,i)=>
+      `<option value="${i+1}"${(val||1)===i+1?' selected':''}>${i+1} · ${l}</option>`).join('')+`</select></label>`;
+}
+function numField(name,val,title,ph){
+  return `<label class="scorefield"><small>${title}</small>
+    <input name="${name}" type="number" min="0" value="${val==null?'':val}" placeholder="${ph}"></label>`;
+}
+function scoreFields(t){
+  t=t||{};
+  return scoreSelect('impact',t.impact,SKIP_LABELS,'COST IF SKIPPED')
+    + scoreSelect('life',t.life,LIFE_LABELS,'LIFE BETTER')
+    + numField('mins',t.mins,'MINUTES','15')
+    + numField('cost',t.cost,'DOLLARS','0')
+    + `<label class="scorefield grow"><small>WAITING ON (leave blank if it is yours to do)</small>
+        <input name="needs" value="${t.needs?esc(t.needs):''}" placeholder="e.g. a quote from the plumber"></label>`;
+}
+function readScores(f){
+  const n=v=>{ const x=parseInt(v,10); return isNaN(x)?0:Math.max(0,x); };
+  return { impact:Math.max(1,Math.min(5,n(f.impact.value)||1)),
+           life:  Math.max(1,Math.min(5,n(f.life.value)||1)),
+           mins:  n(f.mins.value)||15,
+           cost:  n(f.cost.value),
+           needs: f.needs.value.trim() };
+}
+function tuneTask(id){ STATE.tuning = (STATE.tuning===id?null:id); render(); }
+function saveTune(ev,id){ ev.preventDefault();
+  const t=STATE.tasks.find(x=>x.id===id); if(!t) return;
+  Object.assign(t, readScores(ev.target));
+  if(!t.cost) delete t.cost;
+  if(!t.needs) delete t.needs;
+  STATE.tuning=null; pushToast('Scores updated — the ranking moved','good'); markDirty(); render();
+}
+function tuneForm(t){
+  return `<form class="tuneform" onsubmit="saveTune(event,'${t.id}')">
+      ${scoreFields(t)}
+      <div class="tunerow">
+        <button class="btn" type="submit">Save</button>
+        <button class="btn ghost" type="button" onclick="tuneTask('${t.id}')">Cancel</button>
+        <span class="note">Your numbers replace mine, and the list re-ranks straight away.</span>
+      </div>
+    </form>`;
+}
+
 function meter(n,color,label){
   return `<span class="dots" title="${label} ${n} of 5" style="color:${color}">${'\u25cf'.repeat(n)}${'\u25cb'.repeat(5-n)}</span>`;
 }
 function focusRow(t,rank){
   const q=quadrant(t), imp=taskImpact(t), life=taskLife(t), d=domainById(t.domainId), st=dueStatus(t);
-  return `<div class="frow q-${q}${rank&&rank<=3?' top':''}${isBlocked(t)?' blocked':''}">
+  return `<div class="fwrap"><div class="frow q-${q}${rank&&rank<=3?' top':''}${isBlocked(t)?' blocked':''}">
     <div class="frank">${rank||'·'}</div>
     <div class="grow"><div class="ftt">${esc(t.title)}</div>
       <div class="fwhy">${esc(taskWhy(t))}</div>
@@ -3467,8 +3541,11 @@ function focusRow(t,rank){
       </div>
       ${isBlocked(t)?`<div class="fblock">\u23f3 waiting on ${esc(taskNeeds(t))}</div>`:''}</div>
     <div class="fmins">${fmtMins(taskMins(t))}<small>EST</small></div>
-    <button class="check" title="Mark done" onclick="completeTask('${t.id}')">\u2713</button>
-  </div>`;
+    <div class="frowbtns">
+      <button class="check" title="Mark done" onclick="completeTask('${t.id}')">\u2713</button>
+      <button class="check tunebtn${STATE.tuning===t.id?' on':''}" title="Adjust these scores" onclick="tuneTask('${t.id}')">\u2699</button>
+    </div>
+  </div>${STATE.tuning===t.id?tuneForm(t):''}`;
 }
 function renderFocus(){
   const all=rankedTasks();
@@ -3508,7 +3585,7 @@ function renderFocus(){
   const rest=`<div class="sec-title">${sel?QUADS[sel].label+' \u00b7 '+restList.length:'Everything else you can do now \u00b7 '+restList.length}</div>
     <div class="tasklist">${restList.map(t=>focusRow(t,0)).join('')||'<div class="empty card">Nothing here.</div>'}</div>`;
 
-  return backbar('\ud83c\udfaf Focus')+head+three+quads+wait+rest;
+  return backbar('\ud83c\udfaf Focus')+head+addTaskForm()+three+quads+wait+rest;
 }
 
 /* ============================ STARS & REWARDS UI ============================ */
@@ -3741,9 +3818,17 @@ function renderRewards(){
 /* ============================ ACTIONS ============================ */
 function assignTask(taskId,memberId){ const t=STATE.tasks.find(x=>x.id===taskId); if(t)t.assigneeId=memberId; render(); }
 function addTask(ev){ ev.preventDefault(); const f=ev.target;
-  STATE.tasks.push({id:'t'+(TASK_SEQ++), domainId:f.domain.value, assetId:null, title:f.title.value.trim(),
-    assigneeId:f.assignee.value, dueDate:f.due.value, recurring:null, status:'open', xp:10});
-  toast('📝 Added to your to-do list'); render(); }
+  const sc = f.impact ? readScores(f) : {impact:2,life:1,mins:15,cost:0,needs:''};
+  const t={id:'t'+(TASK_SEQ++), domainId:f.domain.value, assetId:null, title:f.title.value.trim(),
+    assigneeId:f.assignee.value, dueDate:f.due.value, recurring:null, status:'open',
+    impact:sc.impact, life:sc.life, mins:sc.mins,
+    why:(f.why&&f.why.value.trim())||'',
+    xp:sc.impact*5, reward:{coins:sc.impact*4}};
+  if(sc.cost)  t.cost=sc.cost;
+  if(sc.needs) t.needs=sc.needs;
+  STATE.tasks.push(t);
+  pushToast(`Added \u2014 ranked ${rankedTasks().findIndex(x=>x.id===t.id)+1} of ${openTasks().length}`,'good');
+  markDirty(); render(); }
 
 function completeTask(id){
   const t=STATE.tasks.find(x=>x.id===id); if(!t||t.status==='done')return;
