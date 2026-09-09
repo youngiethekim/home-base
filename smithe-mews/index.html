@@ -168,6 +168,7 @@
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
   .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;color:#fff}
   .pill.green{background:var(--green)}.pill.amber{background:var(--amber)}.pill.red{background:var(--red)}
+  .pill.muted{background:var(--bg2);color:var(--muted)}
   .block{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
   .job{border-bottom:1px dashed var(--line);padding:9px 0}
   .job:last-child{border-bottom:none}
@@ -875,6 +876,87 @@ const STATE = {
         {name:'Elongated seat — TOTO SoftClose fits Aquia (confirm hinge spacing before ordering)',partNumber:'SS114#01'}],
       serviceLog:[
         {date:'2026-09-08',who:'Young',work:'Toilet reported broken. Opened the tank, photographed the parts label, tank stamp and flush rating; identified the model as TOTO Aquia CST414M (tank ST413M). Photos sent to the handyman.',parts:'None yet',cost:0}]},
+    {id:'a2',domainId:'maintenance',name:'Heat pump — in-suite (heating + A/C)',brand:'',model:'Not yet recorded — photograph the label during the blower-motor visit',
+      serial:'',barcode:'',purchaseDate:'',purchaseNote:'original to the suite; the building was completed in 2008',price:0,
+      location:'In-suite mechanical closet',
+      vendor:{name:'Harbour Greene HVAC Services — Chris Gustafson (HVAC/R Journeyman, owner)',phone:'236-334-3170'},
+      warranty:{provider:'Unknown — original equipment, out of warranty',months:0,expiryDate:''},
+      issue:'Blower motor failed. Harbour Greene diagnosed it (technician Kevin) and quoted $2,006.65 + GST to replace it — approved by email on Sep 8, 2026. The quote does NOT include the diagnosis visit, which is billed separately. Kevin also found the coils dirty on both units; cleaning both is $260.00 + GST if done during the same visit. Parts were ordered Sep 8, expected in about a week, and Chris will call to book a day and time.',
+      notes:[
+        'Two indoor units — the technician reported dirty coils on “both units”, so the suite has more than one. Record each separately once the labels are photographed.',
+        'Approval on Sep 8 was a reply to the whole message (“let’s proceed”), not to the two line items separately. Confirm in writing that the $260 + GST coil clean is on the work order before the tech arrives.',
+        'The strata runs an annual in-suite heat pump maintenance program for BCS 3202. The 2026 window was Aug 10–19 with mandatory suite access; missing it risks a bylaw fine. Watch for the PowerStrata notice in early August.',
+        'The blower-motor visit is the best chance to photograph the model and serial label — the unit will already be open. Do that before the tech closes it up.'],
+      photos:[],
+      handymanSummary:'In-suite heat pump, 1803-8 Smithe Mews (Flagship, BCS 3202). Blower motor replacement approved Sep 8, 2026 — $2,006.65 + GST, quoted by Harbour Greene HVAC (Chris Gustafson, 236-334-3170), diagnosed by tech Kevin. Coils dirty on both units; clean both for $260 + GST during the same visit. Parts on order since Sep 8. Model/serial not yet recorded — photograph the label while the unit is open. Buzzer 6088.',
+      schedule:[
+        {job:'Annual in-suite heat pump maintenance (strata program)',intervalDays:365,lastDone:null,nextDue:'2027-08-10',
+          howTo:'The strata books the contractor and gives a suite-access window — Aug 10–19 in 2026. Someone must be home or arrangements made in advance, or a bylaw fine applies. The notice arrives through PowerStrata in early August.'},
+        {job:'Clean or replace the return-air filter',intervalDays:90,lastDone:null,nextDue:'2026-12-08',
+          howTo:'Slide the filter out of the return grille, note the size printed on the frame, wash or replace it, and slide it back with the airflow arrow pointing toward the unit. A choked filter is the fastest way to kill a blower motor.'},
+        {job:'Coil cleaning — both units',intervalDays:730,lastDone:null,nextDue:'2026-09-30',
+          howTo:'Quoted at $260 + GST by Harbour Greene when done alongside the blower motor replacement. Dirty coils were flagged on both units in Sep 2026.'}],
+      parts:[{name:'Blower motor — get the supplier part number off the invoice',partNumber:'on order since 2026-09-08'}],
+      serviceLog:[
+        {date:'2026-09-08',who:'Harbour Greene HVAC — Chris Gustafson',work:'Quoted blower motor replacement at $2,006.65 + GST (excludes the earlier diagnosis visit). Technician Kevin reported the coils dirty on both units; cleaning both quoted at $260.00 + GST if completed during the same visit. Approved the same day — parts ordered, roughly a week to arrive, scheduling to follow.',parts:'Blower motor (on order)',cost:0}]},
+    {id:'a3',domainId:'kitchen',name:'Refrigerator',brand:'',model:'Not yet recorded — photograph the label',
+      serial:'',barcode:'',purchaseDate:'',purchaseNote:'',price:0,location:'Kitchen',
+      vendor:{name:'',phone:''},warranty:{provider:'',months:0,expiryDate:''},
+      issue:'',
+      notes:['The model and serial label is usually inside the fridge compartment on the left wall, behind the crisper drawer, or on the back. Photograph it once and every future part, filter and service call gets easier.',
+        'Note whether it has a water/ice dispenser — that decides whether there is a water filter to change.'],
+      photos:[],handymanSummary:'',
+      schedule:[
+        {job:'Vacuum the condenser coils',intervalDays:180,lastDone:null,nextDue:'2026-10-01',
+          howTo:'Unplug it, pull it out, take off the rear or bottom grille, vacuum the coils and the fan blades, wipe the drip pan and reassemble. Dirty coils raise the power bill and shorten the compressor’s life.'},
+        {job:'Replace the water filter (if fitted)',intervalDays:180,lastDone:null,nextDue:'2026-11-01',
+          howTo:'Twist the filter a quarter turn, pull it out, fit the new one and run about two gallons through the dispenser to clear the air from the line.'},
+        {job:'Clean the door gaskets',intervalDays:90,lastDone:null,nextDue:'2026-12-01',
+          howTo:'Wipe the rubber seals with warm soapy water and dry them. Close the door on a banknote — if it slides out easily the seal is going and the fridge is running hot.'}],
+      parts:[],serviceLog:[]},
+    {id:'a4',domainId:'kitchen',name:'Range hood fan',brand:'',model:'Not yet recorded — photograph the label',
+      serial:'',barcode:'',purchaseDate:'',purchaseNote:'',price:0,location:'Kitchen',
+      vendor:{name:'',phone:''},warranty:{provider:'',months:0,expiryDate:''},
+      issue:'',
+      notes:['Find out first whether this hood is ducted into a shared building riser or recirculating. A recirculating hood has a charcoal filter that needs replacing; a ducted one does not.',
+        'The label is usually under the hood behind the grease filter, visible once the filter is slid out.',
+        'In a tower the hood shares a riser with other suites — if it smells of a neighbour’s cooking, that is a strata matter, not an in-suite repair.'],
+      photos:[],handymanSummary:'',
+      schedule:[
+        {job:'Wash the metal grease filter',intervalDays:30,lastDone:null,nextDue:'2026-09-16',
+          howTo:'Slide the mesh filter out, soak it in hot water with dish soap and a scoop of baking soda, scrub the grease off, dry it fully and slide it back. A greasy filter is both a fire risk and the reason the fan sounds like it is working hard.'},
+        {job:'Wipe the hood, fan housing and check the damper',intervalDays:180,lastDone:null,nextDue:'2027-03-09',
+          howTo:'Degrease the underside and the fan housing, then run the fan and confirm the damper flap opens and closes. A stuck damper lets building air back into the suite.'},
+        {job:'Replace the charcoal filter (recirculating hoods only)',intervalDays:365,lastDone:null,nextDue:'2027-09-09',
+          howTo:'Only applies if the hood recirculates rather than ducting outside. Charcoal cannot be washed — it gets replaced.'}],
+      parts:[],serviceLog:[]},
+    {id:'a5',domainId:'kitchen',name:'Dishwasher',brand:'',model:'Not yet recorded — photograph the label',
+      serial:'',barcode:'',purchaseDate:'',purchaseNote:'',price:0,location:'Kitchen',
+      vendor:{name:'',phone:''},warranty:{provider:'',months:0,expiryDate:''},
+      issue:'',
+      notes:['The label is on the edge of the door, visible when the door is open.'],
+      photos:[],handymanSummary:'',
+      schedule:[
+        {job:'Clean the filter',intervalDays:60,lastDone:null,nextDue:'2026-10-09',
+          howTo:'Twist out the cylindrical filter in the floor of the tub, rinse it under hot water, scrub the mesh with a soft brush and drop it back in.'},
+        {job:'Run a cleaner on the hottest cycle',intervalDays:90,lastDone:null,nextDue:'2026-12-09',
+          howTo:'Empty it, put a dishwasher cleaner tablet in, run the hottest cycle. Then wipe the door seal — that is where the smell lives.'}],
+      parts:[],serviceLog:[]},
+    {id:'a6',domainId:'cleaning',name:'Washer & dryer (in-suite)',brand:'',model:'Not yet recorded — photograph the label',
+      serial:'',barcode:'',purchaseDate:'',purchaseNote:'',price:0,location:'Laundry closet',
+      vendor:{name:'',phone:''},warranty:{provider:'',months:0,expiryDate:''},
+      issue:'',
+      notes:['In-suite laundry in a tower usually vents through a shared duct. Lint building up in that run is a real fire risk and it is the reason drying takes two cycles.',
+        'The label is behind the door on the washer and inside the door opening on the dryer.'],
+      photos:[],handymanSummary:'',
+      schedule:[
+        {job:'Clear the dryer lint trap and vent run',intervalDays:90,lastDone:null,nextDue:'2026-12-09',
+          howTo:'Vacuum the lint-screen housing, then pull the dryer out and clear as much of the duct as you can reach. Ask the concierge whether the strata cleans the shared riser and how often.'},
+        {job:'Run a washer drum clean',intervalDays:30,lastDone:null,nextDue:'2026-10-09',
+          howTo:'Empty drum, two cups of white vinegar or a machine cleaner, hottest cycle. Then wipe the rubber gasket dry — that fold is where the mildew smell starts.'},
+        {job:'Check the washer hoses and shut-off',intervalDays:365,lastDone:null,nextDue:'2027-09-09',
+          howTo:'Look for bulges, rust or damp at both ends of the fill hoses and confirm the shut-off valve turns. A burst hose on the 18th floor damages every suite below you.'}],
+      parts:[],serviceLog:[]},
   ],
   tasks:[
     {id:'t1', domainId:'maintenance',assetId:'a1', title:'Send toilet photos + model info to handyman', assigneeId:'m1',dueDate:'2026-09-09',recurring:null,          status:'open',xp:15,needsApproval:false,reward:{coins:12}},
@@ -882,11 +964,26 @@ const STATE = {
     {id:'t3', domainId:'maintenance',assetId:'a1', title:'Handyman visit — fix the toilet',            assigneeId:'m1',dueDate:'2026-09-15',recurring:null,          status:'open',xp:40,needsApproval:false,reward:{coins:32}},
     {id:'t4', domainId:'maintenance',assetId:'a1', title:'Log the repair + parts on the toilet’s History tab',assigneeId:'m1',dueDate:'2026-09-16',recurring:null,     status:'open',xp:15,needsApproval:false,reward:{coins:12}},
     {id:'t5', domainId:'maintenance',assetId:'a1', title:'Toilet dye test (silent leak)',              assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:180},status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t6', domainId:'maintenance',assetId:null, title:'Add the condo’s other appliances to Records', assigneeId:'m1',dueDate:'2026-09-30',recurring:null,          status:'open',xp:25,needsApproval:false,reward:{coins:20}},
+    {id:'t6', domainId:'maintenance',assetId:null, title:'Fill in the blanks on the appliance records', assigneeId:'m1',dueDate:'2026-09-30',recurring:null,          status:'open',xp:25,needsApproval:false,reward:{coins:20}},
     {id:'t7', domainId:'safety',     assetId:null, title:'Test smoke & CO detector',                  assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:30}, status:'open',xp:20,needsApproval:false,reward:{coins:16}},
     {id:'t8', domainId:'building',   assetId:null, title:'Pay strata fees',                           assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:30}, status:'open',xp:10,needsApproval:false,reward:{coins:8}},
     {id:'t9', domainId:'building',   assetId:null, title:'File strata contact, buzzer & fob numbers', assigneeId:'m1',dueDate:'2026-09-20',recurring:null,          status:'open',xp:15,needsApproval:false,reward:{coins:12}},
     {id:'t10',domainId:'cleaning',   assetId:null, title:'Vacuum bathroom exhaust-fan grille',        assigneeId:'m1',dueDate:'2026-10-15',recurring:{everyDays:180},status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t11',domainId:'maintenance',assetId:'a2', title:'Confirm the $260 coil clean is on the work order',assigneeId:'m1',dueDate:'2026-09-11',recurring:null,          status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t12',domainId:'maintenance',assetId:'a2', title:'Confirm the heat pump repair date with Chris',   assigneeId:'m1',dueDate:'2026-09-15',recurring:null,          status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t13',domainId:'maintenance',assetId:'a2', title:'Be home for the blower motor replacement',       assigneeId:'m1',dueDate:'2026-09-18',recurring:null,          status:'open',xp:40,needsApproval:false,reward:{coins:32}},
+    {id:'t14',domainId:'maintenance',assetId:'a2', title:'Photograph the heat pump label while it is open',assigneeId:'m1',dueDate:'2026-09-18',recurring:null,          status:'open',xp:25,needsApproval:false,reward:{coins:20}},
+    {id:'t15',domainId:'maintenance',assetId:'a2', title:'Log the heat pump invoice + part number',        assigneeId:'m1',dueDate:'2026-09-25',recurring:null,          status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t16',domainId:'kitchen',    assetId:null, title:'Photograph the fridge, hood, dishwasher & laundry labels',assigneeId:'m1',dueDate:'2026-09-20',recurring:null,  status:'open',xp:30,needsApproval:false,reward:{coins:24}},
+    {id:'t17',domainId:'kitchen',    assetId:'a4', title:'Wash the range hood grease filter',              assigneeId:'m1',dueDate:'2026-09-16',recurring:{everyDays:30}, status:'open',xp:12,needsApproval:false,reward:{coins:10}},
+    {id:'t18',domainId:'kitchen',    assetId:'a3', title:'Vacuum the fridge condenser coils',              assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:180},status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t19',domainId:'cleaning',   assetId:'a6', title:'Clear the dryer lint trap & vent run',           assigneeId:'m1',dueDate:'2026-12-09',recurring:{everyDays:90}, status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t20',domainId:'building',   assetId:null, title:'Read the Aug 13 strata council minutes',         assigneeId:'m1',dueDate:'2026-09-12',recurring:null,          status:'open',xp:12,needsApproval:false,reward:{coins:10}},
+    {id:'t21',domainId:'building',   assetId:null, title:'Read the Aug 21 owner communication notice',     assigneeId:'m1',dueDate:'2026-09-12',recurring:null,          status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t22',domainId:'building',   assetId:null, title:'Answer Rove Concepts on the Oct 20–Nov 4 bed delivery',assigneeId:'m1',dueDate:'2026-09-10',recurring:null,     status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t23',domainId:'building',   assetId:null, title:'Book the service elevator for the bed delivery', assigneeId:'m1',dueDate:'2026-10-15',recurring:null,          status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t24',domainId:'building',   assetId:null, title:'Decide on EcoClean annual carpet cleaning',      assigneeId:'m1',dueDate:'2026-09-20',recurring:null,          status:'open',xp:12,needsApproval:false,reward:{coins:10}},
+    {id:'t25',domainId:'building',   assetId:'a2', title:'Watch for next year’s in-suite HVAC access notice',assigneeId:'m1',dueDate:'2027-08-01',recurring:{everyDays:365},status:'open',xp:15,needsApproval:false,reward:{coins:12}},
   ],
   receipts:[],
   pets:[],
@@ -2738,7 +2835,8 @@ function renderDomain(){
 function barcodeSVG(str){ let x=0,bars=''; for(const ch of str){ const w=1+(ch.charCodeAt(0)%4);
   const fill=(ch.charCodeAt(0)%2)?'#3b2f26':'transparent'; bars+=`<rect x="${x}" y="0" width="${w}" height="46" fill="${fill}"/>`; x+=w+1; }
   return `<svg class="barcode" viewBox="0 0 ${x} 46" width="230" height="46" role="img" aria-label="barcode ${esc(str)}">${bars}</svg>`; }
-function warrantyText(a){ const n=daysUntil(a.warranty.expiryDate);
+function warrantyText(a){ if(!a.warranty||!a.warranty.expiryDate) return {t:'No warranty on file',cls:'muted'};
+  const n=daysUntil(a.warranty.expiryDate);
   if(n<0)return {t:'Expired '+fmtDate(a.warranty.expiryDate),cls:'red'};
   const mo=Math.round(n/30); return {t:'Expires in '+(mo<=1?n+' days':mo+' months'),cls:n<60?'amber':'green'}; }
 
@@ -2760,7 +2858,7 @@ function renderAssetModal(){
     body=`<div class="block">
         <div class="sec-title" style="margin:0 0 8px">Registry</div>
         <div class="kv"><b>Serial</b><span class="mono">${esc(a.serial)}</span>
-          <b>Purchased</b><span>${fmtDate(a.purchaseDate)}${a.price?' · $'+a.price.toLocaleString():''}${a.purchaseNote?' <span class="muted">('+esc(a.purchaseNote)+')</span>':''}</span>${a.location?`<b>Location</b><span>${esc(a.location)}</span>`:''}</div>
+          <b>Purchased</b><span>${a.purchaseDate?fmtDate(a.purchaseDate):'<span class="muted">Not recorded yet</span>'}${a.price?' · $'+a.price.toLocaleString():''}${a.purchaseNote?' <span class="muted">('+esc(a.purchaseNote)+')</span>':''}</span>${a.location?`<b>Location</b><span>${esc(a.location)}</span>`:''}</div>
         <div><span class="muted" style="font-size:12px">Barcode ${esc(a.barcode)}</span><br>${barcodeSVG(a.barcode)}</div>
       </div>
       ${a.issue?`<div class="block" style="border-color:var(--red)"><div class="sec-title" style="margin:0 0 6px;color:var(--red)">⚠️ Current issue</div><div style="font-size:14px">${esc(a.issue)}</div></div>`:''}
@@ -2821,7 +2919,7 @@ function renderAssetModal(){
     <div class="sheet">
       <div class="hd">
         <div style="font-size:30px;flex:none">${assetIcon(a)}</div>
-        <div class="grow"><h2>${esc(a.name)} <span class="pill ${ws.cls}" style="font-size:11px;vertical-align:middle">${ws.cat==='active'?'✓ Active':ws.cat==='expiring'?'Expiring':'Expired'}</span></h2>
+        <div class="grow"><h2>${esc(a.name)} <span class="pill ${ws.cls}" style="font-size:11px;vertical-align:middle">${ws.cat==='active'?'✓ Active':ws.cat==='expiring'?'Expiring':ws.cat==='unknown'?'No warranty on file':'Expired'}</span></h2>
           <div class="muted">${esc(a.brand)} · ${esc(a.model)}</div></div>
         <button class="x" onclick="closeModal()">✕</button>
       </div>
@@ -3024,7 +3122,8 @@ function scheduleAgenda(items){
 function renderSchedule(){ return backbar("🗓️ Upcoming — What's Due")+scheduleAgenda(scheduleItems()); }
 
 /* ---- Warranties & Records vault ---- */
-function warrantyStatus(a){ const n=daysUntil(a.warranty.expiryDate);
+function warrantyStatus(a){ if(!a.warranty||!a.warranty.expiryDate) return {cat:'unknown', label:'No warranty on file', cls:'muted'};
+  const n=daysUntil(a.warranty.expiryDate);
   if(n<0) return {cat:'expired', label:'Expired '+fmtDate(a.warranty.expiryDate), cls:'red'};
   if(n<=90) return {cat:'expiring', label:'Expiring '+relDay(a.warranty.expiryDate), cls:'amber'};
   const mo=Math.round(n/30); return {cat:'active', label:'Active · '+(mo>=12?(Math.round(mo/12*10)/10)+' yr':mo+' mo')+' left', cls:'green'}; }
