@@ -717,6 +717,33 @@
     .shopbtn{padding:9px 12px;font-size:11px}
   }
 
+  /* ---- Focus: consequence per minute ---- */
+  .fhead{padding:18px 20px;margin-bottom:16px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .fbig{font-size:34px;font-weight:800;letter-spacing:-1px;line-height:1;font-variant-numeric:tabular-nums}
+  .fquads{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+  .fquad{padding:12px 14px;text-align:left;border-radius:14px;border:1px solid var(--line);background:var(--card);
+    box-shadow:0 3px 0 #e6dcc6;transition:transform .08s var(--ease)}
+  .fquad:active{transform:translateY(2px);box-shadow:0 1px 0 #e6dcc6}
+  .fquad.on{border-color:var(--accent);box-shadow:0 3px 0 var(--accent2)}
+  .fquad .qn{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+  .fquad .ql{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .fquad .qd{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+  .frow{display:flex;gap:13px;align-items:flex-start;padding:13px 15px;border:1px solid var(--line);
+    border-radius:14px;background:var(--card);border-left:5px solid var(--line)}
+  .frow.q-quick{border-left-color:var(--green)}
+  .frow.q-rock{border-left-color:var(--accent)}
+  .frow.q-fill{border-left-color:#cbbda4}
+  .frow.q-later{border-left-color:#ddd2ba}
+  .frank{width:26px;height:26px;border-radius:9px;background:var(--bg2);display:grid;place-items:center;
+    font-weight:800;font-size:13px;flex:none;color:var(--muted);font-variant-numeric:tabular-nums}
+  .frow.top .frank{background:var(--accent);color:#fff}
+  .ftt{font-weight:700;line-height:1.3}
+  .fwhy{font-size:12.5px;color:var(--muted);line-height:1.45;margin-top:3px}
+  .fmeta{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px;align-items:center}
+  .fmins{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;flex:none;text-align:right}
+  .fmins small{display:block;font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:.4px}
+  .dots{letter-spacing:1px;font-size:11px}
+  .fwin{background:#fdeee4;color:var(--accent2);font-weight:700;font-size:11px;padding:2px 8px;border-radius:999px}
   /* ---- Stars, bounties, bank & prizes ---- */
   .whobar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 14px;margin-bottom:14px}
   .whobar select{font:inherit;font-weight:700;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
@@ -966,33 +993,33 @@ const STATE = {
       parts:[],serviceLog:[]},
   ],
   tasks:[
-    {id:'t1', domainId:'maintenance',assetId:'a1', title:'Send toilet photos + model info to handyman', assigneeId:'m1',dueDate:'2026-09-09',recurring:null,          status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t2', domainId:'maintenance',assetId:'a1', title:'Write the exact toilet symptom on its record', assigneeId:'m1',dueDate:'2026-09-09',recurring:null,          status:'done',xp:10,needsApproval:false,reward:{coins:8}},
-    {id:'t3', domainId:'maintenance',assetId:'a1', title:'Handyman visit — fix the toilet',            assigneeId:'m1',dueDate:'2026-09-15',recurring:null,          status:'open',xp:40,needsApproval:false,reward:{coins:32}},
-    {id:'t4', domainId:'maintenance',assetId:'a1', title:'Log the repair + parts on the toilet’s History tab',assigneeId:'m1',dueDate:'2026-09-16',recurring:null,     status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t5', domainId:'maintenance',assetId:'a1', title:'Toilet dye test — seal or fill valve?',      assigneeId:'m1',dueDate:'2026-09-10',recurring:{everyDays:180},status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t6', domainId:'maintenance',assetId:null, title:'Fill in the blanks on the appliance records', assigneeId:'m1',dueDate:'2026-09-30',recurring:null,          status:'open',xp:25,needsApproval:false,reward:{coins:20}},
-    {id:'t7', domainId:'safety',     assetId:null, title:'Test smoke & CO detector',                  assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:30}, status:'open',xp:20,needsApproval:false,reward:{coins:16}},
-    {id:'t8', domainId:'building',   assetId:null, title:'Pay strata fees',                           assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:30}, status:'open',xp:10,needsApproval:false,reward:{coins:8}},
-    {id:'t9', domainId:'building',   assetId:null, title:'File strata contact, buzzer & fob numbers', assigneeId:'m1',dueDate:'2026-09-20',recurring:null,          status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t10',domainId:'cleaning',   assetId:null, title:'Vacuum bathroom exhaust-fan grille',        assigneeId:'m1',dueDate:'2026-10-15',recurring:{everyDays:180},status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t26',domainId:'maintenance',assetId:'a1', title:'Ask the handyman to bring 9BU064E + TSU09A.8',assigneeId:'m1',dueDate:'2026-09-10',recurring:null,          status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t27',domainId:'maintenance',assetId:'a1', title:'Close the toilet shut-off between uses until it is fixed',assigneeId:'m1',dueDate:'2026-09-09',recurring:null,status:'open',xp:10,needsApproval:false,reward:{coins:8}},
-    {id:'t11',domainId:'maintenance',assetId:'a2', title:'Confirm the $260 coil clean is on the work order',assigneeId:'m1',dueDate:'2026-09-11',recurring:null,          status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t12',domainId:'maintenance',assetId:'a2', title:'Confirm the heat pump repair date with Chris',   assigneeId:'m1',dueDate:'2026-09-15',recurring:null,          status:'open',xp:20,needsApproval:false,reward:{coins:16}},
-    {id:'t13',domainId:'maintenance',assetId:'a2', title:'Be home for the blower motor replacement',       assigneeId:'m1',dueDate:'2026-09-18',recurring:null,          status:'open',xp:40,needsApproval:false,reward:{coins:32}},
-    {id:'t14',domainId:'maintenance',assetId:'a2', title:'Photograph the heat pump label while it is open',assigneeId:'m1',dueDate:'2026-09-18',recurring:null,          status:'open',xp:25,needsApproval:false,reward:{coins:20}},
-    {id:'t15',domainId:'maintenance',assetId:'a2', title:'Log the heat pump invoice + part number',        assigneeId:'m1',dueDate:'2026-09-25',recurring:null,          status:'open',xp:20,needsApproval:false,reward:{coins:16}},
-    {id:'t16',domainId:'kitchen',    assetId:null, title:'Photograph the fridge, hood, dishwasher & laundry labels',assigneeId:'m1',dueDate:'2026-09-20',recurring:null,  status:'open',xp:30,needsApproval:false,reward:{coins:24}},
-    {id:'t17',domainId:'kitchen',    assetId:'a4', title:'Wash the range hood grease filter',              assigneeId:'m1',dueDate:'2026-09-16',recurring:{everyDays:30}, status:'open',xp:12,needsApproval:false,reward:{coins:10}},
-    {id:'t18',domainId:'kitchen',    assetId:'a3', title:'Vacuum the fridge condenser coils',              assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:180},status:'open',xp:20,needsApproval:false,reward:{coins:16}},
-    {id:'t19',domainId:'cleaning',   assetId:'a6', title:'Clear the dryer lint trap & vent run',           assigneeId:'m1',dueDate:'2026-12-09',recurring:{everyDays:90}, status:'open',xp:20,needsApproval:false,reward:{coins:16}},
-    {id:'t20',domainId:'building',   assetId:null, title:'Read the Aug 13 strata council minutes',         assigneeId:'m1',dueDate:'2026-09-12',recurring:null,          status:'open',xp:12,needsApproval:false,reward:{coins:10}},
-    {id:'t21',domainId:'building',   assetId:null, title:'Read the Aug 21 owner communication notice',     assigneeId:'m1',dueDate:'2026-09-12',recurring:null,          status:'open',xp:10,needsApproval:false,reward:{coins:8}},
-    {id:'t22',domainId:'building',   assetId:null, title:'Answer Rove Concepts on the Oct 20–Nov 4 bed delivery',assigneeId:'m1',dueDate:'2026-09-10',recurring:null,     status:'open',xp:15,needsApproval:false,reward:{coins:12}},
-    {id:'t23',domainId:'building',   assetId:null, title:'Book the service elevator for the bed delivery', assigneeId:'m1',dueDate:'2026-10-15',recurring:null,          status:'open',xp:20,needsApproval:false,reward:{coins:16}},
-    {id:'t24',domainId:'building',   assetId:null, title:'Decide on EcoClean annual carpet cleaning',      assigneeId:'m1',dueDate:'2026-09-20',recurring:null,          status:'open',xp:12,needsApproval:false,reward:{coins:10}},
-    {id:'t25',domainId:'building',   assetId:'a2', title:'Watch for next year’s in-suite HVAC access notice',assigneeId:'m1',dueDate:'2027-08-01',recurring:{everyDays:365},status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t1', domainId:'maintenance',assetId:'a1', title:'Send toilet photos + model info to handyman', assigneeId:'m1',dueDate:'2026-09-09',recurring:null,          impact:5,mins:5,why:'The handyman is waiting on this to bring the right parts.',window:true,status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t2', domainId:'maintenance',assetId:'a1', title:'Write the exact toilet symptom on its record', assigneeId:'m1',dueDate:'2026-09-09',recurring:null,          impact:4,mins:5,why:'Without the symptom they diagnose from scratch on your time.',status:'done',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t3', domainId:'maintenance',assetId:'a1', title:'Handyman visit — fix the toilet',            assigneeId:'m1',dueDate:'2026-09-15',recurring:null,          impact:5,mins:120,why:'The running toilet stops. Everything else about it is waiting on this.',status:'open',xp:40,needsApproval:false,reward:{coins:32}},
+    {id:'t4', domainId:'maintenance',assetId:'a1', title:'Log the repair + parts on the toilet’s History tab',assigneeId:'m1',dueDate:'2026-09-16',recurring:null,     impact:2,mins:10,why:'Next owner of this problem — you in 3 years — reads this log.',status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t5', domainId:'maintenance',assetId:'a1', title:'Toilet dye test — seal or fill valve?',      assigneeId:'m1',dueDate:'2026-09-10',recurring:{everyDays:180},impact:4,mins:20,why:'Fifteen minutes of waiting tells the handyman which part to bring.',window:true,status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t6', domainId:'maintenance',assetId:null, title:'Fill in the blanks on the appliance records', assigneeId:'m1',dueDate:'2026-09-30',recurring:null,          impact:2,mins:30,why:'Turns four blank records into a real registry.',status:'open',xp:25,needsApproval:false,reward:{coins:20}},
+    {id:'t7', domainId:'safety',     assetId:null, title:'Test smoke & CO detector',                  assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:30}, impact:5,mins:5,why:'It is the one device in the suite that has to work at 3am.',status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t8', domainId:'building',   assetId:null, title:'Pay strata fees',                           assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:30}, impact:5,mins:5,why:'Late strata fees draw interest and, eventually, a lien.',window:true,status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t9', domainId:'building',   assetId:null, title:'File strata contact, buzzer & fob numbers', assigneeId:'m1',dueDate:'2026-09-20',recurring:null,          impact:3,mins:10,why:'Whoever is home when something breaks needs these numbers.',status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t10',domainId:'cleaning',   assetId:null, title:'Vacuum bathroom exhaust-fan grille',        assigneeId:'m1',dueDate:'2026-10-15',recurring:{everyDays:180},impact:2,mins:15,why:'The fan is the suite dehumidifier — a clogged grille grows mildew.',status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t26',domainId:'maintenance',assetId:'a1', title:'Ask the handyman to bring 9BU064E + TSU09A.8',assigneeId:'m1',dueDate:'2026-09-10',recurring:null,          impact:4,mins:3,why:'One message. Saves an entire second call-out if the first guess is wrong.',window:true,status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t27',domainId:'maintenance',assetId:'a1', title:'Close the toilet shut-off between uses until it is fixed',assigneeId:'m1',dueDate:'2026-09-09',recurring:null,impact:3,mins:2,why:'Two minutes now stops hundreds of litres a day going down the drain.',status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t11',domainId:'maintenance',assetId:'a2', title:'Confirm the $260 coil clean is on the work order',assigneeId:'m1',dueDate:'2026-09-11',recurring:null,          impact:4,mins:5,why:'$260 only buys the coil clean while the tech is already there.',window:true,status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t12',domainId:'maintenance',assetId:'a2', title:'Confirm the heat pump repair date with Chris',   assigneeId:'m1',dueDate:'2026-09-15',recurring:null,          impact:4,mins:3,why:'Nobody has booked a day yet. Parts land this week.',window:true,status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t13',domainId:'maintenance',assetId:'a2', title:'Be home for the blower motor replacement',       assigneeId:'m1',dueDate:'2026-09-18',recurring:null,          impact:5,mins:180,why:'No access, no repair — and the parts are already paid for.',status:'open',xp:40,needsApproval:false,reward:{coins:32}},
+    {id:'t14',domainId:'maintenance',assetId:'a2', title:'Photograph the heat pump label while it is open',assigneeId:'m1',dueDate:'2026-09-18',recurring:null,          impact:4,mins:5,why:'The label is only reachable while the unit is open. One photo.',window:true,status:'open',xp:25,needsApproval:false,reward:{coins:20}},
+    {id:'t15',domainId:'maintenance',assetId:'a2', title:'Log the heat pump invoice + part number',        assigneeId:'m1',dueDate:'2026-09-25',recurring:null,          impact:2,mins:10,why:'The blower motor part number matters the next time it fails.',status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t16',domainId:'kitchen',    assetId:null, title:'Photograph the fridge, hood, dishwasher & laundry labels',assigneeId:'m1',dueDate:'2026-09-20',recurring:null,  impact:3,mins:20,why:'Four labels, one pass with a phone. Every future part order needs them.',status:'open',xp:30,needsApproval:false,reward:{coins:24}},
+    {id:'t17',domainId:'kitchen',    assetId:'a4', title:'Wash the range hood grease filter',              assigneeId:'m1',dueDate:'2026-09-16',recurring:{everyDays:30}, impact:2,mins:15,why:'Grease on the filter is a fire risk and it makes the fan work harder.',status:'open',xp:12,needsApproval:false,reward:{coins:10}},
+    {id:'t18',domainId:'kitchen',    assetId:'a3', title:'Vacuum the fridge condenser coils',              assigneeId:'m1',dueDate:'2026-10-01',recurring:{everyDays:180},impact:2,mins:30,why:'Dirty coils raise the power bill and shorten the compressor life.',status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t19',domainId:'cleaning',   assetId:'a6', title:'Clear the dryer lint trap & vent run',           assigneeId:'m1',dueDate:'2026-12-09',recurring:{everyDays:90}, impact:4,mins:30,why:'Lint in a shared tower duct is a genuine fire risk.',status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t20',domainId:'building',   assetId:null, title:'Read the Aug 13 strata council minutes',         assigneeId:'m1',dueDate:'2026-09-12',recurring:null,          impact:2,mins:15,why:'Council decisions become your levies.',status:'open',xp:12,needsApproval:false,reward:{coins:10}},
+    {id:'t21',domainId:'building',   assetId:null, title:'Read the Aug 21 owner communication notice',     assigneeId:'m1',dueDate:'2026-09-12',recurring:null,          impact:2,mins:5,why:'Five minutes to know what the building is about to do.',status:'open',xp:10,needsApproval:false,reward:{coins:8}},
+    {id:'t22',domainId:'building',   assetId:null, title:'Answer Rove Concepts on the Oct 20–Nov 4 bed delivery',assigneeId:'m1',dueDate:'2026-09-10',recurring:null,     impact:3,mins:5,why:'Mike is blocked on your answer and the pre-order window is real.',window:true,status:'open',xp:15,needsApproval:false,reward:{coins:12}},
+    {id:'t23',domainId:'building',   assetId:null, title:'Book the service elevator for the bed delivery', assigneeId:'m1',dueDate:'2026-10-15',recurring:null,          impact:3,mins:10,why:'White-glove delivery to the 18th floor without a booked elevator does not happen.',window:true,status:'open',xp:20,needsApproval:false,reward:{coins:16}},
+    {id:'t24',domainId:'building',   assetId:null, title:'Decide on EcoClean annual carpet cleaning',      assigneeId:'m1',dueDate:'2026-09-20',recurring:null,          impact:1,mins:10,why:'Nice to have. Nothing breaks if it waits a year.',status:'open',xp:12,needsApproval:false,reward:{coins:10}},
+    {id:'t25',domainId:'building',   assetId:'a2', title:'Watch for next year’s in-suite HVAC access notice',assigneeId:'m1',dueDate:'2027-08-01',recurring:{everyDays:365},impact:3,mins:5,why:'Missing the strata access window risks a bylaw fine.',status:'open',xp:15,needsApproval:false,reward:{coins:12}},
   ],
   receipts:[],
   pets:[],
@@ -1722,6 +1749,48 @@ function giftStars(ev){ ev.preventDefault(); if(!needParent()) return;
   f.reset(); celebrate(); pushToast(`🎁 ${n} ⭐ to ${m.name}`,'good'); markDirty(); render();
 }
 
+/* ============================================================================
+   FOCUS — what is worth doing next
+   Every task carries the size of the consequence if it slips (impact 1-5) and
+   an honest estimate in minutes. The ranking is consequence per minute, lifted
+   when a deadline is close and again when the cheap chance to do it is about
+   to close. The point is not the ranking — it is the sentence underneath it:
+   this many minutes clears this much risk.
+   ========================================================================== */
+function taskImpact(t){ return t.impact || Math.max(1,Math.min(5,Math.round((t.xp||10)/10)+1)); }
+function taskMins(t){ return t.mins || Math.max(5,Math.round((t.xp||10)*1.5)); }
+function taskWhy(t){ if(t.why) return t.why;
+  const d=domainById(t.domainId); return d?`Keeps ${d.name.split(/[ &]/)[0].toLowerCase()} on track.`:''; }
+// a deadline multiplies what a slip costs; a closing window does it harder
+function urgencyMul(t){ const n=daysUntil(t.dueDate);
+  if(n<0)  return 2.0;                       // already late
+  if(n<=1) return 1.7;
+  if(n<=3) return 1.4;
+  if(n<=7) return 1.15;
+  if(n<=30)return 1.0;
+  return 0.8;                                // far off — it can wait
+}
+function taskScore(t){
+  const perHour = taskImpact(t)/(taskMins(t)/60);
+  return perHour * urgencyMul(t) * (t.window?1.35:1);
+}
+function quadrant(t){ const i=taskImpact(t), m=taskMins(t);
+  if(i>=3 && m<=15) return 'quick';          // do it now, it costs nothing
+  if(i>=4)          return 'rock';           // worth putting in the calendar
+  if(m<=15)         return 'fill';           // fine to batch
+  return 'later';                            // reconsider whether it is worth it
+}
+const QUADS={
+  quick:{label:'Quick wins', desc:'Real consequence, under 15 minutes. Do these first.'},
+  rock: {label:'Worth scheduling', desc:'Big consequence, needs a real block of time.'},
+  fill: {label:'Fill-ins', desc:'Cheap and small. Batch them when you are already up.'},
+  later:{label:'Reconsider', desc:'Costs more time than the consequence justifies.'},
+};
+function openTasks(){ return STATE.tasks.filter(t=>t.status!=='done'); }
+function rankedTasks(){ return openTasks().slice().sort((a,b)=>taskScore(b)-taskScore(a)); }
+function fmtMins(m){ return m>=60 ? (m%60? (m/60|0)+'h '+(m%60)+'m' : (m/60|0)+'h') : m+'m'; }
+function setFocusQuad(q){ STATE.fquad = (STATE.fquad===q ? null : q); render(); }
+
 let RECEIPT_SEQ=100;
 let TASK_SEQ = 100;
 
@@ -2357,7 +2426,7 @@ function renderDepartments(){
      <div class="deptgrid">${cards}</div>`;
 }
 function gameNav(active){
-  const items=[['overworld','🗺️','HQ',"openView('overworld')"],['campaign','🎯','Journey',"openView('campaign')"],['departments','🏠','Depts',"openView('departments')"],['calendar','🗓️','Calendar',"openView('calendar')"],
+  const items=[['overworld','🗺️','HQ',"openView('overworld')"],['focus','🎯','Focus',"openView('focus')"],['campaign','🗺️','Journey',"openView('campaign')"],['departments','🏠','Depts',"openView('departments')"],['calendar','🗓️','Calendar',"openView('calendar')"],
     ['vault','🗄️','Assets',"openView('vault')"],['receipts','🧾','Receipts',"openView('receipts')"],
     ['pets','🐾','Pets',"openView('pets')"],['rewards','⭐','Stars',"openView('rewards')"],['approvals','📋','Approve',"openView('approvals')"],
     ['findpro','🔧','Find Pro',"openFindPro('handyman')"],['family','🏆','Family',"openView('family')"]];
@@ -2590,6 +2659,7 @@ function viewMiddle(v){
     : v==='receipts' ? renderReceipts()
     : v==='pets'     ? renderPetsIndex()
     : v==='family'   ? renderFamily()
+    : v==='focus'    ? renderFocus()
     : v==='rewards'  ? renderRewards()
     : v==='approvals'? renderApprovals()
     : mapMiddle();
@@ -3356,6 +3426,53 @@ function renderFamily(){
       <button class="btn ghost" style="font-size:12px;padding:6px 10px" onclick="if(confirm('Reset all Home Base data to the demo?')) resetDemo()">↺ Reset demo</button>
     </div>`+reward+shelf+
     `<div class="sec-title">Leaderboard</div><div class="card lead">${lead}</div><div class="mcards">${cards}</div>`;
+}
+
+
+function focusRow(t,rank){
+  const q=quadrant(t), imp=taskImpact(t), d=domainById(t.domainId), st=dueStatus(t);
+  return `<div class="frow q-${q}${rank&&rank<=3?' top':''}">
+    <div class="frank">${rank||'·'}</div>
+    <div class="grow"><div class="ftt">${esc(t.title)}</div>
+      <div class="fwhy">${esc(taskWhy(t))}</div>
+      <div class="fmeta">
+        <span class="dots" title="Impact ${imp} of 5" style="color:${imp>=4?'var(--red)':imp>=3?'var(--amber)':'var(--muted)'}">${'\u25cf'.repeat(imp)}${'\u25cb'.repeat(5-imp)}</span>
+        ${d?`<span class="chip">${d.icon} ${esc(d.name.split(/[ &]/)[0])}</span>`:''}
+        <span class="chip" style="${st==='overdue'?'background:#f6dcd8;color:var(--red)':''}">${st==='overdue'?'overdue':'due '+relDay(t.dueDate)}</span>
+        ${t.window?'<span class="fwin">window closing</span>':''}
+      </div></div>
+    <div class="fmins">${fmtMins(taskMins(t))}<small>EST</small></div>
+    <button class="check" title="Mark done" onclick="completeTask('${t.id}')">\u2713</button>
+  </div>`;
+}
+function renderFocus(){
+  const all=rankedTasks();
+  if(!all.length) return backbar('\ud83c\udfaf Focus')+`<div class="card empty">Nothing open. \ud83c\udf89</div>`;
+  const top=all.slice(0,3);
+  const mins=top.reduce((s,t)=>s+taskMins(t),0);
+  const risk=top.filter(t=>taskImpact(t)>=4).length;
+  const counts={quick:0,rock:0,fill:0,later:0}; all.forEach(t=>counts[quadrant(t)]++);
+  const sel=STATE.fquad;
+  const list=sel?all.filter(t=>quadrant(t)===sel):all;
+
+  const head=`<div class="card fhead">
+    <div><div class="wlab">Do these three next</div>
+      <div class="fbig">${fmtMins(mins)}</div></div>
+    <div class="grow"><div style="font-size:15px;line-height:1.5">
+      ${fmtMins(mins)} of work clears <b>${risk||'the'}</b> ${risk===1?'item':'items'} you would regret leaving${risk?' (impact 4 or 5)':''}.
+      Ranked by what it costs you if it slips, divided by how long it takes.</div></div>
+  </div>`;
+
+  const three=`<div class="tasklist" style="margin-bottom:18px">${top.map((t,i)=>focusRow(t,i+1)).join('')}</div>`;
+
+  const quads=`<div class="fquads">`+Object.entries(QUADS).map(([k,q])=>
+    `<button class="fquad${sel===k?' on':''}" onclick="setFocusQuad('${k}')">
+      <div class="qn">${counts[k]}</div><div class="ql">${q.label}</div><div class="qd">${q.desc}</div></button>`).join('')+`</div>`;
+
+  const rest=`<div class="sec-title">${sel?QUADS[sel].label+' \u00b7 '+list.length:'Everything else, ranked \u00b7 '+(all.length-3)}</div>
+    <div class="tasklist">${(sel?list:all.slice(3)).map(t=>focusRow(t,0)).join('')||'<div class="empty card">Nothing here.</div>'}</div>`;
+
+  return backbar('\ud83c\udfaf Focus')+head+three+quads+rest;
 }
 
 /* ============================ STARS & REWARDS UI ============================ */
